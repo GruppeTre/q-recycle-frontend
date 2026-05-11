@@ -7,9 +7,9 @@ function DriverAdminLoginPage() {
         const password = formData.get('password');
         const email = username + INTERNAL_EMAIL_SUFFIX;
 
-        const data = await passwordSignIn(email, password);
+        const {data, error} = await passwordSignIn(email, password);
 
-        console.log('Logget ind:', JSON.stringify(data));
+
     };
 
     return (
