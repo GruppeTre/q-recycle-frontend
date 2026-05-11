@@ -1,0 +1,1 @@
+export const INTERNAL_EMAIL_SUFFIX = '@qrecycle.internal';
