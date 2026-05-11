@@ -9,7 +9,7 @@ export async function passwordSignIn(identifier, password) {
         password: `${password}`
     })
 
-    if (error.code === 'invalid_credentials') {
+    if (error?.code === 'invalid_credentials') {
         throw new Error('Bad credentials');
     }
 
