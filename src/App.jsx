@@ -11,9 +11,9 @@ function App() {
           <Routes>
               <Route index element={<FrontPage />}/>
               <Route path="driverlogin" element={<DriverAdminLoginPage />}/>
-              <Route path={'partner'} element={<ProtectedRoute redirectPath={'/'} />}>
+              <Route path="partner" element={<ProtectedRoute redirectPath="/" />}>
                   <Route index element={<PartnerLoginPage />} />
-                  <Route path={'dashboard'} element={<h1>Partner dashboard!</h1>} />
+                  <Route path="dashboard" element={<h1>Partner dashboard!</h1>} />
               </Route>
           </Routes>
       </BrowserRouter>
