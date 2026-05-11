@@ -1,6 +1,5 @@
 import {BrowserRouter, Route, Routes} from "react-router";
 import FrontPage from "./features/front-page";
-import CounterPage from "./features/counter";
 
 function App() {
 
@@ -8,7 +7,6 @@ function App() {
       <BrowserRouter>
           <Routes>
               <Route index element={<FrontPage />}/>
-              <Route path="counter" element={<CounterPage />} />
           </Routes>
       </BrowserRouter>
   );
