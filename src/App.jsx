@@ -14,7 +14,7 @@ function App() {
               <Route path="partner" >
                   <Route index="/login" element={<PartnerLoginPage />} />
                   <Route path="dashboard" element={
-                      <ProtectedRoute><h1>DASHBOARD</h1></ProtectedRoute>
+                      <ProtectedRoute redirectPath="/"><h1>DASHBOARD</h1></ProtectedRoute>
                   } />
               </Route>
           </Routes>
