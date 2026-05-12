@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {Navigate, Outlet} from "react-router";
 import {supabaseClient} from "../lib/supabaseClient.js";
 
-function ProtectedRoute({redirectPath, children}) {
+function ProtectedRoute({redirectPath, allowedRoles = [], children}) {
 
     const [session, setSession] = useState(undefined); // undefined = still loading
 
@@ -15,11 +15,12 @@ function ProtectedRoute({redirectPath, children}) {
     //placeholder loading indicator
     if (session === undefined) return <h1>LOADING</h1>;
 
-    if (!session) {
+    //if user is not logged in / does not have the correct role
+    if (session === null || !allowedRoles.includes(session.user.role)) {
         return <Navigate to={redirectPath} replace />;
     }
 
-    //use this role to check against a list of allowed roles for user authorization
+    //if user does not have the correct role
     console.log(session.user.role);
 
     return children ? children : <Outlet />;
