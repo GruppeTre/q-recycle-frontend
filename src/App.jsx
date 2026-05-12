@@ -11,11 +11,29 @@ function App() {
       <BrowserRouter>
           <Routes>
               <Route index element={<FrontPage />}/>
-              <Route path="driverlogin" element={<UserLoginPage />}/>
+              <Route path="login" element={<UserLoginPage />}/>
               <Route path="partner" >
                   <Route index="/login" element={<PartnerLoginPage />} />
                   <Route path="dashboard" element={
                       <ProtectedRoute redirectPath="/" allowedRoles={[role.PARTNER]}><h1>DASHBOARD</h1></ProtectedRoute>
+                  } />
+              </Route>
+
+              <Route path="driver">
+                  <Route path="login" element={<UserLoginPage />} />
+                  <Route path="dashboard" element={
+                      <ProtectedRoute redirectPath="/driver/login" allowedRoles={[role.DRIVER]}>
+                          <h1>DRIVER DASHBOARD</h1>
+                      </ProtectedRoute>
+                  } />
+              </Route>
+
+              <Route path="admin">
+                  <Route path="login" element={<UserLoginPage />} />
+                  <Route path="dashboard" element={
+                      <ProtectedRoute redirectPath="/admin/login" allowedRoles={[role.ADMIN]}>
+                          <h1>ADMIN DASHBOARD</h1>
+                      </ProtectedRoute>
                   } />
               </Route>
           </Routes>

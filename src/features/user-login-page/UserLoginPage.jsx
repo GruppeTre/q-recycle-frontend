@@ -1,58 +1,74 @@
-import {INTERNAL_EMAIL_SUFFIX} from "../../config/constants.js";
-import {passwordSignIn} from "../../lib/supabaseUtils.js";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { INTERNAL_EMAIL_SUFFIX, role } from "../../config/constants.js";
 import UserSignInForm from "./components/UserSignInForm.jsx";
-import {useNavigate} from "react-router";
-import {useState} from "react";
+import { passwordSignIn, getRole } from "../../lib/supabaseUtils.js";
 
 const DASHBOARD_BY_ROLE = {
-    admin: '/admin/dashboard',
-    driver: '/driver/dashboard',
+    [role.ADMIN]: '/admin/dashboard',
+    [role.DRIVER]: '/driver/dashboard',
 };
 
 function UserLoginPage() {
-
     const navigate = useNavigate();
-
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSignIn = async (formData) => {
-
-        setError(null);
+        if (isLoading) return;
 
         const username = formData.get('username')?.trim();
         const password = formData.get('password');
-        const email = username + INTERNAL_EMAIL_SUFFIX;
 
-        const {data, error} = await passwordSignIn(email, password);
+        if (!username || !password) {
+            setError('Udfyld både brugernavn og password');
+            return;
+        }
 
-        if (error) {
+        setError(null);
+        setIsLoading(true);
 
-            if (error.code === 'invalid_credentials') {
-                setError('Ugyldigt password');
-            } else {
-                setError('Noget gik galt, prøv igen senere');
+        try {
+            const email = username + INTERNAL_EMAIL_SUFFIX;
+            const { data, error: signInError } = await passwordSignIn(email, password);
+
+            if (signInError) {
+                if (signInError.code === 'invalid_credentials') {
+                    setError('Ugyldigt brugernavn eller password');
+                } else {
+                    setError('Noget gik galt, prøv igen senere');
+                }
+                return;
             }
-            return;
+
+            const userRole = await getRole(data.user.id);
+            const destination = DASHBOARD_BY_ROLE[userRole];
+
+            if (!destination) {
+                setError('Din konto har ingen tildelt rolle. Kontakt support.');
+                return;
+            }
+
+            navigate(destination);
+
+        } catch (e) {
+            console.error(e);
+            setError('Kunne ikke oprette forbindelse');
+        } finally {
+            setIsLoading(false);
         }
-
-        const role = data.user.app_metadata?.role;
-        const destination = DASHBOARD_BY_ROLE[role];
-
-        if (!destination) {
-            setError('Din konto har ingen tildelt rolle. Kontakt support.');
-            return;
-        }
-
-        navigate(destination);
-
     };
 
     return (
-        <div className="w-lg mx-auto">
+        <div className="max-w-lg mx-auto">
             <div className="w-full flex flex-col gap-2 items-center mt-4">
-                <h2 className="text-lg text-gray-600">Indtast password:</h2>
-                <UserSignInForm callback={handleSignIn}/>
-                {error && <div className="text-sm text-red-500 bg-red-100 px-3 py-2 rounded">{error}</div>}
+                <h2 className="text-lg text-gray-600">Log ind:</h2>
+                <UserSignInForm callback={handleSignIn} />
+                {error && (
+                    <div role="alert" className="text-sm text-red-500 bg-red-100 px-3 py-2 rounded">
+                        {error}
+                    </div>
+                )}
             </div>
         </div>
     );
