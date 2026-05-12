@@ -1,8 +1,7 @@
 function FrontPage() {
+
     return (
-        <>
-            <h1>Velkommen til forsiden!</h1>
-        </>
+        <h1>Forside</h1>
     );
 }
 
