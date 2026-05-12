@@ -1,7 +1,7 @@
 import { INTERNAL_EMAIL_SUFFIX } from "../../config/constants.js";
 import { passwordSignIn } from "../../lib/supabaseUtils.js";
 
-function DriverAdminLoginPage() {
+function UserLoginPage() {
     const handleSignIn = async (formData) => {
         const username = formData.get('username');
         const password = formData.get('password');
@@ -21,4 +21,4 @@ function DriverAdminLoginPage() {
     );
 }
 
-export default DriverAdminLoginPage;
+export default UserLoginPage;
