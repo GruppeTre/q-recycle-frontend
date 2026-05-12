@@ -9,3 +9,17 @@ export async function passwordSignIn(identifier, password) {
 
     return { data, error }
 }
+
+export async function getRole(userId) {
+    const { data } = await supabaseClient
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .single();
+
+    if (!data) {
+        return null;
+    }
+
+    return data.role;
+}
