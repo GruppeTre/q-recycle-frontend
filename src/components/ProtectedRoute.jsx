@@ -1,7 +1,11 @@
 import {Navigate, Outlet} from "react-router";
 import {useAuth} from "../context/useAuth.js";
 
-function ProtectedRoute({redirectPath, allowedRoles = [], children}) {
+function ProtectedRoute({redirectPath, allowedRoles, children}) {
+
+    if (!allowedRoles) {
+        throw new Error('Protected Route must have at least one allowed role');
+    }
 
     const { session, role, isLoading } = useAuth();
 
