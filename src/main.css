@@ -1,1 +1,13 @@
 @import "tailwindcss";
+
+@theme {
+    /* Farver */
+    --color-primary: rgb(234, 179, 8);
+    --color-primary-hover: rgb(202, 138, 4);
+    --color-background: rgb(245, 244, 238);
+
+    /* Gap-størrelser */
+    --spacing-gap-sm: 0.5rem;
+    --spacing-gap-md: 1rem;
+    --spacing-gap-lg: 2rem;
+}
