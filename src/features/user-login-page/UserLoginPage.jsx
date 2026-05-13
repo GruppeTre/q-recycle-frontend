@@ -10,36 +10,31 @@ const DASHBOARD_BY_ROLE = {
 };
 
 function UserLoginPage() {
+
     const navigate = useNavigate();
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSignIn = async (formData) => {
-        if (isLoading) return;
+
+        if (isLoading) {
+            return;
+        }
 
         const username = formData.get('username')?.trim();
         const password = formData.get('password');
 
         if (!username || !password) {
-            setError('Udfyld både brugernavn og password');
+            setError('Udfyld venligst alle felter');
             return;
         }
 
+        const email = username + INTERNAL_EMAIL_SUFFIX;
         setError(null);
         setIsLoading(true);
 
         try {
-            const email = username + INTERNAL_EMAIL_SUFFIX;
-            const { data, error: signInError } = await passwordSignIn(email, password);
-
-            if (signInError) {
-                if (signInError.code === 'invalid_credentials') {
-                    setError('Ugyldigt brugernavn eller password');
-                } else {
-                    setError('Noget gik galt, prøv igen senere');
-                }
-                return;
-            }
+            const data = await passwordSignIn(email, password);
 
             const userRole = await getRole(data.user.id);
             const destination = DASHBOARD_BY_ROLE[userRole];
@@ -53,7 +48,11 @@ function UserLoginPage() {
 
         } catch (e) {
             console.error(e);
-            setError('Kunne ikke oprette forbindelse');
+            if (e.code === 'invalid_credentials') {
+                setError('Ugyldigt brugernavn eller password');
+            } else {
+                setError('Noget gik galt, prøv igen senere');
+            }
         } finally {
             setIsLoading(false);
         }

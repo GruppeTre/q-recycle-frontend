@@ -9,27 +9,35 @@ function PartnerLoginPage() {
     const navigate = useNavigate();
 
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSignIn = async (formData) => {
 
+        if (isLoading) {
+            return;
+        }
+
         setError(null);
+        setIsLoading(true);
+        
+        try {
+            const pin = formData.get('pin');
+            const email = pin + INTERNAL_EMAIL_SUFFIX;
 
-        const pin = formData.get('pin');
-        const email = pin + INTERNAL_EMAIL_SUFFIX;
+            await passwordSignIn(email, pin);
 
-        const { data, error} = await passwordSignIn(email, pin);
+            navigate('/partner/dashboard');
 
-        if (error) {
-
-            if (error.code === 'invalid_credentials') {
+        } catch (e) {
+            console.error(e);
+            if (e.code === 'invalid_credentials') {
                 setError('Ugyldig pin');
             } else {
                 setError('Noget gik galt, prøv igen senere');
             }
-            return;
+        } finally {
+            setIsLoading(false);
         }
-
-        navigate('/partner/dashboard');
     }
 
     return (

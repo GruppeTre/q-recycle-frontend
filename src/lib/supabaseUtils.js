@@ -2,16 +2,22 @@ import {supabaseClient} from "./supabaseClient.js";
 
 export async function passwordSignIn(identifier, password) {
 
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
+    const { data, error: authError } = await supabaseClient.auth.signInWithPassword({
         email: identifier,
         password: password
-    })
+    });
 
-    return { data, error }
+    if (authError) {
+        const error = new Error(authError.message);
+        error.code = authError.code;
+        throw error;
+    }
+
+    return data;
 }
 
 export async function getRole(userId) {
-    const { data } = await supabaseClient
+    const { data, error } = await supabaseClient
         .from('profiles')
         .select('role')
         .eq('id', userId)
@@ -19,6 +25,10 @@ export async function getRole(userId) {
 
     if (!data) {
         return null;
+    }
+
+    if (error) {
+        console.error(error);
     }
 
     return data.role;
