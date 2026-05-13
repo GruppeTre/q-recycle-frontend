@@ -1,8 +1,8 @@
 import {INTERNAL_EMAIL_SUFFIX} from "../../config/constants.js";
-import {passwordSignIn} from "../../lib/supabaseUtils.js";
 import PartnerSignInForm from "./components/PartnerSignInForm.jsx";
 import {useNavigate} from "react-router";
 import {useState} from "react";
+import {auth} from "../../lib/auth.js";
 
 function PartnerLoginPage() {
 
@@ -24,7 +24,7 @@ function PartnerLoginPage() {
             const pin = formData.get('pin');
             const email = pin + INTERNAL_EMAIL_SUFFIX;
 
-            await passwordSignIn(email, pin);
+            await auth.signIn(email, pin);
 
             navigate('/partner/dashboard');
 

@@ -2,8 +2,8 @@ import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import {DASHBOARD_BY_ROLE, INTERNAL_EMAIL_SUFFIX} from "../../config/constants.js";
 import UserSignInForm from "./components/UserSignInForm.jsx";
-import { passwordSignIn } from "../../lib/supabaseUtils.js";
 import {useAuth} from "../../context/useAuth.js";
+import {auth} from "../../lib/auth.js";
 
 
 
@@ -40,7 +40,7 @@ function UserLoginPage() {
         setError(null);
 
         try {
-            await passwordSignIn(email, password);
+            await auth.signIn(email, password);
         } catch (e) {
             console.error(e);
             if (e.code === 'invalid_credentials') {

@@ -1,6 +1,6 @@
 import {createContext, useEffect, useState} from "react";
 import {supabaseClient} from "../lib/supabaseClient.js";
-import {getRole} from "../lib/supabaseUtils.js";
+import {profiles} from "../lib/profiles.js";
 
 const AuthContext = createContext(null);
 
@@ -41,7 +41,7 @@ const AuthProvider = ({children}) => {
             }
 
             try {
-                const fetchedRole = await getRole(fetchedSession.user.id);
+                const fetchedRole = await profiles.getRole(fetchedSession.user.id);
                 if (isMounted) {
                     setRole(fetchedRole);
                     setSession(fetchedSession);
