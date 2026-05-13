@@ -13,23 +13,21 @@ export async function passwordSignIn(identifier, password) {
         throw error;
     }
 
-    return data;
+    return data ? data : null;
 }
 
 export async function getRole(userId) {
-    const { data, error } = await supabaseClient
+    const { data, error: postgresError } = await supabaseClient
         .from('profiles')
         .select('role')
         .eq('id', userId)
         .single();
 
-    if (!data) {
-        return null;
+    if (postgresError) {
+        const error = new Error(postgresError.message);
+        error.code = postgresError.code;
+        throw error;
     }
 
-    if (error) {
-        console.error(error);
-    }
-
-    return data.role;
+    return data ? data.role : null;
 }
