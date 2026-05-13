@@ -5,7 +5,6 @@ import {getRole} from "../lib/supabaseUtils.js";
 const AuthContext = createContext(null);
 
 const AuthProvider = ({children}) => {
-    //all the supabase code here
 
     const [ session, setSession ] = useState(null);
     const [ role, setRole ] = useState(null);
@@ -13,30 +12,53 @@ const AuthProvider = ({children}) => {
 
     useEffect(() => {
 
+        //keep track of whether the component is mounted or not, if it isn't, we don't want to update state
+        let isMounted = true;
+
         const { data: { subscription} } = supabaseClient.auth.onAuthStateChange( async (event, fetchedSession) => {
 
-            //debug log statement, just so I can see it working
             console.log(`Handling Auth state change: ${event}`);
 
-            if (!fetchedSession) {
-                setSession(null);
-                setRole(null);
-                setIsLoading(false);
+            if (event === 'TOKEN_REFRESHED') {
+                if (isMounted) {
+                    setSession(fetchedSession);
+                    setIsLoading(false);
+                }
                 return;
             }
 
-            setSession(fetchedSession);
+            if (isMounted) {
+                setIsLoading(true);
+            }
 
-            const userId = fetchedSession.user.id;
-            const fetchedRole = await getRole(userId)
-            setRole(fetchedRole);
+            if (!fetchedSession) {
+                if (isMounted) {
+                    setSession(null);
+                    setRole(null);
+                    setIsLoading(false);
+                }
+                return;
+            }
 
-
-            setIsLoading(false);
+            try {
+                const fetchedRole = await getRole(fetchedSession.user.id);
+                if (isMounted) {
+                    setRole(fetchedRole);
+                    setSession(fetchedSession);
+                }
+            } catch (e) {
+                console.error(e);
+            } finally {
+                if (isMounted) {
+                    setIsLoading(false);
+                }
+            }
         });
 
         //cleanup function
         return () => {
+            console.log('AuthProvider component unmounted');
+            isMounted = false;
             subscription.unsubscribe();
         }
     }, []);
