@@ -35,12 +35,11 @@ function App() {
                   </Route>
 
                   <Route path="driver" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.DRIVER, role.ADMIN]}/>}>
-                      <Route path="dashboard" element={<h1>DRIVER DASHBOARD</h1>} />
+                      <Route index element={<h1>DRIVER DASHBOARD</h1>} />
                   </Route>
 
                   <Route path="admin" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.ADMIN]}/>}>
-                      <Route path="login" element={<UserLoginPage />} />
-                      <Route path="dashboard" element={<h1>ADMIN DASHBOARD </h1>} />
+                      <Route index element={<h1>ADMIN DASHBOARD </h1>} />
                   </Route>
               </Routes>
           </BrowserRouter>
