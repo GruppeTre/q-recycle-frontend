@@ -5,3 +5,9 @@ export const role = {
     ADMIN: 'admin',
     PARTNER: 'partner'
 }
+
+export const DASHBOARD_BY_ROLE = {
+    [role.ADMIN]: '/admin/dashboard',
+    [role.DRIVER]: '/driver/dashboard',
+    [role.PARTNER]: '/partner/dashboard'
+};
