@@ -1,12 +1,13 @@
+import Input from "../../../components/Input.jsx";
+import Button from "../../../components/Button.jsx";
+
 function UserSignInForm({ callback }) {
 
     return (
-        <form action={callback}>
-            <div className="flex gap-2">
-                <input type="text" placeholder="navn" name="username" className="bg-gray-200 p-4 h-full rounded-md"></input>
-                <input type="password" placeholder="password" name="password" className="bg-gray-200 p-4 h-full rounded-md"></input>
-                <button type="submit" className="p-4 bg-blue-400 rounded-md cursor-pointer">LOG IND</button>
-            </div>
+        <form action={callback} className="flex flex-col gap-gap-sm w-full max-w-sm mx-auto p-lg">
+            <Input type="text" placeholder="Brugernavn" name="username" />
+            <Input type="password" placeholder="Adgangskode" name="password" />
+            <Button type="submit">LOG IND</Button>
         </form>
     );
 }
