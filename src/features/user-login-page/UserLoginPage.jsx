@@ -1,23 +1,76 @@
-import { INTERNAL_EMAIL_SUFFIX } from "../../config/constants.js";
-import { passwordSignIn } from "../../lib/supabaseUtils.js";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { INTERNAL_EMAIL_SUFFIX, role } from "../../config/constants.js";
+import UserSignInForm from "./components/UserSignInForm.jsx";
+import { passwordSignIn, getRole } from "../../lib/supabaseUtils.js";
+
+const DASHBOARD_BY_ROLE = {
+    [role.ADMIN]: '/admin/dashboard',
+    [role.DRIVER]: '/driver/dashboard',
+};
 
 function UserLoginPage() {
+    const navigate = useNavigate();
+    const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+
     const handleSignIn = async (formData) => {
-        const username = formData.get('username');
+        if (isLoading) return;
+
+        const username = formData.get('username')?.trim();
         const password = formData.get('password');
-        const email = username + INTERNAL_EMAIL_SUFFIX;
 
-        const {data, error} = await passwordSignIn(email, password);
+        if (!username || !password) {
+            setError('Udfyld både brugernavn og password');
+            return;
+        }
 
+        setError(null);
+        setIsLoading(true);
 
+        try {
+            const email = username + INTERNAL_EMAIL_SUFFIX;
+            const { data, error: signInError } = await passwordSignIn(email, password);
+
+            if (signInError) {
+                if (signInError.code === 'invalid_credentials') {
+                    setError('Ugyldigt brugernavn eller password');
+                } else {
+                    setError('Noget gik galt, prøv igen senere');
+                }
+                return;
+            }
+
+            const userRole = await getRole(data.user.id);
+            const destination = DASHBOARD_BY_ROLE[userRole];
+
+            if (!destination) {
+                setError('Din konto har ingen tildelt rolle. Kontakt support.');
+                return;
+            }
+
+            navigate(destination);
+
+        } catch (e) {
+            console.error(e);
+            setError('Kunne ikke oprette forbindelse');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
-        <form action={handleSignIn}>
-            <input type="text" placeholder="Navn" name="username" />
-            <input type="password" placeholder="Password" name="password" />
-            <button type="submit">LOG IND</button>
-        </form>
+        <div className="max-w-lg mx-auto">
+            <div className="w-full flex flex-col gap-2 items-center mt-4">
+                <h2 className="text-lg text-gray-600">Log ind:</h2>
+                <UserSignInForm callback={handleSignIn} />
+                {error && (
+                    <div role="alert" className="text-sm text-red-500 bg-red-100 px-3 py-2 rounded">
+                        {error}
+                    </div>
+                )}
+            </div>
+        </div>
     );
 }
 
