@@ -1,8 +1,9 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { INTERNAL_EMAIL_SUFFIX, role } from "../../config/constants.js";
 import UserSignInForm from "./components/UserSignInForm.jsx";
 import { passwordSignIn, getRole } from "../../lib/supabaseUtils.js";
+import {supabaseClient} from "../../lib/supabaseClient.js";
 
 const DASHBOARD_BY_ROLE = {
     [role.ADMIN]: '/admin/dashboard',
@@ -14,6 +15,17 @@ function UserLoginPage() {
     const navigate = useNavigate();
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        supabaseClient.auth.getSession().then(async ({ data }) => {
+            const session = data.session;
+
+            if (session) {
+                const role = await getRole(session.user.id);
+                navigate(DASHBOARD_BY_ROLE[role]);
+            }
+        })
+    }, [navigate]);
 
     const handleSignIn = async (formData) => {
 
