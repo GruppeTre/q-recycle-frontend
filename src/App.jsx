@@ -4,6 +4,7 @@ import UserLoginPage from "./features/user-login-page/UserLoginPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import {role} from "./config/constants.js";
 import {AuthProvider} from "./context/AuthContext.jsx";
+import GuestRoute from "./components/GuestRoute.jsx";
 
 function App() {
 
@@ -11,12 +12,23 @@ function App() {
       <AuthProvider>
           <BrowserRouter>
               <Routes>
-                  <Route index element={<UserLoginPage />}/>
+
+                  <Route index element={
+                      <GuestRoute>
+                          <UserLoginPage />
+                      </GuestRoute>
+                  }/>
 
                   <Route path="partner" >
-                      <Route index="/login" element={<PartnerLoginPage />} />
+
+                      <Route index element={
+                          <GuestRoute allowedRoles={[role.ADMIN, role.DRIVER]}>
+                              <PartnerLoginPage />
+                          </GuestRoute>
+                      }/>
+
                       <Route path="dashboard" element={
-                          <ProtectedRoute redirectPath="/partner/login" allowedRoles={[role.PARTNER]}>
+                          <ProtectedRoute redirectPath="/partner" allowedRoles={[role.PARTNER]}>
                               <h1>DASHBOARD</h1>
                           </ProtectedRoute>
                       } />
