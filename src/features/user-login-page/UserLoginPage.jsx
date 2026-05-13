@@ -1,37 +1,32 @@
 import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
-import { INTERNAL_EMAIL_SUFFIX, role } from "../../config/constants.js";
+import {DASHBOARD_BY_ROLE, INTERNAL_EMAIL_SUFFIX} from "../../config/constants.js";
 import UserSignInForm from "./components/UserSignInForm.jsx";
-import { passwordSignIn, getRole } from "../../lib/supabaseUtils.js";
-import {supabaseClient} from "../../lib/supabaseClient.js";
+import {useAuth} from "../../context/useAuth.js";
+import {auth} from "../../lib/auth.js";
 
-const DASHBOARD_BY_ROLE = {
-    [role.ADMIN]: '/admin/dashboard',
-    [role.DRIVER]: '/driver/dashboard',
-};
+
 
 function UserLoginPage() {
 
     const navigate = useNavigate();
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const { session, role } = useAuth();
 
     useEffect(() => {
-        supabaseClient.auth.getSession().then(async ({ data }) => {
-            const session = data.session;
-
-            if (session) {
-                const role = await getRole(session.user.id);
-                navigate(DASHBOARD_BY_ROLE[role]);
-            }
-        })
-    }, [navigate]);
+        if (session) {
+            navigate(DASHBOARD_BY_ROLE[role]);
+        }
+    }, [session, role])
 
     const handleSignIn = async (formData) => {
 
         if (isLoading) {
             return;
         }
+
+        setIsLoading(true);
 
         const username = formData.get('username')?.trim();
         const password = formData.get('password');
@@ -43,21 +38,9 @@ function UserLoginPage() {
 
         const email = username + INTERNAL_EMAIL_SUFFIX;
         setError(null);
-        setIsLoading(true);
 
         try {
-            const data = await passwordSignIn(email, password);
-
-            const userRole = await getRole(data.user.id);
-            const destination = DASHBOARD_BY_ROLE[userRole];
-
-            if (!destination) {
-                setError('Din konto har ingen tildelt rolle. Kontakt support.');
-                return;
-            }
-
-            navigate(destination);
-
+            await auth.signIn(email, password);
         } catch (e) {
             console.error(e);
             if (e.code === 'invalid_credentials') {

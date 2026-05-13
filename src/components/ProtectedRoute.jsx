@@ -1,31 +1,23 @@
-import {useEffect, useState} from "react";
 import {Navigate, Outlet} from "react-router";
-import {supabaseClient} from "../lib/supabaseClient.js";
-import {getRole} from "../lib/supabaseUtils.js";
+import {useAuth} from "../context/useAuth.js";
 
-function ProtectedRoute({redirectPath, allowedRoles = [], children}) {
+function ProtectedRoute({redirectPath, allowedRoles, children}) {
 
-    const [session, setSession] = useState(undefined); // undefined = still loading
-    const [userRole, setUserRole] = useState(undefined);
+    if (!allowedRoles) {
+        throw new Error('Protected Route must have at least one allowed role');
+    }
 
-    useEffect(() => {
-        supabaseClient.auth.getSession().then(async ({ data }) => {
-            const s = data.session;
-            setSession(s);
-            if (s) {
-                const role = await getRole(s.user.id);
-                setUserRole(role);
-            }
-        });
-    }, []);
+    const { session, role, isLoading } = useAuth();
 
-    if (session === undefined || (session && userRole === undefined)) return <h1>LOADING</h1>;
+    if (isLoading) {
+        return <h1>LOADING</h1>;
+    }
 
-    if (session === null) {
+    if (!session) {
         return <Navigate to={redirectPath} replace />;
     }
 
-    if (!allowedRoles.includes(userRole)) {
+    if (!allowedRoles.includes(role)) {
         return <Navigate to={redirectPath} replace />;
     }
 
