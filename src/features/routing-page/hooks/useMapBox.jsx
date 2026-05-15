@@ -16,23 +16,17 @@ export function useMapBox(token, containerRef) {
             style: 'mapbox://styles/mapbox/dark-v11',
             center: MAP_CENTER,
             zoom: MAP_ZOOM,
-            attributionControl: false,
         })
 
-        map.addControl(
-            new mapboxgl.NavigationControl({showCompass: false}),
-            "top-right"
-        )
+        map.on("load", () => setMapReady(true));
+        mapRef.current = map;
 
-        map.on("load", () => {setMapReady(true);})
-
-        mapRef.current = map
         return () => {
             map.remove()
             mapRef.current = null
             setMapReady(false)
         }
-    }, [token, containerRef])
+    }, [token, containerRef]);
 
-    return {mapRef, mapReady}
+    return {mapRef, mapReady};
 }

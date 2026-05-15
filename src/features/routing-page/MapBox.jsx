@@ -4,86 +4,19 @@ import { useMapBox } from "./hooks/useMapBox.jsx";
 import { STOPS } from "./constants/stops.js";
 
 const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
-console.log('Token loaded:', token ? `${token.slice(0, 10)}...` : 'MISSING');
 
-function buildMarkerEl(label, color, numbered) {
-    const el = document.createElement("div");
-
-    Object.assign(el.style, {
-        width: "38px",
-        height: "38px",
-        backgroundColor: color,
-        borderRadius: "50%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: numbered ? "14px" : "17px",
-        fontWeight: "800",
-        color: "#0f172a",
-        border: "2.5px solid rgba(255, 255, 255, 0.9)",
-        cursor: "pointer",
-    });
-
-    el.textContent = label;
-    return el;
+function coordsToString(coordsList) {
+    return coordsList.map((c) => `${c[0]},${c[1]}`).join(";");
 }
 
-function addMarkers(map, stops, markersRef, numbered) {
-    // Clear out any previous markers before adding the new set
-    markersRef.current.forEach((m) => m.remove());
-    markersRef.current = [];
+export const mapboxApi = {
+    async optimize(startCoords, stops){
+        const allCoords = [startCoords, ...stops.map((s) => s.coords)];
+        const coords = coordsToString(allCoords);
 
-    stops.forEach((stop, i) => {
-        const label = numbered ? String(i + 1) : stop.emoji;
-        const el = buildMarkerEl(label, stop.color, numbered);
-
-        const popup = new mapboxgl.Popup({ offset: 28, closeButton: false })
-            .setHTML(`<strong>${stop.name}</strong><br>${stop.address}`);
-
-        const marker = new mapboxgl.Marker({ element: el })
-            .setLngLat(stop.coords)
-            .setPopup(popup)
-            .addTo(map);
-
-        markersRef.current.push(marker);
-    });
+        const url
+    }
 }
-
-function drawRoute(map, geometry) {
-    // Remove old route layers/source before adding new
-    if (map.getLayer("route-line")) map.removeLayer("route-line");
-    if (map.getLayer("route-glow")) map.removeLayer("route-glow");
-    if (map.getSource("route")) map.removeSource("route");
-
-    map.addSource("route", {
-        type: "geojson",
-        data: { type: "Feature", properties: {}, geometry },
-    });
-
-    map.addLayer({
-        id: "route-glow",
-        type: "line",
-        source: "route",
-        layout: { "line-join": "round", "line-cap": "round" },
-        paint: { "line-color": "#4ecdc4", "line-width": 10, "line-opacity": 0.25 },
-    });
-
-    map.addLayer({
-        id: "route-line",
-        type: "line",
-        source: "route",
-        layout: { "line-join": "round", "line-cap": "round" },
-        paint: { "line-color": "#4ecdc4", "line-width": 4, "line-opacity": 0.9 },
-    });
-}
-
-function clearRoute(map) {
-    if (!map) return;
-    if (map.getLayer("route-line")) map.removeLayer("route-line");
-    if (map.getLayer("route-glow")) map.removeLayer("route-glow");
-    if (map.getSource("route")) map.removeSource("route");
-}
-
 export default function MapApp() {
     const containerRef = useRef(null);
     const markersRef = useRef([]);
