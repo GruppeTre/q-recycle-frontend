@@ -1,13 +1,13 @@
-import Container from "../../components/Container.jsx";
 import Navbar from "../../components/navbar/Navbar.jsx";
+import {adminNavItems} from "../../components/navbar/navItems.jsx";
+import {Outlet} from "react-router";
 
 function AdminDashboard() {
+
     return (
         <div className="bg-primary-background h-dvh">
-            <Navbar title="Admin"/>
-            <Container>
-                <p className="text-section-header">New Admin Dashboard!</p>
-            </Container>
+            <Navbar title="Admin" navItems={adminNavItems}/>
+            <Outlet />
         </div>
     );
 }
