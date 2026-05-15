@@ -9,7 +9,9 @@
     --color-background: oklch(0.9663 0.008 98.88);
 
     /* Gap-størrelser */
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 2rem;
+    --spacing-padding: 0.25rem;
+    --spacing-gap-sm: 0.5rem;
+    --spacing-gap-md: 1rem;
+    --spacing-gap-lg: 2rem;
+    --spacing-gap-xl: 4rem;
 }
