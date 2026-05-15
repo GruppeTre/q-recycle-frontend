@@ -5,6 +5,7 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import {role} from "./config/constants.js";
 import {AuthProvider} from "./context/AuthContext.jsx";
 import GuestRoute from "./components/GuestRoute.jsx";
+import AdminDashboard from "./features/admin-dashboard/AdminDashboard.jsx";
 
 function App() {
 
@@ -18,6 +19,8 @@ function App() {
                           <UserLoginPage />
                       </GuestRoute>
                   }/>
+
+                  <Route path="test" element={<AdminDashboard />}/>
 
                   <Route path="partner" >
 
