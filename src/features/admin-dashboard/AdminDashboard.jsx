@@ -1,10 +1,10 @@
 import Container from "../../components/Container.jsx";
-import Header from "../../components/header/Header.jsx";
+import Navbar from "../../components/navbar/Navbar.jsx";
 
 function AdminDashboard() {
     return (
         <div className="bg-primary-background h-dvh">
-            <Header title="Admin"/>
+            <Navbar title="Admin"/>
             <Container>
                 <h1>New Admin Dashboard!</h1>
             </Container>

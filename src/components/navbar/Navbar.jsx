@@ -1,6 +1,6 @@
 import HeroIcon from "./components/HeroIcon.jsx";
 
-function Header({title, navItems}) {
+function Navbar({title, navItems}) {
     return (
         <nav className="bg-background px-gap-lg py-gap-md border-b border-surface">
                 <div className="flex justify-between items-center">
@@ -14,4 +14,4 @@ function Header({title, navItems}) {
     );
 }
 
-export default Header;
+export default Navbar;
