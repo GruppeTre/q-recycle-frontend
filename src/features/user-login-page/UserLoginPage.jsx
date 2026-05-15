@@ -55,7 +55,7 @@ function UserLoginPage() {
 
     return (
         <div className="max-w-lg mx-auto mt-gap-xl">
-            <div className="w-full flex flex-col items-center mt-4">
+            <div className="w-full flex flex-col gap-gap-md items-center">
                 <UserSignInForm callback={handleSignIn} />
                 {error && (
                     <div role="alert" className="text-sm text-red-500 bg-red-100 px-3 py-2 rounded">

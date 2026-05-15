@@ -6,7 +6,7 @@ function Navbar({title, navItems}) {
                 <div className="flex justify-between items-center">
                     <div className="flex gap-2 items-center">
                         <HeroIcon />
-                        <p>{title}</p>
+                        <h2 className="text-center py-padding text-lg font-semibold">{title}</h2>
                     </div>
                     <p>HAMBURGER MENU</p>
                 </div>

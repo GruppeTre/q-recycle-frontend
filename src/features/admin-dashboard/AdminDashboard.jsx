@@ -6,7 +6,7 @@ function AdminDashboard() {
         <div className="bg-primary-background h-dvh">
             <Navbar title="Admin"/>
             <Container>
-                <h1>New Admin Dashboard!</h1>
+                <p className="text-section-header">New Admin Dashboard!</p>
             </Container>
         </div>
     );

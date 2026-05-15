@@ -43,7 +43,7 @@ function PartnerLoginPage() {
     return (
         <div className="w-lg mx-auto mt-gap-xl">
             <div className="w-full flex flex-col gap-gap-md items-center">
-                <h2 className="text-lg text-gray-600">Indtast din pinkode:</h2>
+                <p className="text-section-header">Indtast din pinkode:</p>
                 <PartnerSignInForm callback={handleSignIn}/>
                 {error && <div className="text-sm text-red-500 bg-red-100 px-3 py-2 rounded">{error}</div>}
             </div>
