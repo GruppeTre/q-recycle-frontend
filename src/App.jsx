@@ -23,8 +23,6 @@ function App() {
                       </GuestRoute>
                   }/>
 
-                  <Route path="test" element={<AdminDashboard />}/>
-
                   <Route path="partner" >
 
                       <Route index element={
@@ -50,6 +48,7 @@ function App() {
                       <Route path="partners" element={<AdminPartnersPage />} />
                       <Route path="statistics" element={<AdminStatisticsPage />} />
                   </Route>
+
               </Routes>
           </BrowserRouter>
       </AuthProvider>
