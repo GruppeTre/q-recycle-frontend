@@ -1,10 +1,10 @@
-import Container from "../../../components/Container.jsx";
+import PageContainer from "../../../components/PageContainer.jsx";
 
 function AdminDriversPage() {
     return (
-        <Container>
+        <PageContainer>
             <h1 className="text-text-hero-header">ADMIN DRIVERS PAGE</h1>
-        </Container>
+        </PageContainer>
     );
 }
 

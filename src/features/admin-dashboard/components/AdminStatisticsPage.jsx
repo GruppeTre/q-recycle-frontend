@@ -1,10 +1,10 @@
-import Container from "../../../components/Container.jsx";
+import PageContainer from "../../../components/PageContainer.jsx";
 
 function AdminStatisticsPage() {
     return (
-        <Container>
+        <PageContainer>
             <h1 className="text-text-hero-header">ADMIN STATISTICS PAGE</h1>
-        </Container>
+        </PageContainer>
     );
 }
 

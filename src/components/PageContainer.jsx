@@ -1,4 +1,4 @@
-function Container({ children }) {
+function PageContainer({ children }) {
     return (
         <div className="max-w-5xl mx-auto px-4">
             {children}
@@ -6,4 +6,4 @@ function Container({ children }) {
     );
 }
 
-export default Container;
+export default PageContainer;
