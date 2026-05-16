@@ -4,6 +4,7 @@ import {DASHBOARD_BY_ROLE, INTERNAL_EMAIL_SUFFIX} from "../../config/constants.j
 import UserSignInForm from "./components/UserSignInForm.jsx";
 import {useAuth} from "../../context/useAuth.js";
 import {auth} from "../../lib/auth.js";
+import Container from "../../components/Container.jsx";
 
 
 
@@ -54,7 +55,7 @@ function UserLoginPage() {
     };
 
     return (
-        <div className="max-w-lg mx-auto mt-gap-xl">
+        <Container >
             <div className="w-full flex flex-col gap-gap-md items-center">
                 <UserSignInForm callback={handleSignIn} />
                 {error && (
@@ -63,7 +64,7 @@ function UserLoginPage() {
                     </div>
                 )}
             </div>
-        </div>
+        </Container>
     );
 }
 
