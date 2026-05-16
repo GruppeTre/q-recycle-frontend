@@ -6,9 +6,9 @@ import {role} from "./config/constants.js";
 import {AuthProvider} from "./context/AuthContext.jsx";
 import GuestRoute from "./components/GuestRoute.jsx";
 import AdminDashboard from "./features/admin-dashboard/AdminDashboard.jsx";
-import AdminDriversPage from "./features/admin-dashboard/components/AdminDriversPage.jsx";
-import AdminPartnersPage from "./features/admin-dashboard/components/AdminPartnersPage.jsx";
-import AdminStatisticsPage from "./features/admin-dashboard/components/AdminStatisticsPage.jsx";
+import AdminDriversPage from "./features/admin-dashboard/pages/AdminDriversPage.jsx";
+import AdminPartnersPage from "./features/admin-dashboard/pages/AdminPartnersPage.jsx";
+import AdminStatisticsPage from "./features/admin-dashboard/pages/AdminStatisticsPage.jsx";
 
 function App() {
 
