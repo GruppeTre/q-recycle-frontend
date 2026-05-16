@@ -6,7 +6,7 @@ const AuthContext = createContext(null);
 
 const AuthProvider = ({children}) => {
 
-    const [ session, setSession ] = useState(null);
+    const [ session, setSession ] = useState(undefined);
     const [ role, setRole ] = useState(null);
     const [ isLoading, setIsLoading ] = useState(true);
 
@@ -27,6 +27,8 @@ const AuthProvider = ({children}) => {
 
     useEffect(() => {
         let isMounted = true;
+
+        if (session === undefined) return;
 
         if (session === null) {
             // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -55,7 +57,7 @@ const AuthProvider = ({children}) => {
         };
     }, [session]);
 
-    return <AuthContext.Provider value={{session, role, isLoading}}>{children}</AuthContext.Provider>
+    return <AuthContext.Provider value={{session: session ?? null, role, isLoading}}>{children}</AuthContext.Provider>
 }
 
 export { AuthProvider, AuthContext };
