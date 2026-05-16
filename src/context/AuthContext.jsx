@@ -11,57 +11,49 @@ const AuthProvider = ({children}) => {
     const [ isLoading, setIsLoading ] = useState(true);
 
     useEffect(() => {
-
-        //keep track of whether the component is mounted or not, if it isn't, we don't want to update state
         let isMounted = true;
 
-        const { data: { subscription} } = supabaseClient.auth.onAuthStateChange( async (event, fetchedSession) => {
-
-            console.log(`Handling Auth state change: ${event}`);
-
-            if (event === 'TOKEN_REFRESHED') {
-                if (isMounted) {
-                    setSession(fetchedSession);
-                    setIsLoading(false);
-                }
-                return;
-            }
-
+        const { data: { subscription } } = supabaseClient.auth.onAuthStateChange((event, fetchedSession) => {
             if (isMounted) {
-                setIsLoading(true);
-            }
-
-            if (!fetchedSession) {
-                if (isMounted) {
-                    setSession(null);
-                    setRole(null);
-                    setIsLoading(false);
-                }
-                return;
-            }
-
-            try {
-                const fetchedRole = await profiles.getRole(fetchedSession.user.id);
-                if (isMounted) {
-                    setRole(fetchedRole);
-                    setSession(fetchedSession);
-                }
-            } catch (e) {
-                console.error(e);
-            } finally {
-                if (isMounted) {
-                    setIsLoading(false);
-                }
+                setSession(fetchedSession);
             }
         });
 
-        //cleanup function
         return () => {
-            console.log('AuthProvider component unmounted');
             isMounted = false;
             subscription.unsubscribe();
-        }
+        };
     }, []);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        if (session === null) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setRole(null);
+            setIsLoading(false);
+            return;
+        }
+
+        setIsLoading(true);
+
+        profiles.getRole(session.user.id)
+            .then(fetchedRole => {
+                if (isMounted) {
+                    setRole(fetchedRole);
+                }
+            })
+            .catch(e => console.error(e))
+            .finally(() => {
+                if (isMounted) {
+                    setIsLoading(false);
+                }
+            });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [session]);
 
     return <AuthContext.Provider value={{session, role, isLoading}}>{children}</AuthContext.Provider>
 }
