@@ -15,7 +15,7 @@ function Navbar({title, navItems}) {
         <nav>
             <div className="bg-background px-gap-md py-gap-md border-b border-surface">
                 <div className="flex justify-between items-center">
-                    <div className="flex gap-2 items-center">
+                    <div className="flex gap-gap-md items-center">
                         <HeroIcon />
                         <h2 className="text-center py-padding text-lg font-semibold">{title}</h2>
                     </div>
