@@ -1,5 +1,5 @@
 import Navbar from "../../components/navbar/Navbar.jsx";
-import {adminNavItems} from "../../components/navbar/navItems.jsx";
+import {adminNavItems} from "./adminNavItems.jsx";
 import {Outlet} from "react-router";
 
 function AdminDashboard() {
