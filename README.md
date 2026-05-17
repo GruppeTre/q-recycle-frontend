@@ -46,9 +46,9 @@ const { session, role, isLoading } = useAuth();
 
 Roles are defined in `src/config/constants.js`.
 
-# Reusable layout components
+## Reusable layout components
 
-## PageContainer
+### PageContainer
 The ``PageContainer`` component is a very simple responsive page wapper, that provides a centered container with a set margin and padding. It is recommended to use this
 wrapper as the top-level component on most user-facing views/pages, to ensure consistent baseline responsiveness across the app:
 
@@ -63,7 +63,7 @@ it can be put outside of the ``PageContainer`` component:
     </PageContainer>
 </div>
 ```
-## Navbar
+### Navbar
 The ``Navbar`` component is a responsive header & navbar, designed to be as simple to use as possible.
 It is intended to span the full width of the page. The navigational links responsively collapse into an accordion
 on smaller screens, and automatically highlight the link indicating the current page.
@@ -96,3 +96,14 @@ The ``navItem`` object has three _required_ fields:
 
 the ``navItem`` array can be defined in a separate module local to the corresponding page component 
 (e.g ``adminNavItems.jsx`` in ``src/features/admin-dashboard``)
+
+## Styling
+
+### Typography
+A few basic tailwind variables for standard text variations are defined in ``main.css``:
+
+ - ``.text-hero-header`` — large and bold header, should be used very sparingly
+ - ``.text-section-header`` — smaller header, can be used to title sections or groups of content
+ - ``.text-body`` — standard body text
+ - ``.text-muted`` — same size as body text, but in a more muted color. Can be used for asides 
+ - or to imply a lower hierarchical value of some text
