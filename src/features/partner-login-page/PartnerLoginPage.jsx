@@ -3,6 +3,7 @@ import PartnerSignInForm from "./components/PartnerSignInForm.jsx";
 import {useNavigate} from "react-router";
 import {useState} from "react";
 import {auth} from "../../lib/auth.js";
+import PageContainer from "../../components/PageContainer.jsx";
 
 function PartnerLoginPage() {
 
@@ -41,13 +42,13 @@ function PartnerLoginPage() {
     }
 
     return (
-        <div className="w-lg mx-auto">
-            <div className="w-full flex flex-col gap-2 items-center mt-4">
-                <h2 className="text-lg text-gray-600">Indtast din pinkode:</h2>
+        <PageContainer>
+            <div className="w-full flex flex-col gap-gap-md items-center mt-gap-xl">
+                <p className="text-section-header">Indtast din pinkode:</p>
                 <PartnerSignInForm callback={handleSignIn}/>
                 {error && <div className="text-sm text-red-500 bg-red-100 px-3 py-2 rounded">{error}</div>}
             </div>
-        </div>
+        </PageContainer>
     );
 }
 

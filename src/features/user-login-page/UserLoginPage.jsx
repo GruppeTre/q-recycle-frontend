@@ -4,6 +4,7 @@ import {DASHBOARD_BY_ROLE, INTERNAL_EMAIL_SUFFIX} from "../../config/constants.j
 import UserSignInForm from "./components/UserSignInForm.jsx";
 import {useAuth} from "../../context/useAuth.js";
 import {auth} from "../../lib/auth.js";
+import PageContainer from "../../components/PageContainer.jsx";
 
 
 
@@ -54,8 +55,8 @@ function UserLoginPage() {
     };
 
     return (
-        <div className="max-w-lg mx-auto">
-            <div className="w-full flex flex-col items-center mt-4">
+        <PageContainer >
+            <div className="w-full flex flex-col gap-gap-md items-center mt-gap-xl">
                 <UserSignInForm callback={handleSignIn} />
                 {error && (
                     <div role="alert" className="text-sm text-red-500 bg-red-100 px-3 py-2 rounded">
@@ -63,7 +64,7 @@ function UserLoginPage() {
                     </div>
                 )}
             </div>
-        </div>
+        </PageContainer>
     );
 }
 
