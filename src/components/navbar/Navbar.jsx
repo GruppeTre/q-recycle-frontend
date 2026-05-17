@@ -23,12 +23,12 @@ function Navbar({title, navItems}) {
                         <NavLinks navItems={navItems}/>
                     </div>
                     <button className="md:hidden cursor-pointer" onClick={handleHamburgerToggle}>
-                        {isOpen ? <X className="pointer-events-none" /> : <Menu className="pointer-events-none" />}
+                        {isOpen ? <X /> : <Menu />}
                     </button>
                 </div>
             </div>
             {isOpen &&
-                <div className="w-full flex flex-col gap-gap-md bg-background px-gap-lg py-gap-md border-b border-surface">
+                <div className="md:hidden w-full flex flex-col gap-gap-md bg-background px-gap-lg py-gap-md border-b border-surface ">
                     <NavLinks navItems={navItems}/>
                 </div>
             }
