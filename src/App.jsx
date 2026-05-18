@@ -1,5 +1,3 @@
-import {BrowserRouter, Route, Routes} from "react-router";
-//import FrontPage from "./features/front-page";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router";
 import PartnerLoginPage from "./features/partner-login-page/PartnerLoginPage.jsx";
 import UserLoginPage from "./features/user-login-page/UserLoginPage.jsx";
