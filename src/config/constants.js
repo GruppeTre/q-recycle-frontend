@@ -11,3 +11,10 @@ export const DASHBOARD_BY_ROLE = {
     [role.DRIVER]: '/driver',
     [role.PARTNER]: '/partner/dashboard'
 };
+
+export const pickupStatus = {
+    REQUESTED: 'requested',
+    SCHEDULED: 'scheduled',
+    COMPLETED: 'completed',
+    CANCELLED: 'cancelled'
+}
