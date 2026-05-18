@@ -19,13 +19,13 @@ function PartnerDashboardPage() {
         const { data, error: userError } = await supabaseClient.auth.getUser()
         const user = data?.user
 
-        console.log("user data:", data)
+        console.log("user data:", JSON.stringify(user));
         console.log("user error:", userError)
 
         const {error} = await supabaseClient.from("pickup").insert({
             partner_id: user.id,
             bags: Number(bags),
-            status: "pending",
+            status: "requested",
             created_at: new Date(),
         })
 
