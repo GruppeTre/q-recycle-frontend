@@ -11,3 +11,9 @@ export const COLORS = {
     route: "#10b981",    // green for the rendered route line
     start: "#8b5cf6",    // purple for the driver's starting point
 };
+
+export const STORAGE = {
+    name: "Storage - Retortvej 38",
+    address: "Retortvej 38, 2500 København NV",
+    coords: [12.501672, 55.65358]
+}

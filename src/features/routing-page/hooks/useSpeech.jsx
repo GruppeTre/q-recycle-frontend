@@ -18,5 +18,12 @@ export function useSpeech({ lang = "da-DK", rate = 1, pitch = 1} = {}) {
         window.speechSynthesis.speak(u);
     }, [supported, lang, rate, pitch]);
 
-    return { speak, supported}
+    const cancel = useCallback(() => {
+        if (!supported) return;
+        window.speechSynthesis.cancel();
+        lastSpokenRef.current = "";
+    }, [supported]);
+
+
+    return { speak, cancel, supported}
 }

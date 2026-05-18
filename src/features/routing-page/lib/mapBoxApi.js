@@ -1,3 +1,5 @@
+import { STORAGE } from "../constants/mapConfig.js";
+
 const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 function coordsToString(coordsList) {
@@ -6,7 +8,11 @@ function coordsToString(coordsList) {
 
 export const mapboxApi = {
     async optimize(startCoords, stops){
-        const allCoords = [startCoords, ...stops.map((s) => s.coords)];
+        const allCoords = [
+            startCoords,
+            ...stops.map((s) => s.coords),
+            STORAGE.coords
+        ];
         const coords = coordsToString(allCoords);
 
         const url =
@@ -22,7 +28,7 @@ export const mapboxApi = {
         const trip = data.trips[0]
 
         const ordered = data.waypoints
-            .slice(1)
+            .slice(1, -1)
             .map((wp, i) => ({waypoint_index: wp.waypoint_index, stop: stops[i]}))
             .sort((a, b) => a.waypoint_index - b.waypoint_index)
             .map(({stop}) => stop);
@@ -31,7 +37,11 @@ export const mapboxApi = {
     },
 
     async directions(startCoords, orderedStops) {
-        const allCoords = [startCoords, ...orderedStops.map((s) => s.coords)]
+        const allCoords = [
+            startCoords,
+            ...orderedStops.map((s) => s.coords),
+            STORAGE.coords
+        ];
         const coords = coordsToString(allCoords);
 
         const url =
