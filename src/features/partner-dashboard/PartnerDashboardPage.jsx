@@ -1,10 +1,11 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import Button from "../../components/Button.jsx";
 import PickupRequestForm from "./components/PickupRequestForm.jsx";
 import ConfirmationMessage from "./components/ConfirmationMessage.jsx";
 import {supabaseClient} from "../../lib/supabaseClient";
 import {useAuth} from "../../context/useAuth.js";
 import PageContainer from "../../components/PageContainer.jsx";
+import {pickupRequest} from "../../lib/pickupRequest.js";
 
 function PartnerDashboardPage() {
 
@@ -14,11 +15,22 @@ function PartnerDashboardPage() {
     const [hasActiveRequest, setHasActiveRequest] = useState(false)
 
     const {session} = useAuth();
+    const user = session.user;
+
+    useEffect(() => {
+        async function checkActiveRequest() {
+            try{
+                const data = await pickupRequest.getActive(user.id);
+                setHasActiveRequest(!!data);
+            }catch(error){
+                console.log("Fejl ved hentning af aktive anmodninger", error);
+            }
+        }
+        checkActiveRequest()
+    },[user.id])
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-
-        const user = session.user;
 
         console.log("handleSubmit kaldt")
 
