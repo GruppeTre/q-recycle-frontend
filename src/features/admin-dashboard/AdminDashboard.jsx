@@ -5,10 +5,13 @@ import {Outlet} from "react-router";
 function AdminDashboard() {
 
     return (
-        <div className="bg-primary-background h-dvh">
-            <Navbar title="Admin" navItems={adminNavItems}/>
-            <Outlet />
-        </div>
+        <>
+            <title>Q-recycle | Admin</title>
+            <div className="bg-primary-background h-dvh">
+                <Navbar title="Admin" navItems={adminNavItems}/>
+                <Outlet />
+            </div>
+        </>
     );
 }
 
