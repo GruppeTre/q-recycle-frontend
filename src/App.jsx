@@ -1,10 +1,12 @@
 import {BrowserRouter, Route, Routes} from "react-router";
+//import FrontPage from "./features/front-page";
 import PartnerLoginPage from "./features/partner-login-page/PartnerLoginPage.jsx";
 import UserLoginPage from "./features/user-login-page/UserLoginPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import {role} from "./config/constants.js";
 import {AuthProvider} from "./context/AuthContext.jsx";
 import GuestRoute from "./components/GuestRoute.jsx";
+import PartnerDashboardPage from "./features/partner-dashboard/PartnerDashboardPage.jsx";
 
 function App() {
 
@@ -21,16 +23,15 @@ function App() {
 
                   <Route path="partner" >
 
-                      <Route index element={
+                      {/*<Route index element={
                           <GuestRoute allowedRoles={[role.ADMIN, role.DRIVER]}>
                               <PartnerLoginPage />
                           </GuestRoute>
-                      }/>
+                      }/>*/}
 
+                      <Route index element={<PartnerLoginPage />} />
                       <Route path="dashboard" element={
-                          <ProtectedRoute redirectPath="/partner" allowedRoles={[role.PARTNER]}>
-                              <h1>DASHBOARD</h1>
-                          </ProtectedRoute>
+                          <PartnerDashboardPage />
                       } />
                   </Route>
 
