@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 
 function haversine(a, b) {
     const toRad = (d) => (d * Math.PI) / 180;
@@ -15,7 +15,11 @@ function haversine(a, b) {
 export function useNavigation({ steps, driverPosition, speak, active}) {
     const [currentStepIdx, setCurrentStepIdx] = useState(0);
 
-    useEffect(() => { setCurrentStepIdx(0); }, [steps]);
+    const prevStepsRef = useRef(steps);
+    if (prevStepsRef.current !== steps) {
+        prevStepsRef.current = steps;
+        setCurrentStepIdx(0);
+    }
 
     useEffect(() => {
         if(!active || !driverPosition || !steps?.length) return;
@@ -35,5 +39,11 @@ export function useNavigation({ steps, driverPosition, speak, active}) {
         speak(currentStep.instruction);
     }, [currentStep, speak, active]);
 
-    return {currentStep, currentStepIdx, ... };
+    const distanceToNext = useMemo(() => {
+        if(!driverPosition || !currentStep) return null;
+        return haversine(driverPosition, currentStep.location);
+    }, [driverPosition, currentStep]);
+
+    return {currentStep, currentStepIdx, totalSteps: steps?.length ?? 0,
+    distanceToNext,};
 }
