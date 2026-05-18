@@ -3,6 +3,7 @@ import Button from "../../components/Button.jsx";
 import PickupRequestForm from "./components/PickupRequestForm.jsx";
 import ConfirmationMessage from "./components/ConfirmationMessage.jsx";
 import {supabaseClient} from "../../lib/supabaseClient";
+import {useAuth} from "../../context/useAuth.js";
 
 function PartnerDashboardPage() {
 
@@ -11,16 +12,16 @@ function PartnerDashboardPage() {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [hasActiveRequest, setHasActiveRequest] = useState(false)
 
+    const {session, role, isLoading} = useAuth();
+
     const handleSubmit = async (event) => {
         event.preventDefault()
 
+        const user = session.user;
+
         console.log("handleSubmit kaldt")
 
-        const { data, error: userError } = await supabaseClient.auth.getUser()
-        const user = data?.user
-
         console.log("user data:", JSON.stringify(user));
-        console.log("user error:", userError)
 
         const {error} = await supabaseClient.from("pickup").insert({
             partner_id: user.id,
@@ -30,7 +31,6 @@ function PartnerDashboardPage() {
         })
 
         console.log("error:", error)
-        console.log("data:", data)
 
         if (error) {
             setMessage("Noget gik galt, prøv igen")
