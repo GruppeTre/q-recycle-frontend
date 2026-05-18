@@ -1,12 +1,3 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
 ## React Compiler
 
 The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
@@ -17,7 +8,7 @@ If you are developing a production application, we recommend using TypeScript wi
 
 ## Authentication
 
-Auth state lives in `AuthContext` (wraps the whole app in `App.jsx`). To access it anywhere:
+A global authentication and authorization state lives in `AuthContext` (wraps the whole app in `App.jsx`). Use the auth hook to access it anywhere:
 
 ```js
 import { useAuth } from './context/useAuth';
@@ -54,3 +45,64 @@ const { session, role, isLoading } = useAuth();
 ```
 
 Roles are defined in `src/config/constants.js`.
+
+## Reusable layout components
+
+### PageContainer
+The ``PageContainer`` component is a very simple responsive page wapper, that provides a centered container with a set margin and padding. It is recommended to use this
+wrapper as the top-level component on most user-facing views/pages, to ensure consistent baseline responsiveness across the app:
+
+If a certain element (e.g. the [navbar](#navbar)) should span the full width of the page,
+it can be put outside of the ``PageContainer`` component:
+
+```javascript
+<div>
+    <Navbar title="Admin" navItems={adminNavItems}/>
+    <PageContainer>
+        {/* Page content here */}
+    </PageContainer>
+</div>
+```
+### Navbar
+The ``Navbar`` component is a responsive header & navbar, designed to be as simple to use as possible.
+It is intended to span the full width of the page. The navigational links responsively collapse into an accordion
+on smaller screens, and automatically highlight the link indicating the current page.
+
+The ``Navbar`` component takes two props:
+
+```javascript
+<div className="h-dvh">
+    <Navbar title="Admin" navItems={adminNavItems}/>
+    {/* Page content here */}
+</div>
+```
+
+- `title` — Title presented next to the logo in navbar
+- `navItems` — array of ``navItem`` objects
+
+The ``navItem`` object has three _required_ fields:
+
+```javascript
+{
+    icon: <Truck />,
+    label: "Drivers",
+    to: "/admin/drivers"
+}
+```
+
+- `icon` — any Lucide icon component
+- `label` — text presented on the navigational button
+- `to` — path that the link should navigate to
+
+the ``navItem`` array can be defined in a separate module local to the corresponding page component 
+(e.g ``adminNavItems.jsx`` in ``src/features/admin-dashboard``)
+
+## Styling
+
+### Typography
+A few basic tailwind variables for standard text variations are defined in ``main.css``:
+
+ - ``text-hero-header`` — large and bold header, should be used very sparingly
+ - ``text-section-header`` — smaller header, can be used to title sections or groups of content
+ - ``text-body`` — standard body text
+ - ``text-muted`` — same size as body text, but in a more muted color. Can be used for asides or to imply a lower hierarchical value of some text

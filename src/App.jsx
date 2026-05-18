@@ -1,5 +1,6 @@
 import {BrowserRouter, Route, Routes} from "react-router";
 //import FrontPage from "./features/front-page";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router";
 import PartnerLoginPage from "./features/partner-login-page/PartnerLoginPage.jsx";
 import UserLoginPage from "./features/user-login-page/UserLoginPage.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
@@ -7,6 +8,10 @@ import {role} from "./config/constants.js";
 import {AuthProvider} from "./context/AuthContext.jsx";
 import GuestRoute from "./components/GuestRoute.jsx";
 import PartnerDashboardPage from "./features/partner-dashboard/PartnerDashboardPage.jsx";
+import AdminDashboard from "./features/admin-dashboard/AdminDashboard.jsx";
+import AdminDriversPage from "./features/admin-dashboard/pages/AdminDriversPage.jsx";
+import AdminPartnersPage from "./features/admin-dashboard/pages/AdminPartnersPage.jsx";
+import AdminStatisticsPage from "./features/admin-dashboard/pages/AdminStatisticsPage.jsx";
 
 function App() {
 
@@ -39,9 +44,13 @@ function App() {
                       <Route index element={<h1>DRIVER DASHBOARD</h1>} />
                   </Route>
 
-                  <Route path="admin" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.ADMIN]}/>}>
-                      <Route index element={<h1>ADMIN DASHBOARD </h1>} />
+                  <Route path="admin" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.ADMIN]}> <AdminDashboard /> </ProtectedRoute>}>
+                      <Route index element={<Navigate to="drivers" replace={true}/>}/>
+                      <Route path="drivers" element={<AdminDriversPage />} />
+                      <Route path="partners" element={<AdminPartnersPage />} />
+                      <Route path="statistics" element={<AdminStatisticsPage />} />
                   </Route>
+
               </Routes>
           </BrowserRouter>
       </AuthProvider>
