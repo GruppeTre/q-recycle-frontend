@@ -12,7 +12,7 @@ export const mapboxApi = {
         const url =
             `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${coords}` +
             `?source=first&destination=last&roundtrip=false` +
-            `&overview=full&geometry=geojson` +
+            `&overview=full&geometries=geojson` +
             `&access_token=${token}`;
 
         const res = await fetch(url);
@@ -26,17 +26,18 @@ export const mapboxApi = {
             .map((wp, i) => ({waypoint_index: wp.waypoint_index, stop: stops[i]}))
             .sort((a, b) => a.waypoint_index - b.waypoint_index)
             .map(({stop}) => stop);
-        return { orderedStops: ordered, geometry: trip.geometry, ... };
+        return { orderedStops: ordered, geometry: trip.geometry, durationMin: Math.round(trip.duration / 60),
+            distanceKm: (trip.distance / 1000).toFixed(1), };
     },
 
     async directions(startCoords, orderedStops) {
-        const Allcords = [startCoords, ...orderedStops.map((s) => s.coords)]
-        const coords = coordsToString(Allcords);
+        const allCoords = [startCoords, ...orderedStops.map((s) => s.coords)]
+        const coords = coordsToString(allCoords);
 
         const url =
             `https://api.mapbox.com/directions/v5/mapbox/driving/${coords}` +
-            `?steps=true&overview=full&geometry=geojson&language=da` +
-            `?access_token=${token}`;
+            `?steps=true&overview=full&geometries=geojson&language=da` +
+            `&access_token=${token}`;
 
         const res = await fetch(url);
         const data = await res.json();
@@ -57,6 +58,7 @@ export const mapboxApi = {
             });
         });
 
-        return { geometry: route.geometry, steps, ... };
+        return { geometry: route.geometry, steps, durationMin: Math.round(route.duration / 60),
+        distanceKm: (route.distance / 1000).toFixed(1)};
     }
 }

@@ -1,4 +1,4 @@
-import {useCallback} from "react";
+import {useCallback, useRef} from "react";
 
 export function useSpeech({ lang = "da-DK", rate = 1, pitch = 1} = {}) {
     const supported = typeof window !== 'undefined' && "speechSynthesis" in window;

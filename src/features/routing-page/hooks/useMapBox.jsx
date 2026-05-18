@@ -1,32 +1,33 @@
-import {useEffect, useRef, useState} from "react";
-import mapboxgl from 'mapbox-gl';
-import { MAP_CENTER, MAP_ZOOM} from "../constants/stops.js";
+import { useCallback, useRef, useState } from "react";
+import mapboxgl from "mapbox-gl";
+import { MAP_CENTER, MAP_ZOOM } from "../constants/mapConfig.js";
 
-export function useMapBox(token, containerRef) {
+export function useMapBox(token) {
     const mapRef = useRef(null);
     const [mapReady, setMapReady] = useState(false);
 
-    useEffect(() => {
-        if(!token || !containerRef.current || mapRef.current) return;
+    // Callback ref — React kalder den med DOM-noden så snart den er klar
+    const containerRef = useCallback((node) => {
+        if (!node || !token || mapRef.current) return;
 
         mapboxgl.accessToken = token;
 
         const map = new mapboxgl.Map({
-            container: containerRef.current,
+            container: node,
             style: 'mapbox://styles/mapbox/dark-v11',
             center: MAP_CENTER,
             zoom: MAP_ZOOM,
-        })
+        });
 
         map.on("load", () => setMapReady(true));
+
+        // Watch container size and resize map whenever it changes
+        const observer = new ResizeObserver(() => map.resize());
+        observer.observe(node);
+
         mapRef.current = map;
+        mapRef.current._observer = observer;  // stash so we can clean up
+    }, [token]);
 
-        return () => {
-            map.remove()
-            mapRef.current = null
-            setMapReady(false)
-        }
-    }, [token, containerRef]);
-
-    return {mapRef, mapReady};
+    return { mapRef, mapReady, containerRef };
 }

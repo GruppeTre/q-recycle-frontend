@@ -1,172 +1,286 @@
 import mapboxgl from "mapbox-gl";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
 import { useMapBox } from "./hooks/useMapBox.jsx";
-import { STOPS } from "./constants/stops.js";
+import { useDriverPosition } from "./hooks/useDriverPosition.jsx";
+import { useSpeech } from "./hooks/useSpeech.jsx";
+import { useNavigation } from "./hooks/useNavigation.jsx";
+
+import { pickupApi } from "./api/pickupApi.js";
+import { mapboxApi } from "./lib/mapboxApi.js";
+import {
+    renderPickupMarkers,
+    renderRoute,
+    clearRoute,
+    renderDriverDot,
+} from "./lib/mapRenderers.js";
+
+import { PickupList } from "./components/PickupList.jsx";
+import { NavigationPanel } from "./components/NavigationPanel.jsx";
 
 const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
-function coordsToString(coordsList) {
-    return coordsList.map((c) => `${c[0]},${c[1]}`).join(";");
-}
+// Three phases of the screen, controlled by the `phase` state:
+//   "selecting"    → showing pickup list, driver picks which to include
+//   "navigating"   → route is drawn, GPS dot tracking, TTS active
+//   (no separate "loading" phase — we use a `busy` flag overlay)
 
-export const mapboxApi = {
-    async optimize(startCoords, stops){
-        const allCoords = [startCoords, ...stops.map((s) => s.coords)];
-        const coords = coordsToString(allCoords);
+console.log('Token:', token ? token.slice(0, 12) + '...' : 'MISSING');
 
-        const url
-    }
-}
 export default function MapApp() {
-    const containerRef = useRef(null);
-    const markersRef = useRef([]);
+    // --- map setup ---
+    const markersRef = useRef([]);       // pickup-stop markers (we clear/recreate these)
+    const driverMarkerRef = useRef(null); // the blue GPS dot (we move it, not recreate)
 
-    const { mapRef, mapReady } = useMapBox(token, containerRef);
+    const { mapRef, mapReady, containerRef } = useMapBox(token);
 
-    const [optimized, setOptimized] = useState(false);
-    const [orderedStops, setOrderedStops] = useState(STOPS);
-    const [stats, setStats] = useState(null);
-    const [loading, setLoading] = useState(false);
+    // --- data ---
+    const [pickups, setPickups] = useState([]);
+    const [loadingPickups, setLoadingPickups] = useState(true);
+    const [selectedIds, setSelectedIds] = useState(new Set());
+
+    // --- route + nav ---
+    const [phase, setPhase] = useState("selecting");
+    const [routeData, setRouteData] = useState(null); // { steps, durationMin, distanceKm, orderedStops }
+    const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
 
-    // Add initial (un-optimized) markers once the map is ready.
-    // useRef as a one-shot guard so we don't re-add on every render.
-    const didInitMarkers = useRef(false);
-    if (mapReady && !didInitMarkers.current) {
-        didInitMarkers.current = true;
-        addMarkers(mapRef.current, STOPS, markersRef, false);
+    // --- GPS + TTS ---
+    // Only track GPS while we're actually navigating — save battery.
+    const { position: driverPosition, error: gpsError } = useDriverPosition(phase === "navigating");
+    const { speak, cancel: cancelSpeech } = useSpeech({ lang: "da-DK", rate: 1.0 });
+
+    const { currentStep, currentStepIdx, totalSteps, distanceToNext } = useNavigation({
+        steps: routeData?.steps,
+        driverPosition,
+        speak,
+        active: phase === "navigating",
+    });
+
+    // ------------------------------------------------------------------
+    // Effect 1: fetch pending pickups once on mount
+    // ------------------------------------------------------------------
+    useEffect(() => {
+        let cancelled = false;
+        pickupApi
+            .fetchPending()
+            .then((data) => {
+                if (!cancelled) {
+                    setPickups(data);
+                    setLoadingPickups(false);
+                }
+            })
+            .catch((err) => {
+                if (!cancelled) {
+                    setError(err.message);
+                    setLoadingPickups(false);
+                }
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
+    // ------------------------------------------------------------------
+    // Effect 2: render pickup markers when map ready + pickups loaded
+    // (Only during "selecting" phase — during navigation we render the
+    // ordered subset with numbers instead.)
+    // ------------------------------------------------------------------
+    useEffect(() => {
+        if (!mapReady || phase !== "selecting") return;
+        renderPickupMarkers(mapRef.current, pickups, markersRef, { numbered: false });
+    }, [mapReady, pickups, phase, mapRef]);
+
+    // ------------------------------------------------------------------
+    // Effect 3: keep the driver dot in sync with GPS
+    // ------------------------------------------------------------------
+    useEffect(() => {
+        if (!mapReady || !driverPosition) return;
+        renderDriverDot(mapRef.current, driverPosition, driverMarkerRef);
+    }, [mapReady, driverPosition, mapRef]);
+
+    useEffect(() => {
+        if (!mapReady) return;
+
+        const map = mapRef.current;
+        map.resize();
+
+        // Also resize when the window changes
+        const onResize = () => map.resize();
+        window.addEventListener('resize', onResize);
+        return () => window.removeEventListener('resize', onResize);
+    }, [mapReady, mapRef]);
+
+    // ------------------------------------------------------------------
+    // Handlers
+    // ------------------------------------------------------------------
+    function toggleSelected(id) {
+        setSelectedIds((prev) => {
+            const next = new Set(prev);
+            next.has(id) ? next.delete(id) : next.add(id);
+            return next;
+        });
     }
 
-    async function handleOptimize() {
-        if (!mapReady || loading) return;
-        setLoading(true);
-        setError("");
-
-        try {
-            const coords = STOPS.map((s) => s.coords.join(",")).join(";");
-
-            const url =
-                `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${coords}` +
-                `?roundtrip=true&overview=full&geometries=geojson` +
-                `&access_token=${token}`;
-
-            const res = await fetch(url);
-            const data = await res.json();
-
-            if (data.code !== "Ok") {
-                throw new Error(data.message || `API fejl: ${data.code}`);
+    async function handleStartRoute() {
+        if (!mapReady) return;
+        if (selectedIds.size === 0) {
+            setError("Vælg mindst én opsamling.");
+            return;
+        }
+        if (!driverPosition) {
+            // We need a starting point. Ask for the position once if we don't have it.
+            // (useDriverPosition only watches while phase === "navigating", so we
+            // bootstrap with a one-shot getCurrentPosition here.)
+            try {
+                const pos = await new Promise((resolve, reject) =>
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                    })
+                );
+                await buildAndStart([pos.coords.longitude, pos.coords.latitude]);
+            } catch {
+                setError("Kunne ikke hente din position. Tjek GPS-tilladelser.");
             }
+            return;
+        }
+        await buildAndStart(driverPosition);
+    }
 
-            const trip = data.trips[0];
+    async function buildAndStart(startCoords) {
+        setBusy(true);
+        setError("");
+        try {
+            const selectedPickups = pickups.filter((p) => selectedIds.has(p.id));
 
-            // Sort STOPS based on the optimized waypoint order returned by Mapbox.
-            // Each waypoint corresponds to the input stop at the same index.
-            const ordered = data.waypoints
-                .map((wp, i) => ({ waypoint_index: wp.waypoint_index, stop: STOPS[i] }))
-                .filter(({ stop }) => stop !== undefined)
-                .sort((a, b) => a.waypoint_index - b.waypoint_index)
-                .map(({ stop }) => stop);
+            // 1. Get optimal ordering from Optimization API
+            const opt = await mapboxApi.optimize(startCoords, selectedPickups);
 
-            setOrderedStops(ordered);
-            setStats({
-                time: Math.round(trip.duration / 60),
-                dist: (trip.distance / 1000).toFixed(1),
-            });
+            // 2. Get full turn-by-turn directions for that order
+            const dir = await mapboxApi.directions(startCoords, opt.orderedStops);
 
+            // 3. Persist that these pickups are now scheduled
+            await pickupApi.markScheduled(opt.orderedStops.map((s) => s.id));
+
+            // 4. Draw on the map
             const map = mapRef.current;
-            drawRoute(map, trip.geometry);
-            addMarkers(map, ordered, markersRef, true);
+            renderRoute(map, dir.geometry);
+            renderPickupMarkers(map, opt.orderedStops, markersRef, { numbered: true });
 
             const bounds = new mapboxgl.LngLatBounds();
-            ordered.forEach((s) => bounds.extend(s.coords));
-            map.fitBounds(bounds, { padding: 72, duration: 900 });
+            bounds.extend(startCoords);
+            opt.orderedStops.forEach((s) => bounds.extend(s.coords));
+            map.fitBounds(bounds, { padding: 80, duration: 800 });
 
-            setOptimized(true);
+            // 5. Save and flip into navigation mode
+            setRouteData({
+                steps: dir.steps,
+                durationMin: dir.durationMin,
+                distanceKm: dir.distanceKm,
+                orderedStops: opt.orderedStops,
+            });
+            setPhase("navigating");
         } catch (err) {
             setError(err.message || "Noget gik galt.");
         } finally {
-            setLoading(false);
+            setBusy(false);
         }
     }
 
-    function handleReset() {
-        const map = mapRef.current;
-        if (!map) return;
-
-        clearRoute(map);
-        addMarkers(map, STOPS, markersRef, false);
-
-        setOrderedStops(STOPS);
-        setStats(null);
-        setOptimized(false);
-        setError("");
+    function handleCancelRoute() {
+        cancelSpeech();
+        clearRoute(mapRef.current);
+        renderPickupMarkers(mapRef.current, pickups, markersRef, { numbered: false });
+        setRouteData(null);
+        setPhase("selecting");
     }
 
+    // ------------------------------------------------------------------
+    // UI
+    // ------------------------------------------------------------------
+
     return (
-        <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-            {/* Header — fast højde */}
-            <div style={{ flexShrink: 0, padding: "12px 16px", background: "#0f172a", color: "#fff" }}>
-                <h2 style={{ margin: 0, fontSize: 18 }}>Route Optimizer</h2>
-            </div>
+        <div className="h-screen flex flex-col bg-slate-950 text-slate-100">
+            {/* Top panel: pickup selection (only in selecting phase) */}
+            {phase === "selecting" && (
+                <div className="shrink-0 border-b border-slate-800 bg-slate-900/95 backdrop-blur">
+                    <div className="p-4">
+                        <div className="flex items-center justify-between mb-3">
+                            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
+                                Ventende opsamlinger ({pickups.length})
+                            </h2>
+                            <div className="text-xs text-slate-400">
+                                Valgt: <span className="text-amber-400 font-semibold">{selectedIds.size}</span>
+                            </div>
+                        </div>
+                        <div className="max-h-[35vh] overflow-y-auto pr-1">
+                            <PickupList
+                                pickups={pickups}
+                                selectedIds={selectedIds}
+                                onToggle={toggleSelected}
+                                loading={loadingPickups}
+                            />
+                        </div>
+                        <div className="flex items-center gap-2 mt-3">
+                            <button
+                                onClick={handleStartRoute}
+                                disabled={!mapReady || busy || selectedIds.size === 0}
+                                className="px-5 py-2.5 rounded-md font-semibold bg-emerald-500 text-slate-950 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                            >
+                                {busy ? "Bygger rute…" : "Start rute"}
+                            </button>
+                            {/* DEBUG — fjern senere */}
+                            <div className="text-xs text-slate-400">
+                                mapReady: {String(mapReady)} | busy: {String(busy)} | selected: {selectedIds.size}
+                            </div>
+                            {error && <span className="text-sm text-rose-400">{error}</span>}
+                        </div>
+                    </div>
+                </div>
+            )}
 
-            {/* Kortet — fylder al tilgængelig plads */}
-            <div ref={containerRef} style={{ flex: "1 1 0", minHeight: 0 }} />
+            {/* Map fills remaining space */}
+            <div className="flex-1">
+                <div ref={containerRef} style={{ width: '100%', height: '100%' }} />
 
-            {/* Bund-panel — fast maks-højde */}
-            <div
-                style={{
-                    flexShrink: 0,
-                    maxHeight: "45vh",
-                    overflowY: "auto",
-                    padding: "12px 16px",
-                    background: "#1e293b",
-                    color: "#fff",
-                }}
-            >
-                {/* Stop-liste */}
-                <ol style={{ margin: "0 0 12px 0", paddingLeft: 20 }}>
-                    {orderedStops.map((stop, i) => (
-                        <li key={`${stop.id}-${i}`} style={{ padding: "4px 0" }}>
-                            <strong>{stop.name}</strong>
-                            <span style={{ color: "#94a3b8", marginLeft: 8, fontSize: 12 }}>
-                                {stop.address}
-                            </span>
-                        </li>
-                    ))}
-                </ol>
-
-                {/* Stats vises kun når optimized === true */}
-                {stats && (
-                    <div style={{ marginBottom: 8, fontSize: 14 }}>
-                        🕒 {stats.time} min · 📏 {stats.dist} km
+                {/* Top bar during navigation */}
+                {phase === "navigating" && routeData && (
+                    <div className="absolute top-3 left-3 right-3 bg-slate-900/90 backdrop-blur rounded-lg border border-slate-700 px-4 py-2 flex items-center justify-between">
+                        <div className="text-sm">
+                            <span className="text-slate-400">Rute:</span>{" "}
+                            <span className="font-semibold">{routeData.orderedStops.length} stop</span>{" "}
+                            <span className="text-slate-400">·</span>{" "}
+                            <span className="font-mono">{routeData.distanceKm} km</span>{" "}
+                            <span className="text-slate-400">·</span>{" "}
+                            <span className="font-mono">{routeData.durationMin} min</span>
+                        </div>
+                        <button
+                            onClick={handleCancelRoute}
+                            className="text-xs px-3 py-1 rounded bg-slate-700 hover:bg-slate-600 transition"
+                        >
+                            Afslut
+                        </button>
                     </div>
                 )}
 
-                {/* Fejl */}
-                {error && (
-                    <div style={{ color: "#fca5a5", marginBottom: 8, fontSize: 13 }}>
-                        {error}
+                {/* GPS error overlay */}
+                {gpsError && phase === "navigating" && (
+                    <div className="absolute bottom-24 left-3 right-3 bg-rose-900/90 backdrop-blur rounded-lg border border-rose-700 px-4 py-2 text-sm">
+                        GPS: {gpsError}
                     </div>
                 )}
-
-                {/* Knap skifter adfærd baseret på state */}
-                <button
-                    onClick={optimized ? handleReset : handleOptimize}
-                    disabled={!mapReady || loading}
-                    style={{
-                        padding: "10px 20px",
-                        background: optimized ? "#64748b" : "#4ecdc4",
-                        color: "#0f172a",
-                        border: "none",
-                        borderRadius: 6,
-                        fontWeight: 700,
-                        cursor: mapReady && !loading ? "pointer" : "not-allowed",
-                        opacity: mapReady && !loading ? 1 : 0.5,
-                    }}
-                >
-                    {loading ? "Optimerer..." : optimized ? "Nulstil" : "Optimer"}
-                </button>
             </div>
+
+            {/* Bottom navigation panel */}
+            {phase === "navigating" && (
+                <NavigationPanel
+                    currentStep={currentStep}
+                    currentStepIdx={currentStepIdx}
+                    totalSteps={totalSteps}
+                    distanceToNext={distanceToNext}
+                />
+            )}
         </div>
     );
 }

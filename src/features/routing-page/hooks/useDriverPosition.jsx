@@ -13,7 +13,7 @@ export function useDriverPosition(enabled = true) {
 
         const watchId = navigator.geolocation.watchPosition(
             (pos) => {
-                setPosition(pos.coords.longitude, pos.coords.latitude);
+                setPosition([pos.coords.longitude, pos.coords.latitude]);
                 setError(null);
             },
             (err) => setError(err.message),
