@@ -1,9 +1,23 @@
 import PageContainer from "../../../components/PageContainer.jsx";
+import SectionCard from "../../../components/SectionCard.jsx";
 
 function AdminStatisticsPage() {
     return (
         <PageContainer>
-            <h1 className="text-section-header">ADMIN STATISTICS PAGE</h1>
+            <div className="flex flex-col gap-gap-md mt-gap-lg">
+
+                <SectionCard title="Afhentninger">
+                </SectionCard>
+
+                <SectionCard title="Indsamlede poser">
+                </SectionCard>
+
+                <SectionCard title="Udgifter">
+                </SectionCard>
+
+                <SectionCard title="Chaufføraktivitet">
+                </SectionCard>
+            </div>
         </PageContainer>
     );
 }
