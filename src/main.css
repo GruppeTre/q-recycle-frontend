@@ -1,2 +1,40 @@
 @import "tailwindcss";
 @import "mapbox-gl/dist/mapbox-gl.css";
+
+@theme {
+    /* Farver */
+    --color-primary: oklch(0.7952 0.1617 86.05);
+    --color-primary-hover: oklch(from var(--color-primary) calc(l - 0.05) c h);
+    --color-primary-background: oklch(from var(--color-primary) calc(l + 0.15) calc(c - 0.1) h);
+    --color-text-color: oklch(0.15 0 0);
+    --color-text-color-muted: oklch(from var(--color-text-color) calc(l + 0.1) c h);
+    --color-surface: oklch(0.910 0.014 98.88);
+    --color-background: oklch(0.9663 0.008 98.88);
+
+    /* Gap-størrelser */
+    --spacing-padding: 0.25rem;
+    --spacing-gap-sm: 0.5rem;
+    --spacing-gap-md: 1rem;
+    --spacing-gap-lg: 2rem;
+    --spacing-gap-xl: 4rem;
+}
+
+/* typography */
+@layer components {
+
+    .text-hero-header {
+        @apply text-2xl font-bold text-text-color;
+    }
+
+    .text-section-header {
+        @apply text-xl font-semibold text-text-color;
+    }
+
+    .text-body {
+        @apply text-base text-text-color;
+    }
+
+    .text-muted {
+        @apply text-base text-text-color-muted;
+    }
+}
