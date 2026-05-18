@@ -102,8 +102,7 @@ the ``navItem`` array can be defined in a separate module local to the correspon
 ### Typography
 A few basic tailwind variables for standard text variations are defined in ``main.css``:
 
- - ``.text-hero-header`` — large and bold header, should be used very sparingly
- - ``.text-section-header`` — smaller header, can be used to title sections or groups of content
- - ``.text-body`` — standard body text
- - ``.text-muted`` — same size as body text, but in a more muted color. Can be used for asides 
- - or to imply a lower hierarchical value of some text
+ - ``text-hero-header`` — large and bold header, should be used very sparingly
+ - ``text-section-header`` — smaller header, can be used to title sections or groups of content
+ - ``text-body`` — standard body text
+ - ``text-muted`` — same size as body text, but in a more muted color. Can be used for asides or to imply a lower hierarchical value of some text
