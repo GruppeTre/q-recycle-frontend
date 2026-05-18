@@ -34,6 +34,29 @@ export const mapboxApi = {
         const coords = coordsToString(Allcords);
 
         const url =
-            ``
+            `https://api.mapbox.com/directions/v5/mapbox/driving/${coords}` +
+            `?steps=true&overview=full&geometry=geojson&language=da` +
+            `?access_token=${token}`;
+
+        const res = await fetch(url);
+        const data = await res.json();
+        if(data.code !== "Ok") throw new Error(data.message);
+
+        const route = data.routes[0];
+
+        const steps = [];
+        route.legs.forEach((leg, legIdx) => {
+            leg.steps.forEach((step) => {
+                steps.push({
+                    legIndex: legIdx,
+                    instruction: step.maneuver.instruction,
+                    distance: step.distance,
+                    duration: step.duration,
+                    location: step.maneuver.location,
+                });
+            });
+        });
+
+        return { geometry: route.geometry, steps, ... };
     }
 }
