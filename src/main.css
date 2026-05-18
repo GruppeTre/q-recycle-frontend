@@ -22,7 +22,7 @@
 @layer components {
 
     .text-hero-header {
-        @apply text-3xl font-bold text-text-color;
+        @apply text-2xl font-bold text-text-color;
     }
 
     .text-section-header {

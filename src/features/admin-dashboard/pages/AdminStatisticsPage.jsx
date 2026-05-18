@@ -3,7 +3,7 @@ import PageContainer from "../../../components/PageContainer.jsx";
 function AdminStatisticsPage() {
     return (
         <PageContainer>
-            <h1 className="text-text-hero-header">ADMIN STATISTICS PAGE</h1>
+            <h1 className="text-section-header">ADMIN STATISTICS PAGE</h1>
         </PageContainer>
     );
 }
