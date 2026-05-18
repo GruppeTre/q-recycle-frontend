@@ -4,6 +4,7 @@ import PickupRequestForm from "./components/PickupRequestForm.jsx";
 import ConfirmationMessage from "./components/ConfirmationMessage.jsx";
 import {supabaseClient} from "../../lib/supabaseClient";
 import {useAuth} from "../../context/useAuth.js";
+import PageContainer from "../../components/PageContainer.jsx";
 
 function PartnerDashboardPage() {
 
@@ -49,32 +50,34 @@ function PartnerDashboardPage() {
     }
 
     return (
-        <div className="max-w-md mx-auto mt-10 p-4">
-            <p>Her kan du anmode om at få hentet din pant</p>
-            <Button onClick={hasActiveRequest ? handleCancel : () => setIsModalOpen(true)}>
-                {hasActiveRequest ? "Annuller" : "Anmod om afhentning"}
-            </Button>
-            {message && (<ConfirmationMessage message={message}/>)}
-            {isModalOpen && (
-                <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded-md w-80">
-                        <h2 className="text-xl font-bold mb-4">
-                            Antal poser
-                        </h2>
-                        <PickupRequestForm
-                            bags={bags}
-                            setBags={setBags}
-                            onSubmit={handleSubmit}
-                        />
-                        <button type="button"
-                                onClick={() => setIsModalOpen(false)}
-                                className="mt-3 text-sm text-gray-600 underline">
-                            Annuller
-                        </button>
+        <PageContainer>
+            <div className="flex flex-col items-center mt-gap-xl">
+                <p>Her kan du anmode om at få hentet din pant</p>
+                <Button onClick={hasActiveRequest ? handleCancel : () => setIsModalOpen(true)}>
+                    {hasActiveRequest ? "Annuller" : "Anmod om afhentning"}
+                </Button>
+                {message && (<ConfirmationMessage message={message}/>)}
+                {isModalOpen && (
+                    <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+                        <div className="bg-white p-6 rounded-md w-80">
+                            <h2 className="text-xl font-bold mb-4">
+                                Antal poser
+                            </h2>
+                            <PickupRequestForm
+                                bags={bags}
+                                setBags={setBags}
+                                onSubmit={handleSubmit}
+                            />
+                            <button type="button"
+                                    onClick={() => setIsModalOpen(false)}
+                                    className="mt-3 text-sm text-gray-600 underline">
+                                Annuller
+                            </button>
+                        </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
+        </PageContainer>
     )
 }
 
