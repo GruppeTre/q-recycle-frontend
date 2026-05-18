@@ -12,7 +12,7 @@ function PartnerDashboardPage() {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [hasActiveRequest, setHasActiveRequest] = useState(false)
 
-    const {session, role, isLoading} = useAuth();
+    const {session} = useAuth();
 
     const handleSubmit = async (event) => {
         event.preventDefault()
