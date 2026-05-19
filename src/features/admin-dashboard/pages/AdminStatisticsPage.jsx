@@ -1,12 +1,11 @@
 import PageContainer from "../../../components/PageContainer.jsx";
 import SectionCardExpandable from "../../../components/SectionCardExpandable.jsx";
 import PickupChart from "../components/PickupChart.jsx";
-import {bagsByPartnerData, pickupData} from "../../../lib/dataSupplier.js";
+import {bagsByPartnerData, expenses, pickupData} from "../../../lib/dataSupplier.js";
 import BagsByPartnerChart from "../components/BagsByPartnerChart.jsx";
+import ExpensesChart from "../components/ExpensesChart.jsx";
 
 function AdminStatisticsPage() {
-
-
 
     return (
         <PageContainer>
@@ -20,7 +19,9 @@ function AdminStatisticsPage() {
                     <BagsByPartnerChart data={bagsByPartnerData} />
                 </SectionCardExpandable>
 
-                <SectionCardExpandable title="Udgifter">
+                <SectionCardExpandable title="Omkostninger">
+                    <h2 className="text-section-header">Total omkostninger: {expenses.reduce((partialSum, expense) => partialSum + expense.amount, 0)}kr</h2>
+                    <ExpensesChart data={expenses}/>
                 </SectionCardExpandable>
 
                 <SectionCardExpandable title="Chaufføraktivitet">
