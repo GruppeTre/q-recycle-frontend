@@ -23,9 +23,6 @@ function AdminStatisticsPage() {
                     <h2 className="text-section-header">Total omkostninger: {expenses.reduce((partialSum, expense) => partialSum + expense.amount, 0)}kr</h2>
                     <ExpensesChart data={expenses}/>
                 </SectionCardExpandable>
-
-                <SectionCardExpandable title="Chaufføraktivitet">
-                </SectionCardExpandable>
             </div>
         </PageContainer>
     );
