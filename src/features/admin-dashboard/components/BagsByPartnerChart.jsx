@@ -14,10 +14,16 @@ function BagsByPartnerChart({data}) {
                 top: 5,
                 right: 0,
                 left: 0,
-                bottom: 5,
+                bottom: 40,
             }}
         >
-            <XAxis dataKey="name"/>
+            <XAxis
+                dataKey="name"
+                angle={-25}
+                tickMargin={30}
+                fontSize={'0.6rem'}
+            />
+
             <YAxis width="auto"/>
             <Tooltip />
             <Bar
