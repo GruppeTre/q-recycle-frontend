@@ -17,7 +17,11 @@ function PickupChart({data}) {
                 bottom: 5,
             }}
         >
-            <XAxis dataKey="name" stroke="var(--color-text-color)"/>
+            <XAxis
+                dataKey="name"
+                stroke="var(--color-text-color)"
+                padding={{ left: 15, right: 15 }}
+            />
             <YAxis width="auto" stroke="var(--color-text-color)"/>
             <Tooltip
                 cursor={{
