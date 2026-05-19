@@ -18,3 +18,4 @@ export const pickupRequest = {
         return data ?? null;
     }
 }
+
