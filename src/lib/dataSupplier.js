@@ -34,3 +34,18 @@ export const pickupData = [
         pickups: 19,
     },
 ]
+
+export const bagsByPartnerData = [
+    {
+        name: "7-eleven Nørrebro",
+        amount: 89,
+    },
+    {
+        name: "McDonald's Rådhuspladsen",
+        amount: 34,
+    },
+    {
+        name: "Burger-King Nørreport",
+        amount: 56,
+    },
+]
