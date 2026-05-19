@@ -20,7 +20,7 @@ function AdminStatisticsPage() {
                 </SectionCardExpandable>
 
                 <SectionCardExpandable title="Omkostninger">
-                    <h2 className="text-section-header">Total omkostninger: {expenses.reduce((partialSum, expense) => partialSum + expense.amount, 0)}kr</h2>
+                    <h2 className="text-section-header">Totale omkostninger for perioden: {expenses.reduce((partialSum, expense) => partialSum + expense.amount, 0)}kr</h2>
                     <ExpensesChart data={expenses}/>
                 </SectionCardExpandable>
             </div>
