@@ -1,22 +1,29 @@
 import PageContainer from "../../../components/PageContainer.jsx";
-import SectionCard from "../../../components/SectionCard.jsx";
+import SectionCardExpandable from "../../../components/SectionCardExpandable.jsx";
+import Button from "../../../components/Button.jsx";
 
 function AdminStatisticsPage() {
+
+
+
     return (
         <PageContainer>
             <div className="flex flex-col gap-gap-md mt-gap-lg">
 
-                <SectionCard title="Afhentninger">
-                </SectionCard>
+                <SectionCardExpandable title="Afhentninger">
+                    <h1>testetsetest</h1>
+                    <Button>TEST buttons</Button>
+                </SectionCardExpandable>
 
-                <SectionCard title="Indsamlede poser">
-                </SectionCard>
+                <SectionCardExpandable
+                    title="Indsamlede poser">
+                </SectionCardExpandable>
 
-                <SectionCard title="Udgifter">
-                </SectionCard>
+                <SectionCardExpandable title="Udgifter">
+                </SectionCardExpandable>
 
-                <SectionCard title="Chaufføraktivitet">
-                </SectionCard>
+                <SectionCardExpandable title="Chaufføraktivitet">
+                </SectionCardExpandable>
             </div>
         </PageContainer>
     );
