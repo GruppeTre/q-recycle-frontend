@@ -6,8 +6,7 @@ function PickupChart({data}) {
             style={{
                 width: '100%',
                 height: '100%',
-                maxHeight: '70vh',
-                aspectRatio: 1.618
+                aspectRatio: 1.618,
             }}
             responsive
             data={data}
