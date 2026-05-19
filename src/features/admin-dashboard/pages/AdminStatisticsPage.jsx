@@ -1,6 +1,6 @@
 import PageContainer from "../../../components/PageContainer.jsx";
 import SectionCardExpandable from "../../../components/SectionCardExpandable.jsx";
-import PickupChart from "../components/LineChart.jsx";
+import PickupChart from "../components/PickupChart.jsx";
 import {pickupData} from "../../../lib/dataSupplier.js";
 
 function AdminStatisticsPage() {
