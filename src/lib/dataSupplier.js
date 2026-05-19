@@ -48,6 +48,18 @@ export const bagsByPartnerData = [
         name: "Burger-King Nørreport",
         amount: 56,
     },
+    {
+        name: "Hulk Burger",
+        amount: 56,
+    },
+    {
+        name: "Den store kebab",
+        amount: 56,
+    },
+    {
+        name: "MEGA PIZZA",
+        amount: 56,
+    },
 ]
 
 export const expenses = [
