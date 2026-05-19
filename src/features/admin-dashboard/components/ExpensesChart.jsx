@@ -1,5 +1,9 @@
 import {Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
 
+function valueToCurrency(value) {
+    return value + 'kr';
+}
+
 function ExpensesChart({data}) {
     return (
         <LineChart
@@ -22,7 +26,11 @@ function ExpensesChart({data}) {
                 stroke="var(--color-text-color)"
                 padding={{ left: 15, right: 15 }}
             />
-            <YAxis width="auto" stroke="var(--color-text-color)"/>
+            <YAxis
+                width="auto"
+                stroke="var(--color-text-color)"
+                tickFormatter={valueToCurrency}
+            />
             <Tooltip
                 cursor={{
                     stroke: 'var(--color-primary-hover)',
