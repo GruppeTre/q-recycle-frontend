@@ -40,7 +40,7 @@ function PartnerDashboardPage() {
             }
         }
 
-        checkActiveRequest()
+        void checkActiveRequest()
     }, [user.id])
 
     const handleSubmit = async (event) => {
@@ -75,7 +75,7 @@ function PartnerDashboardPage() {
             await pickupRequest.cancelActive(user.id);
             setHasActiveRequest(false);
             setMessage("Din anmodning er blevet annulleret")
-        } catch (error) {
+        } catch{
             setMessage("Noget gik galt, prøv igen")
         }
     }
