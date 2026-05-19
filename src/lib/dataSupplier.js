@@ -49,3 +49,34 @@ export const bagsByPartnerData = [
         amount: 56,
     },
 ]
+
+export const expenses = [
+    {
+        name: '03/04/26',
+        amount: 40,
+    },
+    {
+        name: '09/04/26',
+        amount: 33,
+    },
+    {
+        name: '17/04/26',
+        amount: 87,
+    },
+    {
+        name: '23/04/26',
+        amount: 76,
+    },
+    {
+        name: '30/04/26',
+        amount: 56,
+    },
+    {
+        name: '01/05/26',
+        amount: 66,
+    },
+    {
+        name: '07/05/26',
+        amount: 104,
+    },
+]
