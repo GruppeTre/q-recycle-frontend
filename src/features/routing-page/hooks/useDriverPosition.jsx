@@ -2,6 +2,7 @@ import {useState, useEffect} from "react";
 
 export function useDriverPosition(enabled = true) {
     const [position, setPosition] = useState(null);
+    const [heading, setHeading] = useState(null);
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -14,6 +15,9 @@ export function useDriverPosition(enabled = true) {
         const watchId = navigator.geolocation.watchPosition(
             (pos) => {
                 setPosition([pos.coords.longitude, pos.coords.latitude]);
+                if(pos.coords.heading != null && !isNan(pos.coords.heading)) {
+                    setHeading(pos.coords.heading);
+                }
                 setError(null);
             },
             (err) => setError(err.message),

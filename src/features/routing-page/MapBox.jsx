@@ -47,7 +47,7 @@ export default function MapApp() {
 
     // --- GPS + TTS ---
     // Only track GPS while we're actually navigating — save battery.
-    const { position: driverPosition, error: gpsError } = useDriverPosition(phase === "navigating");
+    const { position: driverPosition, heading, error: gpsError } = useDriverPosition(phase === "navigating");
     const { speak, cancel: cancelSpeech } = useSpeech({ lang: "da-DK", rate: 1.0 });
 
     const { currentStep, currentStepIdx, totalSteps, distanceToNext } = useNavigation({
@@ -99,6 +99,9 @@ export default function MapApp() {
         renderDriverDot(mapRef.current, driverPosition, driverMarkerRef);
     }, [mapReady, driverPosition, mapRef]);
 
+    // ------------------------------------------------------------------
+    // Effect 4: resize the map to make full use of the window
+    // ------------------------------------------------------------------
     useEffect(() => {
         if (!mapReady) return;
 
@@ -110,6 +113,22 @@ export default function MapApp() {
         window.addEventListener('resize', onResize);
         return () => window.removeEventListener('resize', onResize);
     }, [mapReady, mapRef]);
+
+    // ------------------------------------------------------------------
+    // Effect 5: update the map to follow the driver position
+    // ------------------------------------------------------------------
+    useEffect(() => {
+        if(!mapReady || !driverPosition || phase !== "navigating") return;
+
+        mapRef.current.easeTo({
+            center: driverPosition,
+            zoom: 16,
+            pitch: 50,
+            bearing: heading ?? 0,
+            duration: 1000,
+
+        });
+    });
 
     // ------------------------------------------------------------------
     // Handlers
