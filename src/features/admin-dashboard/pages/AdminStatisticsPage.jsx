@@ -1,6 +1,7 @@
 import PageContainer from "../../../components/PageContainer.jsx";
 import SectionCardExpandable from "../../../components/SectionCardExpandable.jsx";
-import Button from "../../../components/Button.jsx";
+import PickupChart from "../components/LineChart.jsx";
+import {pickupData} from "../../../lib/dataSupplier.js";
 
 function AdminStatisticsPage() {
 
@@ -11,8 +12,7 @@ function AdminStatisticsPage() {
             <div className="flex flex-col gap-gap-md mt-gap-lg">
 
                 <SectionCardExpandable title="Afhentninger">
-                    <h1>testetsetest</h1>
-                    <Button>TEST buttons</Button>
+                    <PickupChart data={pickupData}/>
                 </SectionCardExpandable>
 
                 <SectionCardExpandable
