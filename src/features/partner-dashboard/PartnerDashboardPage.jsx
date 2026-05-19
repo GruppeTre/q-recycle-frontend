@@ -6,6 +6,7 @@ import {supabaseClient} from "../../lib/supabaseClient";
 import {useAuth} from "../../context/useAuth.js";
 import PageContainer from "../../components/PageContainer.jsx";
 import {pickupRequest} from "../../lib/pickupRequest.js";
+import {pickupStatus} from "../../config/constants.js";
 
 function PartnerDashboardPage() {
 
@@ -19,15 +20,28 @@ function PartnerDashboardPage() {
 
     useEffect(() => {
         async function checkActiveRequest() {
-            try{
+            try {
                 const data = await pickupRequest.getActive(user.id);
-                setHasActiveRequest(!!data);
-            }catch(error){
-                console.log("Fejl ved hentning af aktive anmodninger", error);
+
+                if (!data || data.length === 0) {
+                    setHasActiveRequest(false);
+                    return;
+                }
+
+                if (data.length > 1) {
+                    console.error("Fejl: Der findes flere aktive anmodninger");
+                }
+
+                setHasActiveRequest(true);
+
+            } catch (err) {
+                console.log("Fejl ved hentning af aktive anmodninger", err);
+                setHasActiveRequest(false);
             }
         }
+
         checkActiveRequest()
-    },[user.id])
+    }, [user.id])
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -39,7 +53,7 @@ function PartnerDashboardPage() {
         const {error} = await supabaseClient.from("pickup").insert({
             partner_id: user.id,
             bags: Number(bags),
-            status: "requested",
+            status: pickupStatus.REQUESTED,
             created_at: new Date(),
         })
 
@@ -56,9 +70,14 @@ function PartnerDashboardPage() {
         setHasActiveRequest(true)
     };
 
-    const handleCancel = () => {
-        setHasActiveRequest(false)
-        setMessage("")
+    const handleCancel = async () => {
+        try {
+            await pickupRequest.cancelActive(user.id);
+            setHasActiveRequest(false);
+            setMessage("Din anmodning er blevet annulleret")
+        } catch (error) {
+            setMessage("Noget gik galt, prøv igen")
+        }
     }
 
     return (
