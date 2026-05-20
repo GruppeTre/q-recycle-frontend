@@ -9,20 +9,31 @@ import {pickupRequest} from "../../lib/pickupRequest.js";
 import {pickupStatus} from "../../config/constants.js";
 import Modal from "../../components/Modal.jsx";
 import PickupRequestReceipt from "./components/PickupRequestReceipt.jsx";
+import PickupRequestModal from "./components/PickupRequestModal.jsx";
 
 function PartnerDashboardPage() {
+
+    // =========================
+    // State
+    // =========================
 
     const [bags, setBags] = useState("")
     const [message, setMessage] = useState("")
     const [isModalOpen, setIsModalOpen] = useState(false)
-
     const [activeRequest, setActiveRequest] = useState(null)
-
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false)
+
+    // =========================
+    // Auth / derived values
+    // =========================
 
     const {session} = useAuth();
     const user = session.user;
     const hasActiveRequest = activeRequest !== null
+
+    // =========================
+    // Modal helper functions
+    // =========================
 
     function openCreateModal() {
         setBags("")
@@ -38,6 +49,10 @@ function PartnerDashboardPage() {
         setIsModalOpen(false)
         setBags("")
     }
+
+    // =========================
+    // Load active pickup request
+    // =========================
 
     useEffect(() => {
         async function checkActiveRequest() {
@@ -63,6 +78,10 @@ function PartnerDashboardPage() {
 
         void checkActiveRequest()
     }, [user.id])
+
+    // =========================
+    // Submit new pickup request
+    // =========================
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -93,6 +112,10 @@ function PartnerDashboardPage() {
         closePickupModal()
     };
 
+    // =========================
+    // Update existing pickup request
+    // =========================
+
     const handleUpdate = async (event) => {
         event.preventDefault()
         try {
@@ -116,6 +139,10 @@ function PartnerDashboardPage() {
         }
     }
 
+    // =========================
+    // Cancel pickup request
+    // =========================
+
     const handleCancel = async () => {
         try{
             await pickupRequest.cancelActive(user.id);
@@ -127,6 +154,11 @@ function PartnerDashboardPage() {
             setMessage("Noget gik galt, prøv igen")
         }
     }
+
+
+    // =========================
+    // Render
+    // =========================
 
     return (
         <PageContainer>
@@ -155,34 +187,18 @@ function PartnerDashboardPage() {
                 )}
 
 
-                {isModalOpen && (
-                    <Modal
-                        title={
-                            hasActiveRequest
-                                ? "Rediger antallet af poser"
-                                : "Antal poser"
-                        }
-                        onClose={closePickupModal}
-                    >
-
-                        <PickupRequestForm
-                            bags={bags}
-                            setBags={setBags}
-                            onSubmit={
-                                hasActiveRequest
-                                    ? handleUpdate
-                                    : handleSubmit
-                            }
-
-                            buttonText={
-                                hasActiveRequest
-                                    ? "Gem ændringer"
-                                    : "Bekræft"
-                            }
-                        />
-
-                    </Modal>
-                )}
+                <PickupRequestModal
+                    isOpen={isModalOpen}
+                    hasActiveRequest={hasActiveRequest}
+                    bags={bags}
+                    setBags={setBags}
+                    onClose={closePickupModal}
+                    onSubmit={
+                        hasActiveRequest
+                            ? handleUpdate
+                            : handleSubmit
+                    }
+                />
 
 
                 {isCancelModalOpen && (
