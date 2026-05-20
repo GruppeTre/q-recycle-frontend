@@ -19,14 +19,12 @@ import { PickupList } from "./components/PickupList.jsx";
 import { NavigationPanel } from "./components/NavigationPanel.jsx";
 import { ScheduledList} from "./components/ScheduledList.jsx";
 
-const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
-
 // Three phases of the screen, controlled by the `phase` state:
 //   "selecting"    → showing pickup list, driver picks which to include
 //   "navigating"   → route is drawn, GPS dot tracking, TTS active
 //   (no separate "loading" phase — we use a `busy` flag overlay)
 
-console.log('Token:', token ? token.slice(0, 12) + '...' : 'MISSING');
+const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 export default function MapApp() {
     // --- map setup ---

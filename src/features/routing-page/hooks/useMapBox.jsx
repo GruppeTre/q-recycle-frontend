@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import {useCallback, useRef, useState} from "react";
 import mapboxgl from "mapbox-gl";
 import { MAP_CENTER, MAP_ZOOM } from "../constants/mapConfig.js";
 
