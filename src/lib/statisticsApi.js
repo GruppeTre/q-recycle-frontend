@@ -1,4 +1,19 @@
-export const pickupData = [
+export const statisticsApi = {
+
+    getPickupData: (cutoffDate) => {
+        return mockPickupData;
+    },
+
+    getBagsByPartner: (cutoffDate) => {
+        return mockBagsByPartnerData;
+    },
+
+    getExpenses: (cutoffDate) => {
+        return mockExpenses;
+    }
+}
+
+export const mockPickupData = [
     {
         name: '03/04/26',
         pickups: 14,
@@ -35,7 +50,7 @@ export const pickupData = [
     },
 ]
 
-export const bagsByPartnerData = [
+export const mockBagsByPartnerData = [
     {
         name: "7-eleven Nørrebro",
         amount: 89,
@@ -62,7 +77,7 @@ export const bagsByPartnerData = [
     },
 ]
 
-export const expenses = [
+export const mockExpenses = [
     {
         name: '03/04/26',
         amount: 40,
