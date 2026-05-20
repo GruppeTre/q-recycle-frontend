@@ -26,7 +26,7 @@ function PickupRequestModal({isOpen, hasActiveRequest, bags, setBags, onClose, o
                         ? "Gem ændringer"
                         : "Bekræft"
                 }
-                isOpen={hasActiveRequest}
+                isUpdated={hasActiveRequest}
             />
         </Modal>
     )
