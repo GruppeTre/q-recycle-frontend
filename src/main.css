@@ -13,7 +13,7 @@
 
     /* states og feedback */
     --color-surface-hover: oklch(from var(--color-surface) calc(l - 0.04) c h);
-    --color-border: oklch(from var(--color-text) calc(l + 0.5) c h);
+    --color-border: oklch(from var(--color-text-color) calc(l + 0.5) c h);
 
     /* Feedback-farver */
     --color-success: oklch(0.65 0.15 145);     /* grøn */
