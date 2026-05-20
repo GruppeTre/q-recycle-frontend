@@ -86,6 +86,24 @@ import SectionCardExpandable from "./SectionCardExpandable";
 ```
 - `title` — Title presented in the top of the card
 
+Optionally, the ``SectionCard`` component takes a ``headerContent`` prop, which can be used
+to insert a JSX expression into the header of the card:
+
+```javascript
+import SectionCard from "./SectionCard";
+
+<PageContainer>
+    <SectionCard headerContent={
+        <div className="flex justify-between">
+            <h2>This is a section header</h2>
+            <button>some action</button>
+        </div>
+    }>
+        {/* Section content here */}
+    </SectionCard>
+</PageContainer>
+```
+
 ### Navbar
 The ``Navbar`` component is a responsive header & navbar, designed to be as simple to use as possible.
 It is intended to span the full width of the page. The navigational links responsively collapse into an accordion
