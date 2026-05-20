@@ -24,6 +24,21 @@ function PartnerDashboardPage() {
     const user = session.user;
     const hasActiveRequest = activeRequest !== null
 
+    function openCreateModal() {
+        setBags("")
+        setIsModalOpen(true)
+    }
+
+    function openEditModal() {
+        setBags(String(activeRequest.bags))
+        setIsModalOpen(true)
+    }
+
+    function closePickupModal() {
+        setIsModalOpen(false)
+        setBags("")
+    }
+
     useEffect(() => {
         async function checkActiveRequest() {
             try {
@@ -39,7 +54,6 @@ function PartnerDashboardPage() {
                 }
 
                 setActiveRequest(data[0]);
-                setBags(String(data[0].bags));
 
             } catch (err) {
                 console.log("Fejl ved hentning af aktive anmodninger", err);
@@ -75,44 +89,41 @@ function PartnerDashboardPage() {
         }
 
         setMessage("Din anmodning er sendt")
-        setBags("")
-        setIsModalOpen(false)
         setActiveRequest(data[0])
+        closePickupModal()
     };
 
     const handleUpdate = async (event) => {
         event.preventDefault()
+        try {
 
-        try{
-            const updatedBagCount = activeRequest.bags + Number(bags)
-
+            const updatedBagCount = Number(bags)
             await pickupRequest.update(
                 activeRequest.id,
                 updatedBagCount
-            );
+            )
 
             setMessage("Din anmodning er blevet opdateret")
-            setIsModalOpen(false)
 
             setActiveRequest({
                 ...activeRequest,
-                bags: updatedBagCount,
+                bags: updatedBagCount
             })
 
-            setBags("")
-
-        }catch{
+            closePickupModal()
+        } catch{
             setMessage("Noget gik galt, prøv igen")
         }
     }
 
     const handleCancel = async () => {
-        try {
+        try{
             await pickupRequest.cancelActive(user.id);
+
             setActiveRequest(null);
             setIsCancelModalOpen(false);
             setMessage("Din anmodning er blevet annulleret")
-        } catch{
+        }catch {
             setMessage("Noget gik galt, prøv igen")
         }
     }
@@ -124,7 +135,7 @@ function PartnerDashboardPage() {
                 <p>Her kan du anmode om at få hentet din pant</p>
 
                 {!hasActiveRequest && (
-                    <Button onClick={() => setIsModalOpen(true)}>
+                    <Button onClick={openCreateModal}>
                         Anmod om afhentning
                     </Button>
                 )}
@@ -133,7 +144,7 @@ function PartnerDashboardPage() {
                     <PickupRequestReceipt
                         activeRequest={activeRequest}
 
-                        onUpdate={() => setIsModalOpen(true)}
+                        onUpdate={openEditModal}
                         onCancel={() => setIsCancelModalOpen(true)}
                     />
                 )}
@@ -148,10 +159,10 @@ function PartnerDashboardPage() {
                     <Modal
                         title={
                             hasActiveRequest
-                                ? "Opdater antal poser"
+                                ? "Rediger antallet af poser"
                                 : "Antal poser"
                         }
-                        onClose={() => setIsModalOpen(false)}
+                        onClose={closePickupModal}
                     >
 
                         <PickupRequestForm
@@ -165,7 +176,7 @@ function PartnerDashboardPage() {
 
                             buttonText={
                                 hasActiveRequest
-                                    ? "Opdater"
+                                    ? "Gem ændringer"
                                     : "Bekræft"
                             }
                         />
