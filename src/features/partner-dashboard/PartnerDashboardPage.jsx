@@ -7,16 +7,22 @@ import {useAuth} from "../../context/useAuth.js";
 import PageContainer from "../../components/PageContainer.jsx";
 import {pickupRequest} from "../../lib/pickupRequest.js";
 import {pickupStatus} from "../../config/constants.js";
+import Modal from "../../components/Modal.jsx";
+import PickupRequestReceipt from "./components/PickupRequestReceipt.jsx";
 
 function PartnerDashboardPage() {
 
     const [bags, setBags] = useState("")
     const [message, setMessage] = useState("")
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [hasActiveRequest, setHasActiveRequest] = useState(false)
+
+    const [activeRequest, setActiveRequest] = useState(null)
+
+    const [isCancelModalOpen, setIsCancelModalOpen] = useState(false)
 
     const {session} = useAuth();
     const user = session.user;
+    const hasActiveRequest = activeRequest !== null
 
     useEffect(() => {
         async function checkActiveRequest() {
@@ -24,7 +30,7 @@ function PartnerDashboardPage() {
                 const data = await pickupRequest.getActive(user.id);
 
                 if (!data || data.length === 0) {
-                    setHasActiveRequest(false);
+                    setActiveRequest(null);
                     return;
                 }
 
@@ -32,11 +38,12 @@ function PartnerDashboardPage() {
                     console.error("Fejl: Der findes flere aktive anmodninger");
                 }
 
-                setHasActiveRequest(true);
+                setActiveRequest(data[0]);
+                setBags(String(data[0].bags));
 
             } catch (err) {
                 console.log("Fejl ved hentning af aktive anmodninger", err);
-                setHasActiveRequest(false);
+                setActiveRequest(null);
             }
         }
 
@@ -50,12 +57,15 @@ function PartnerDashboardPage() {
 
         console.log("user data:", JSON.stringify(user));
 
-        const {error} = await supabaseClient.from("pickup").insert({
+        const {data, error} = await supabaseClient
+            .from("pickup")
+            .insert({
             partner_id: user.id,
             bags: Number(bags),
             status: pickupStatus.REQUESTED,
             created_at: new Date(),
         })
+            .select()
 
         console.log("error:", error)
 
@@ -67,13 +77,40 @@ function PartnerDashboardPage() {
         setMessage("Din anmodning er sendt")
         setBags("")
         setIsModalOpen(false)
-        setHasActiveRequest(true)
+        setActiveRequest(data[0])
     };
+
+    const handleUpdate = async (event) => {
+        event.preventDefault()
+
+        try{
+            const updatedBagCount = activeRequest.bags + Number(bags)
+
+            await pickupRequest.update(
+                activeRequest.id,
+                updatedBagCount
+            );
+
+            setMessage("Din anmodning er blevet opdateret")
+            setIsModalOpen(false)
+
+            setActiveRequest({
+                ...activeRequest,
+                bags: updatedBagCount,
+            })
+
+            setBags("")
+
+        }catch{
+            setMessage("Noget gik galt, prøv igen")
+        }
+    }
 
     const handleCancel = async () => {
         try {
             await pickupRequest.cancelActive(user.id);
-            setHasActiveRequest(false);
+            setActiveRequest(null);
+            setIsCancelModalOpen(false);
             setMessage("Din anmodning er blevet annulleret")
         } catch{
             setMessage("Noget gik galt, prøv igen")
@@ -82,32 +119,81 @@ function PartnerDashboardPage() {
 
     return (
         <PageContainer>
-            <div className="flex flex-col items-center mt-gap-xl">
+            <div className="flex flex-col items-center mt-gap-xl gap-gap-md">
+
                 <p>Her kan du anmode om at få hentet din pant</p>
-                <Button onClick={hasActiveRequest ? handleCancel : () => setIsModalOpen(true)}>
-                    {hasActiveRequest ? "Annuller" : "Anmod om afhentning"}
-                </Button>
-                {message && (<ConfirmationMessage message={message}/>)}
+
+                {!hasActiveRequest && (
+                    <Button onClick={() => setIsModalOpen(true)}>
+                        Anmod om afhentning
+                    </Button>
+                )}
+
+                {hasActiveRequest && (
+                    <PickupRequestReceipt
+                        activeRequest={activeRequest}
+
+                        onUpdate={() => setIsModalOpen(true)}
+                        onCancel={() => setIsCancelModalOpen(true)}
+                    />
+                )}
+
+
+                {message && (
+                    <ConfirmationMessage message={message}/>
+                )}
+
+
                 {isModalOpen && (
-                    <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-                        <div className="bg-white p-6 rounded-md w-80">
-                            <h2 className="text-xl font-bold mb-4">
-                                Antal poser
-                            </h2>
-                            <PickupRequestForm
-                                bags={bags}
-                                setBags={setBags}
-                                onSubmit={handleSubmit}
-                            />
-                            <button type="button"
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="mt-3 text-sm text-gray-600 underline">
-                                Annuller
-                            </button>
+                    <Modal
+                        title={
+                            hasActiveRequest
+                                ? "Opdater antal poser"
+                                : "Antal poser"
+                        }
+                        onClose={() => setIsModalOpen(false)}
+                    >
+
+                        <PickupRequestForm
+                            bags={bags}
+                            setBags={setBags}
+                            onSubmit={
+                                hasActiveRequest
+                                    ? handleUpdate
+                                    : handleSubmit
+                            }
+
+                            buttonText={
+                                hasActiveRequest
+                                    ? "Opdater"
+                                    : "Bekræft"
+                            }
+                        />
+
+                    </Modal>
+                )}
+
+
+                {isCancelModalOpen && (
+                    <Modal
+                        title="Annuller afhentning"
+                        onClose={() => setIsCancelModalOpen(false)}
+                    >
+                        <div className="flex flex-col gap-gap-md">
+
+                            <p>
+                                Er du sikker på, at du vil annullere afhentningen?
+                            </p>
+
+                            <Button onClick={handleCancel}>
+                                Bekræft annullering
+                            </Button>
+
                         </div>
-                    </div>
+                    </Modal>
                 )}
             </div>
+
         </PageContainer>
     )
 }
