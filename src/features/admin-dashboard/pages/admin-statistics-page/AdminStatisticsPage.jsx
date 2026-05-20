@@ -33,23 +33,24 @@ function AdminStatisticsPage() {
                             value={selectedTimeRange.label}
                             onChange={(e) => handleTimeRangeChange(e)}
                         >
-                            <option value={timeRange.LAST_MONTH.label}>{timeRange.LAST_MONTH.label}</option>
-                            <option value={timeRange.ALL_TIME.label}>{timeRange.ALL_TIME.label}</option>
+                            {Object.values(timeRange).map(tr =>
+                                <option key={tr.label} value={tr.label}>{tr.label}</option>
+                            )}
                         </select>
                     </div>
                 </SectionCard>
 
                 <SectionCardExpandable title="Afhentninger">
-                    <PickupChart data={statisticsApi.getPickupData()}/>
+                    <PickupChart data={statisticsApi.getPickupData(selectedTimeRange.getDate())}/>
                 </SectionCardExpandable>
 
                 <SectionCardExpandable title="Indsamlede poser Pr. virksomhed">
-                    <BagsByPartnerChart data={statisticsApi.getBagsByPartner()} />
+                    <BagsByPartnerChart data={statisticsApi.getBagsByPartner(selectedTimeRange.getDate())} />
                 </SectionCardExpandable>
 
                 <SectionCardExpandable title="Omkostninger">
                     <h2 className="text-section-header">Totale omkostninger for perioden: {mockExpenses.reduce((partialSum, expense) => partialSum + expense.amount, 0)}kr</h2>
-                    <ExpensesChart data={statisticsApi.getExpenses()}/>
+                    <ExpensesChart data={statisticsApi.getExpenses(selectedTimeRange.getDate())}/>
                 </SectionCardExpandable>
             </div>
         </PageContainer>
