@@ -39,4 +39,16 @@ export const pickupRequest = {
 
     },
 
+    update: async(id, bags) => {
+        const {error: postgresError} = await supabaseClient
+        .from("pickup")
+            .update({
+                bags: bags,
+            })
+            .eq("id", id)
+
+        handlePostgresError(postgresError);
+    }
+
+
 }
