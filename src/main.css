@@ -11,6 +11,16 @@
     --color-surface: oklch(0.910 0.014 98.88);
     --color-background: oklch(0.9663 0.008 98.88);
 
+    /* states og feedback */
+    --color-surface-hover: oklch(from var(--color-surface) calc(l - 0.04) c h);
+    --color-border: oklch(from var(--color-text-color) calc(l + 0.5) c h);
+
+    /* Feedback-farver */
+    --color-success: oklch(0.65 0.15 145);     /* grøn */
+    --color-success-bg: oklch(from var(--color-success) calc(l + 0.25) calc(c - 0.1) h);
+    --color-danger: oklch(0.55 0.20 25);       /* rød */
+    --color-danger-bg: oklch(from var(--color-danger) calc(l + 0.35) calc(c - 0.1) h);
+
     /* Gap-størrelser */
     --spacing-padding: 0.25rem;
     --spacing-gap-sm: 0.5rem;
