@@ -31,7 +31,7 @@ function AddressAutocomplete({ onSelect, selectedAddress }) {
         return (
             <div className="flex flex-col gap-1">
                 <span className="text-sm">Adresse</span>
-                <div className="flex items-center justify-between bg-green-50 border border-green-200 p-3 rounded-md">
+                <div className="flex items-center justify-between p-3 rounded-md">
                     <span className="text-sm">{selectedAddress.displayText}</span>
                     <Button
                         type="button"

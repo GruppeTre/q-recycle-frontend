@@ -23,4 +23,29 @@ export const partners = {
 
         return data;
     },
+
+    list: async () => {
+        const { data, error: postgresError } = await supabaseClient
+            .from("partner")
+            .select(`
+                id,
+                name,
+                phone_number,
+                address (
+                    street,
+                    number,
+                    zipcode,
+                    city
+                )
+            `)
+            .order("name", { ascending: true });
+
+        if (postgresError) {
+            const error = new Error(postgresError.message);
+            error.code = postgresError.code;
+            throw error;
+        }
+
+        return data ?? [];
+    },
 };
