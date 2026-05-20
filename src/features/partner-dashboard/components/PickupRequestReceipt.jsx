@@ -27,7 +27,7 @@ function PickupRequestReceipt({activeRequest, onUpdate, onCancel}) {
 
             <div className="flex gap-gap-md mt-gap-md">
                 <Button onClick={onUpdate}>
-                    Tilføj poser
+                    Rediger antal poser
                 </Button>
 
                 <Button onClick={onCancel}>
