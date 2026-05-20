@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useAddressSuggestions } from "../hooks/useAddressSuggestions.js";
+import Button from "../../../components/Button.jsx";
+import Input from "../../../components/Input.jsx";
 
 function AddressAutocomplete({ onSelect, selectedAddress }) {
     const [query, setQuery] = useState("");
@@ -31,13 +33,12 @@ function AddressAutocomplete({ onSelect, selectedAddress }) {
                 <span className="text-sm">Adresse</span>
                 <div className="flex items-center justify-between bg-green-50 border border-green-200 p-3 rounded-md">
                     <span className="text-sm">{selectedAddress.displayText}</span>
-                    <button
+                    <Button
                         type="button"
                         onClick={() => onSelect(null)}
-                        className="text-xs text-blue-600 hover:underline"
                     >
                         Skift adresse
-                    </button>
+                    </Button>
                 </div>
             </div>
         );
@@ -46,7 +47,7 @@ function AddressAutocomplete({ onSelect, selectedAddress }) {
     return (
         <div className="flex flex-col gap-1 relative" ref={containerRef}>
             <span className="text-sm">Adresse</span>
-            <input
+            <Input
                 type="text"
                 value={query}
                 onChange={(e) => {
@@ -55,7 +56,6 @@ function AddressAutocomplete({ onSelect, selectedAddress }) {
                 }}
                 onFocus={() => setIsOpen(true)}
                 placeholder="Søg adresse..."
-                className="bg-gray-200 p-3 rounded-md"
                 autoComplete="off"
             />
 

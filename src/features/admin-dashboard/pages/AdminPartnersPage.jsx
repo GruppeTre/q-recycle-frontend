@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import PageContainer from "../../../components/PageContainer.jsx";
+import Button from "../../../components/Button.jsx";
 
 function AdminPartnersPage() {
     return (
@@ -8,9 +9,8 @@ function AdminPartnersPage() {
                 <h1 className="text-section-header">Partners</h1>
                 <Link
                     to="new"
-                    className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
                 >
-                    + Add Partner
+                    <Button>+ Add Partner</Button>
                 </Link>
             </div>
         </PageContainer>

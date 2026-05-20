@@ -3,6 +3,8 @@ import { useNavigate } from "react-router";
 import PageContainer from "../../../components/PageContainer.jsx";
 import AddressAutocomplete from "../components/AddressAutocomplete.jsx";
 import { partners } from "../../../lib/partners.js";
+import Button from "../../../components/Button.jsx";
+import Input from "../../../components/Input.jsx";
 
 function CreatePartnerPage() {
     const navigate = useNavigate();
@@ -50,17 +52,15 @@ function CreatePartnerPage() {
         return (
             <PageContainer>
                 <div className="mt-8 p-6 bg-green-50 border border-green-200 rounded-lg">
-                    <h2 className="text-section-header text-green-800">Partner oprettet!</h2>
+                    <h2 className="text-section-header text-green-800">Partner oprettet</h2>
                     <p className="mt-2 text-sm text-green-700">Giv denne PIN til partneren:</p>
                     <div className="mt-4 text-4xl font-mono font-bold tracking-wider text-green-900">
                         {generatedPin}
                     </div>
-                    <button
-                        onClick={() => navigate("/admin/partners")}
-                        className="mt-6 px-4 py-2 bg-primary text-white rounded-md"
-                    >
+                    <Button
+                        onClick={() => navigate("/admin/partners")}>
                         Tilbage til partneroversigt
-                    </button>
+                    </Button>
                 </div>
             </PageContainer>
         );
@@ -72,18 +72,16 @@ function CreatePartnerPage() {
             <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-gap-md max-w-md">
                 <label className="flex flex-col gap-1">
                     <span className="text-sm">Navn</span>
-                    <input
+                    <Input
                         type="text" value={name} onChange={(e) => setName(e.target.value)}
                         required minLength={2}
-                        className="bg-gray-200 p-3 rounded-md"
                     />
                 </label>
 
                 <label className="flex flex-col gap-1">
-                    <span className="text-sm">Telefonnummer (valgfrit)</span>
-                    <input
+                    <span className="text-sm">Telefonnummer</span>
+                    <Input
                         type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)}
-                        className="bg-gray-200 p-3 rounded-md"
                     />
                 </label>
 
@@ -98,13 +96,12 @@ function CreatePartnerPage() {
                     </div>
                 )}
 
-                <button
+                <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="p-3 bg-blue-400 text-white rounded-md disabled:opacity-50"
                 >
                     {isSubmitting ? "Opretter..." : "Opret partner"}
-                </button>
+                </Button>
             </form>
         </PageContainer>
     );
