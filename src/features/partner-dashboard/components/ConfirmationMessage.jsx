@@ -1,7 +1,13 @@
-
-function ConfirmationMessage({message}){
+function ConfirmationMessage({message}) {
     return (
-        <div className="bg-green-100 text-green-700 p-3 mt-4 rounded-md">
+        <div className="
+             bg-primary-background
+             text-text-color
+             border border-primary
+             p-3
+             mt-4
+             rounded-md
+            ">
             {message}
         </div>
     )
