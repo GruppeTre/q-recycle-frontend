@@ -1,5 +1,5 @@
-function Modal({title, children, onClose}){
-    return(
+function Modal({title, children, onClose}) {
+    return (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
             <div className="bg-surface p-6 rounded-md w-80 shadow-lg border border-primary/20">
                 {title && (
@@ -9,12 +9,12 @@ function Modal({title, children, onClose}){
                 )}
 
                 <div className="text-body">
-                {children}
+                    {children}
                 </div>
                 <button
-                type="button"
-                onClick={onClose}
-                className="mt-3
+                    type="button"
+                    onClick={onClose}
+                    className="mt-3
                 text-sm
                 text-text-color-muted
                 hover:text-text-color
