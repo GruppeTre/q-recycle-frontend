@@ -56,6 +56,8 @@ If a certain element (e.g. the [navbar](#navbar)) should span the full width of 
 it can be put outside of the ``PageContainer`` component:
 
 ```javascript
+import PageContainer from "./PageContainer";
+
 <div>
     <Navbar title="Admin" navItems={adminNavItems}/>
     <PageContainer>
@@ -63,6 +65,45 @@ it can be put outside of the ``PageContainer`` component:
     </PageContainer>
 </div>
 ```
+
+### SectionCard & SectionCardExpandable
+The ``SectionCard`` and ``SectionCardExpandable`` components are simple card components, which can be used
+to section off related content:
+
+```javascript
+import SectionCard from "./SectionCard";
+import SectionCardExpandable from "./SectionCardExpandable";
+
+<PageContainer>
+    <SectionCard title="First Section">
+        {/* Section content here */}
+    </SectionCard>
+
+    <SectionCardExpandable title="Expandable section">
+        {/* Expandable content here */}
+    </SectionCardExpandable>
+</PageContainer>
+```
+- `title` — Title presented in the top of the card
+
+Optionally, the ``SectionCard`` component takes a ``headerContent`` prop, which can be used
+to insert a JSX expression into the header of the card:
+
+```javascript
+import SectionCard from "./SectionCard";
+
+<PageContainer>
+    <SectionCard headerContent={
+        <div className="flex justify-between">
+            <h2>This is a section header</h2>
+            <button>some action</button>
+        </div>
+    }>
+        {/* Section content here */}
+    </SectionCard>
+</PageContainer>
+```
+
 ### Navbar
 The ``Navbar`` component is a responsive header & navbar, designed to be as simple to use as possible.
 It is intended to span the full width of the page. The navigational links responsively collapse into an accordion
@@ -71,6 +112,8 @@ on smaller screens, and automatically highlight the link indicating the current 
 The ``Navbar`` component takes two props:
 
 ```javascript
+import Navbar from "./Navbar";
+
 <div className="h-dvh">
     <Navbar title="Admin" navItems={adminNavItems}/>
     {/* Page content here */}

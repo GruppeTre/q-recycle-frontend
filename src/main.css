@@ -27,7 +27,7 @@
     }
 
     .text-section-header {
-        @apply text-xl font-semibold text-text-color;
+        @apply text-lg font-semibold text-text-color;
     }
 
     .text-body {
