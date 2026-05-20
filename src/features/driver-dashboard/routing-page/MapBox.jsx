@@ -7,7 +7,7 @@ import { useSpeech } from "./hooks/useSpeech.jsx";
 import { useNavigation } from "./hooks/useNavigation.jsx";
 
 import { pickupApi } from "./api/pickupApi.js";
-import { mapboxApi } from "./lib/mapboxApi.js";
+import { mapboxApi } from "./lib/mapBoxApi.js";
 import {
     renderPickupMarkers,
     renderRoute,
@@ -27,7 +27,7 @@ const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 console.log('Token:', token ? token.slice(0, 12) + '...' : 'MISSING');
 
-export default function MapApp() {
+export default function RoutePlanner() {
     // --- map setup ---
     const markersRef = useRef([]);       // pickup-stop markers (we clear/recreate these)
     const driverMarkerRef = useRef(null); // the blue GPS dot (we move it, not recreate)

@@ -1,4 +1,4 @@
-import { supabaseClient } from "../../../lib/supabaseClient.js";
+import { supabaseClient } from "../../../../lib/supabaseClient.js";
 
 export const pickupApi = {
     async fetchPending() {

@@ -10,7 +10,7 @@ import AdminDashboard from "./features/admin-dashboard/AdminDashboard.jsx";
 import AdminDriversPage from "./features/admin-dashboard/pages/AdminDriversPage.jsx";
 import AdminPartnersPage from "./features/admin-dashboard/pages/AdminPartnersPage.jsx";
 import AdminStatisticsPage from "./features/admin-dashboard/pages/AdminStatisticsPage.jsx";
-import MapApp from "./features/routing-page/MapBox.jsx";
+import RoutePlanner from "./features/driver-dashboard/routing-page/MapBox.jsx";
 
 function App() {
 
@@ -41,7 +41,7 @@ function App() {
 
                   <Route path="driver" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.DRIVER, role.ADMIN]}/>}>
                       <Route index element={<h1>DRIVER DASHBOARD</h1>} />
-                      <Route path="routing" element={<MapApp />} />
+                      <Route path="routing" element={<RoutePlanner />} />
                   </Route>
 
                   <Route path="admin" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.ADMIN]}> <AdminDashboard /> </ProtectedRoute>}>
