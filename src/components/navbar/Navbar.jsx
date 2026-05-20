@@ -3,7 +3,7 @@ import NavLinks from "./components/NavLinks.jsx";
 import {Menu, X} from "lucide-react";
 import {useState} from "react";
 
-function Navbar({title, navItems}) {
+function Navbar({title, navItems, pendingBags}) {
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -16,7 +16,7 @@ function Navbar({title, navItems}) {
             <div className="bg-background px-gap-md py-gap-md border-b border-surface">
                 <div className="flex justify-between items-center">
                     <div className="flex gap-gap-md items-center">
-                        <HeroIcon />
+                        <HeroIcon pendingBags={pendingBags}/>
                         <h2 className="text-center py-padding text-lg font-semibold">{title}</h2>
                     </div>
                     <div className="hidden md:flex flex-row gap-gap-md justify-between">

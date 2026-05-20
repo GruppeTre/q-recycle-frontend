@@ -20,7 +20,7 @@ function PartnerLoginPage() {
 
         setError(null);
         setIsLoading(true);
-        
+
         try {
             const pin = formData.get('pin');
             const email = pin + INTERNAL_EMAIL_SUFFIX;
@@ -39,6 +39,8 @@ function PartnerLoginPage() {
         } finally {
             setIsLoading(false);
         }
+
+        /*navigate('/partner/dashboard');*/
     }
 
     return (

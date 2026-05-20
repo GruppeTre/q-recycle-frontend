@@ -5,10 +5,12 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import {role} from "./config/constants.js";
 import {AuthProvider} from "./context/AuthContext.jsx";
 import GuestRoute from "./components/GuestRoute.jsx";
+import PartnerDashboardPage from "./features/partner-dashboard/PartnerDashboardPage.jsx";
 import AdminDashboard from "./features/admin-dashboard/AdminDashboard.jsx";
 import AdminDriversPage from "./features/admin-dashboard/pages/AdminDriversPage.jsx";
 import AdminPartnersPage from "./features/admin-dashboard/pages/AdminPartnersPage.jsx";
 import AdminStatisticsPage from "./features/admin-dashboard/pages/AdminStatisticsPage.jsx";
+import MapApp from "./features/routing-page/MapBox.jsx";
 
 function App() {
 
@@ -25,21 +27,21 @@ function App() {
 
                   <Route path="partner" >
 
-                      <Route index element={
+                      {/*<Route index element={
                           <GuestRoute allowedRoles={[role.ADMIN, role.DRIVER]}>
                               <PartnerLoginPage />
                           </GuestRoute>
-                      }/>
+                      }/>*/}
 
+                      <Route index element={<PartnerLoginPage />} />
                       <Route path="dashboard" element={
-                          <ProtectedRoute redirectPath="/partner" allowedRoles={[role.PARTNER]}>
-                              <h1>DASHBOARD</h1>
-                          </ProtectedRoute>
+                          <PartnerDashboardPage />
                       } />
                   </Route>
 
                   <Route path="driver" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.DRIVER, role.ADMIN]}/>}>
                       <Route index element={<h1>DRIVER DASHBOARD</h1>} />
+                      <Route path="routing" element={<MapApp />} />
                   </Route>
 
                   <Route path="admin" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.ADMIN]}> <AdminDashboard /> </ProtectedRoute>}>
