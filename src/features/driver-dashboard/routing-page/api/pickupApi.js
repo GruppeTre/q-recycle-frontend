@@ -26,8 +26,6 @@ export const pickupApi = {
 
         if (error) throw error;
 
-        console.log('Raw Supabase data:', JSON.stringify(data, null, 2));
-
         return (data ?? [])
             .filter((row) =>
                 row.partner?.address?.lng != null &&
@@ -43,6 +41,46 @@ export const pickupApi = {
             }));
     },
 
+    async fetchActive(){
+        const { data, error } = await supabaseClient
+        .from("pickup")
+            .select(`
+                id,
+                bags,
+                status,
+                completed_at,
+                    partner:partner (
+                    id,
+                    name,
+                    address:address (
+                        street,
+                        zipcode,
+                        city,
+                        lng,
+                        lat
+                    )
+                )
+            `)
+            .in("status", ["scheduled", "completed"])
+            .order("scheduled_at", { ascending: true });
+        if (error) throw error;
+
+        return (data ?? [])
+            .filter((row) =>
+                row.partner?.address?.lng != null &&
+                row.partner?.address?.lat != null
+            )
+            .map((row) => ({
+                id: row.id,
+                bags: row.bags,
+                status: row.status,
+                completed_at: row.completed_at,
+                partner_name: row.partner.name,
+                address: formatAddress(row.partner.address),
+                coords: [row.partner.address.lng, row.partner.address.lat],
+            }));
+    },
+
     async markScheduled(ids) {
         if (!ids?.length) return;
         const { error } = await supabaseClient
@@ -52,11 +90,47 @@ export const pickupApi = {
         if (error) throw error;
     },
 
-    async markCompleted(id) {
+    async markCompleted(id, actualBags) {
         const { error } = await supabaseClient
             .from("pickup")
-            .update({ status: "completed", completed_at: new Date().toISOString() })
+            .update({
+                bags: actualBags,
+                status: "completed",
+                completed_at: new Date().toISOString()
+            })
             .eq("id", id);
+        if (error) throw error;
+    },
+
+    async revertToScheduled(id) {
+        const { error } = await supabaseClient
+        .from("pickup")
+        .update({
+            status: "scheduled",
+            completed_at: null,
+        })
+        .eq("id", id);
+
+        if (error) throw error;
+    },
+
+    async revertAllScheduled(){
+        const { error } = await supabaseClient
+            .from("pickup")
+            .update({
+                status: "requested",
+                scheduled_at: null,
+            })
+            .eq("status", "scheduled");
+        if (error) throw error;
+    },
+
+    // Archive completed requests to prevent contaminations on new routes
+    async archiveCompletedRoute() {
+        const { error } = await supabaseClient
+            .from("pickup")
+            .update({ status: "archived" })
+            .eq("status", "completed");
         if (error) throw error;
     },
 };
