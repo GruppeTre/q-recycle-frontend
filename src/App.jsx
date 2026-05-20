@@ -9,7 +9,7 @@ import PartnerDashboardPage from "./features/partner-dashboard/PartnerDashboardP
 import AdminDashboard from "./features/admin-dashboard/AdminDashboard.jsx";
 import AdminDriversPage from "./features/admin-dashboard/pages/AdminDriversPage.jsx";
 import AdminPartnersPage from "./features/admin-dashboard/pages/AdminPartnersPage.jsx";
-import AdminStatisticsPage from "./features/admin-dashboard/pages/AdminStatisticsPage.jsx";
+import AdminStatisticsPage from "./features/admin-dashboard/pages/admin-statistics-page/AdminStatisticsPage.jsx";
 import MapApp from "./features/routing-page/MapBox.jsx";
 
 function App() {
