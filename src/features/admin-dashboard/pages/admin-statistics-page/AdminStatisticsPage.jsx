@@ -1,7 +1,7 @@
 import PageContainer from "../../../../components/PageContainer.jsx";
 import SectionCardExpandable from "../../../../components/SectionCardExpandable.jsx";
 import PickupChart from "../../components/PickupChart.jsx";
-import {mockExpenses, statisticsApi} from "../../../../lib/statisticsApi.js";
+import {mockExpenses, statisticsApi} from "./lib/statisticsApi.js";
 import BagsByPartnerChart from "../../components/BagsByPartnerChart.jsx";
 import ExpensesChart from "../../components/ExpensesChart.jsx";
 import {useState} from "react";
