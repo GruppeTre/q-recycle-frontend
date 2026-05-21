@@ -45,8 +45,13 @@ function App() {
                   <Route path="driver" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.DRIVER, role.ADMIN]}> <DriverDashboard /> </ProtectedRoute>}>
                       <Route index element={<Navigate to="routes" replace={true} /> } />
                       <Route path="routes" element={<DriverRoutePage />} />
-                      <Route path="route-planner" element={<RoutePlanner />} />
+
                   </Route>
+                  <Route path="driver/routes/route-planner" element={
+                      <ProtectedRoute redirectPath="/" allowedRoles={[role.DRIVER, role.ADMIN]} >
+                          <RoutePlanner />
+                      </ProtectedRoute> }
+                  />
 
                   <Route path="admin" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.ADMIN]}> <AdminDashboard /> </ProtectedRoute>}>
                       <Route index element={<Navigate to="drivers" replace={true}/>}/>
