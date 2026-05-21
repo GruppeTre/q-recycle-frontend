@@ -4,22 +4,47 @@ export const statisticsApi = {
 
     getPickupData: async (cutoffDate) => {
 
-        //fetch
-        const data = await pickupRequest.getAllCompletedAfter(cutoffDate);
+        try {
+            //fetch
+            const data = await pickupRequest.getAllCompletedAfter(cutoffDate);
 
-        //transform data into array with values fields 'name' and 'pickups', and combine pickups that happened on the same day
-        return Object.values(
-            data.reduce((acc, pickup) => {
-                const date = new Date(pickup.completed_at).toLocaleDateString('en-GB');
-                acc[date] ??= {name: date, pickups: 0}
-                acc[date].pickups += pickup.bags;
-                return acc;
-            }, {})
-        );
+            //transform data into array with values fields 'name' and 'pickups', and combine pickups that happened on the same day
+            const returnData =  Object.values(
+                data.reduce((acc, pickup) => {
+                    const date = new Date(pickup.completed_at).toLocaleDateString('en-GB');
+                    acc[date] ??= {name: date, pickups: 0}
+                    acc[date].pickups += pickup.bags;
+                    return acc;
+                }, {})
+            );
+
+            return { data: returnData, error: null }
+        } catch (e) {
+            return { data: null, error: e }
+        }
     },
 
-    getBagsByPartner: (cutoffDate) => {
-        return mockBagsByPartnerData;
+    getBagsByPartner: async (cutoffDate) => {
+        
+        try {
+            const data = await pickupRequest.getAllCompletedAfter(cutoffDate);
+
+            // transform into array with values 'name' and 'amount'
+            const returnData = Object.values(
+                data.reduce((acc, pickup) => {
+                    const partnerName = pickup.partner.name;
+
+                    acc[partnerName] ??= { name: partnerName, amount: 0 };
+                    acc[partnerName].amount += pickup.bags;
+
+                    return acc;
+                }, {})
+            );
+
+            return { data: returnData, error: null }
+        } catch (e) {
+            return { data: null, error: e }
+        }
     },
 
     getExpenses: (cutoffDate) => {

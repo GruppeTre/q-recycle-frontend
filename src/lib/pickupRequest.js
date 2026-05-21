@@ -38,7 +38,15 @@ export const pickupRequest = {
     getAllCompleted: async () => {
         const { data, error: postgresError } = await supabaseClient
             .from('pickup')
-            .select('bags')
+            .select(`
+                id,
+                bags,
+                completed_at,
+                partner:partner (
+                    id,
+                    name
+                )
+            `)
             .eq('status', pickupStatus.COMPLETED);
 
         if (postgresError) {
@@ -62,7 +70,15 @@ export const pickupRequest = {
 
         const { data, error: postgresError } = await supabaseClient
             .from('pickup')
-            .select('bags, completed_at')
+            .select(`
+                id,
+                bags,
+                completed_at,
+                partner:partner (
+                    id,
+                    name
+                )
+            `)
             .gte('completed_at', date.toISOString())
             .eq('status', pickupStatus.COMPLETED);
 
@@ -73,5 +89,5 @@ export const pickupRequest = {
         }
 
         return data;
-    }
+    },
 }

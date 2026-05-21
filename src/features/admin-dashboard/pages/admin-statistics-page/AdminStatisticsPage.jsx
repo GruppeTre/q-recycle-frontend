@@ -15,10 +15,33 @@ function AdminStatisticsPage() {
 
     //chart data state
     const [pickupData, setPickupData] = useState([]);
+    const [pickupChartError, setPickupChartError] = useState(null);
+
+    const [bagsByPartnerData, setBagsByPartnerData] = useState([]);
+    const [bagsByPartnerChartError, setBagsByPartnerChartError] = useState(null);
 
     useEffect(() => {
+
         statisticsApi.getPickupData(selectedTimeRange.getDate())
-            .then(setPickupData);
+            .then(result => {
+                if (result.error) {
+                    console.error(result.error);
+                    setPickupChartError('Noget gik galt, prøv igen senere');
+                } else {
+                    setPickupData(result.data);
+                }
+            });
+
+        statisticsApi.getBagsByPartner(selectedTimeRange.getDate())
+            .then(result => {
+                if (result.error) {
+                    console.error(result.error);
+                    setBagsByPartnerChartError('Noget gik galt, prøv igen senere');
+                } else {
+                    setBagsByPartnerData(result.data);
+                }
+            });
+
     }, [selectedTimeRange]);
 
     const handleTimeRangeChange = (e) => {
@@ -50,8 +73,12 @@ function AdminStatisticsPage() {
                 </SectionCard>
 
                 <SectionCardExpandable title="Afhentninger">
-                    {pickupData.length >= 2 ?
-                        <PickupChart data={pickupData}/> :
+                    {pickupChartError &&
+                        <div>{pickupChartError}</div>
+                    }
+                    {(pickupData.length >= 2 && !pickupChartError) ?
+                        <PickupChart data={pickupData}/>
+                        :
                         <NotEnoughDataWarning>
                             <p className="text-body">Der skal være minimum 2 datapunkter for at tegne denne graf</p>
                         </NotEnoughDataWarning>
@@ -59,7 +86,16 @@ function AdminStatisticsPage() {
                 </SectionCardExpandable>
 
                 <SectionCardExpandable title="Indsamlede poser Pr. virksomhed">
-                    <BagsByPartnerChart data={statisticsApi.getBagsByPartner(selectedTimeRange.getDate())} />
+                    {bagsByPartnerChartError &&
+                        <div>{bagsByPartnerChartError}</div>
+                    }
+                    {(bagsByPartnerData.length >= 1) && !bagsByPartnerChartError ?
+                        <BagsByPartnerChart data={bagsByPartnerData} />
+                        :
+                        <NotEnoughDataWarning>
+                            <p className="text-body">Der skal være minimum ét datapunkt for at tegne denne graf</p>
+                        </NotEnoughDataWarning>
+                    }
                 </SectionCardExpandable>
 
                 <SectionCardExpandable title="Omkostninger">
