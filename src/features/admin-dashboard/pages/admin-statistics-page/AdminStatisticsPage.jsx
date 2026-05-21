@@ -8,17 +8,17 @@ import {useEffect, useState} from "react";
 import {timeRange} from "./config/timeRange.js";
 import SectionCard from "../../../../components/SectionCard.jsx";
 import NotEnoughDataWarning from "./components/NotEnoughDataWarning.jsx";
+import {useChartData} from "./hooks/useChartData.js";
+import Spinner from "../../../../components/Spinner.jsx";
 
 function AdminStatisticsPage() {
 
     const [selectedTimeRange, setSelectedTimeRange] = useState(initSelectedTimeRange);
 
     //chart data state
-    const [pickupData, setPickupData] = useState([]);
-    const [pickupChartError, setPickupChartError] = useState(null);
+    const { data: pickupData, error: pickupChartError, isLoading: pickupChartIsLoading } = useChartData(statisticsApi.getPickupData, selectedTimeRange);
 
-    const [bagsByPartnerData, setBagsByPartnerData] = useState([]);
-    const [bagsByPartnerChartError, setBagsByPartnerChartError] = useState(null);
+    const { data: bagsByPartnerData, error: bagsByPartnerChartError, isLoading: bagsByPartnerChartIsLoading } = useChartData(statisticsApi.getBagsByPartner, selectedTimeRange);
 
     const openSections = JSON.parse(sessionStorage.getItem('openSections')) ?? [];
 
@@ -26,29 +26,6 @@ function AdminStatisticsPage() {
 
         //save selectedTimeRange to browser session storage
         sessionStorage.setItem('timeRange', selectedTimeRange.label);
-
-        //get data for charts
-        statisticsApi.getPickupData(selectedTimeRange.getDate())
-            .then(result => {
-                if (result.error) {
-                    console.error(result.error);
-                    setPickupChartError('Noget gik galt, prøv igen senere');
-                } else {
-                    setPickupData(result.data);
-                    setPickupChartError(null);
-                }
-            });
-
-        statisticsApi.getBagsByPartner(selectedTimeRange.getDate())
-            .then(result => {
-                if (result.error) {
-                    console.error(result.error);
-                    setBagsByPartnerChartError('Noget gik galt, prøv igen senere');
-                } else {
-                    setBagsByPartnerData(result.data);
-                    setBagsByPartnerChartError(null);
-                }
-            });
 
     }, [selectedTimeRange]);
 
@@ -95,35 +72,43 @@ function AdminStatisticsPage() {
                 </SectionCard>
 
                 <SectionCardExpandable title="Afhentninger" initialIsOpen={openSections.includes('pickup')} onToggle={(newState) => handleSectionCardToggle(newState, 'pickup')}>
-                    {pickupChartError &&
-                        <div>{pickupChartError}</div>
-                    }
-                    {(pickupData.length >= 2 && !pickupChartError) ?
-                        <PickupChart data={pickupData}/>
-                        :
-                        <NotEnoughDataWarning>
-                            <p className="text-body">Der skal være minimum 2 datapunkter for at tegne denne graf</p>
-                        </NotEnoughDataWarning>
+                    {pickupChartIsLoading
+                        ? <div className="flex justify-center">
+                            <Spinner />
+                        </div>
+                        : pickupChartError
+                            ? <div>{pickupChartError}</div>
+                            : pickupData.length >= 2
+                                ? <PickupChart data={pickupData}/>
+                                : <NotEnoughDataWarning>
+                                    <p className="text-body">
+                                        Der skal være minimum 2 datapunkter for at tegne denne graf
+                                    </p>
+                                </NotEnoughDataWarning>
                     }
                 </SectionCardExpandable>
 
                 <SectionCardExpandable title="Indsamlede poser Pr. virksomhed" initialIsOpen={openSections.includes('bags')} onToggle={(newState) => handleSectionCardToggle(newState, 'bags')}>
-                    {bagsByPartnerChartError &&
-                        <div>{bagsByPartnerChartError}</div>
-                    }
-                    {(bagsByPartnerData.length >= 1) && !bagsByPartnerChartError ?
-                        <BagsByPartnerChart data={bagsByPartnerData} />
-                        :
-                        <NotEnoughDataWarning>
-                            <p className="text-body">Der skal være minimum ét datapunkt for at tegne denne graf</p>
-                        </NotEnoughDataWarning>
+                    {bagsByPartnerChartIsLoading
+                        ? <div className="flex justify-center">
+                            <Spinner />
+                        </div>
+                        : bagsByPartnerChartError
+                            ? <div>{bagsByPartnerChartError}</div>
+                            : bagsByPartnerData.length >= 2
+                                ? <BagsByPartnerChart data={bagsByPartnerData}/>
+                                : <NotEnoughDataWarning>
+                                    <p className="text-body">
+                                        Der skal være minimum ét datapunkter for at tegne denne graf
+                                    </p>
+                                </NotEnoughDataWarning>
                     }
                 </SectionCardExpandable>
 
-                <SectionCardExpandable title="Omkostninger" initialIsOpen={openSections.includes('expenses')} onToggle={(newState) => handleSectionCardToggle(newState, 'expenses')}>
-                    <h2 className="text-section-header">Totale omkostninger for perioden: {mockExpenses.reduce((partialSum, expense) => partialSum + expense.amount, 0)}kr</h2>
-                    <ExpensesChart data={statisticsApi.getExpenses(selectedTimeRange.getDate())}/>
-                </SectionCardExpandable>
+                {/*<SectionCardExpandable title="Omkostninger" initialIsOpen={openSections.includes('expenses')} onToggle={(newState) => handleSectionCardToggle(newState, 'expenses')}>*/}
+                {/*    <h2 className="text-section-header">Totale omkostninger for perioden: {mockExpenses.reduce((partialSum, expense) => partialSum + expense.amount, 0)}kr</h2>*/}
+                {/*    <ExpensesChart data={statisticsApi.getExpenses(selectedTimeRange.getDate())}/>*/}
+                {/*</SectionCardExpandable>*/}
             </div>
         </PageContainer>
     );
