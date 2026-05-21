@@ -85,7 +85,7 @@ import SectionCardExpandable from "./SectionCardExpandable";
 </PageContainer>
 ```
 - `title` (optional) — Title presented in the top of the card
-- `backgroundColor` (optional) — determine the background color of the card
+- `backgroundColor` — determine the background color of the card: ``--color-background``
 
 Optionally, the ``SectionCard`` component takes a ``headerContent`` prop, which can be used
 to insert a JSX expression into the header of the card:
@@ -106,6 +106,26 @@ import SectionCard from "./SectionCard";
 ```
 
 The ``SectionCardExpandable`` can optionally take an ``onToggle`` callback function, that will be called with the  state (bool ``isOpen``) every time the component is opened/closed.
+
+### Spinner
+The ``Spinner`` component is a simple loading spinner, that can be used to indicate content not yet ready to display:
+
+```javascript
+import Spinner from "./Spinner";
+
+<div>
+    {isLoading
+        ? <Spinner size={16} thickness={8} color={'blue 500'}/>
+        : <div>
+            {/* loaded content here */}
+        </div>
+    }
+</div>
+```
+
+- `size` - size of the spinner in pixels, default: ``12``
+- `thickness` - thickness of the spinner, default: ``6``
+- ``color`` - color of the spinner, defaults: ``--color-primary``
 
 ### Navbar
 The ``Navbar`` component is a responsive header & navbar, designed to be as simple to use as possible.
