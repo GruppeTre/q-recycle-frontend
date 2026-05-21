@@ -1,9 +1,8 @@
 import PageContainer from "../../../../components/PageContainer.jsx";
 import SectionCardExpandable from "../../../../components/SectionCardExpandable.jsx";
 import PickupChart from "../../components/PickupChart.jsx";
-import {mockExpenses, statisticsApi} from "./lib/statisticsApi.js";
+import {statisticsApi} from "./lib/statisticsApi.js";
 import BagsByPartnerChart from "../../components/BagsByPartnerChart.jsx";
-import ExpensesChart from "../../components/ExpensesChart.jsx";
 import {useEffect, useState} from "react";
 import {timeRange} from "./config/timeRange.js";
 import SectionCard from "../../../../components/SectionCard.jsx";
@@ -15,7 +14,6 @@ function AdminStatisticsPage() {
 
     const [selectedTimeRange, setSelectedTimeRange] = useState(initSelectedTimeRange);
 
-    //chart data state
     const { data: pickupData, error: pickupChartError, isLoading: pickupChartIsLoading } = useChartData(statisticsApi.getPickupData, selectedTimeRange);
 
     const { data: bagsByPartnerData, error: bagsByPartnerChartError, isLoading: bagsByPartnerChartIsLoading } = useChartData(statisticsApi.getBagsByPartner, selectedTimeRange);
@@ -78,7 +76,7 @@ function AdminStatisticsPage() {
                         </div>
                         : pickupChartError
                             ? <div>{pickupChartError}</div>
-                            : pickupData.length >= 2
+                            : pickupData.length >= 1
                                 ? <PickupChart data={pickupData}/>
                                 : <NotEnoughDataWarning>
                                     <p className="text-body">
