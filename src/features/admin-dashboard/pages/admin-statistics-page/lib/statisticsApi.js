@@ -1,6 +1,16 @@
+import {pickupRequest} from "../../../../../lib/pickupRequest.js";
+
 export const statisticsApi = {
 
-    getPickupData: (cutoffDate) => {
+    getPickupData: async (cutoffDate) => {
+
+        console.log(`trying to fetch data AFTER date: ${cutoffDate}`);
+
+        //fetch
+        const data = await pickupRequest.getAllCompletedAfter(cutoffDate);
+
+        console.log('fetched data: ', JSON.stringify(data));
+
         return mockPickupData;
     },
 
