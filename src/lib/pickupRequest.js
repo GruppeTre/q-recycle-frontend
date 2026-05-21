@@ -11,6 +11,25 @@ function handlePostgresError(postgresError) {
 
 
 export const pickupRequest = {
+
+    create: async(partnerId, bags) => {
+        const{data, error: postgresError} = await supabaseClient
+            .from("pickup")
+            .insert({
+                partner_id: partnerId,
+                bags: bags,
+                status: pickupStatus.REQUESTED,
+                created_at: new Date(),
+            })
+            .select()
+
+        handlePostgresError(postgresError);
+
+        return data;
+    },
+
+
+
     getActive: async (userId) => {
 
         const {data, error: postgresError} = await supabaseClient
@@ -56,11 +75,7 @@ export const pickupRequest = {
             .select('bags')
             .eq('status', 'requested');
 
-        if (postgresError) {
-            const error = new Error(postgresError.message);
-            error.code = postgresError.code;
-            throw error;
-        }
+        handlePostgresError(postgresError);
 
         const totalBags = (data ?? []).reduce((sum, row) => sum + (row.bags ?? 0), 0);
         return totalBags;
