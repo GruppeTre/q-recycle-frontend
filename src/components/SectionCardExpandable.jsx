@@ -1,16 +1,21 @@
 import {useState} from "react";
 import {ChevronDown, ChevronUp} from "lucide-react";
 
-function SectionCardExpandable({children, title = null, initialIsOpen}) {
+function SectionCardExpandable({children, title = null, initialIsOpen, backgroundColor = null, onToggle = null}) {
 
     const [isOpen, setIsOpen] = useState(initialIsOpen);
 
     const handleAccordionToggle = () => {
-        setIsOpen(prevState => !prevState);
+        const newState = !isOpen;
+
+        setIsOpen(newState);
+        if (onToggle) {
+            onToggle(newState);
+        }
     }
 
     return (
-        <div className="flex flex-col gap-gap-md bg-background rounded-lg px-gap-md py-gap-md shadow-sm">
+        <div className={`flex flex-col gap-gap-md rounded-lg px-gap-md py-gap-md shadow-sm ${backgroundColor ? `bg-${backgroundColor}` : 'bg-background'}`}>
             {title &&
                 <button className="cursor-pointer" onClick={handleAccordionToggle}>
                     <div className={`flex justify-between w-full ${isOpen ? 'border-b' : ''} border-surface`}>

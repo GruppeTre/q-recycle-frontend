@@ -9,11 +9,11 @@ import PartnerDashboardPage from "./features/partner-dashboard/PartnerDashboardP
 import AdminDashboard from "./features/admin-dashboard/AdminDashboard.jsx";
 import AdminDriversPage from "./features/admin-dashboard/pages/AdminDriversPage.jsx";
 import AdminPartnersPage from "./features/admin-dashboard/pages/AdminPartnersPage.jsx";
-import AdminStatisticsPage from "./features/admin-dashboard/pages/AdminStatisticsPage.jsx";
 import CreatePartnerPage from "./features/admin-dashboard/pages/CreatePartnerPage.jsx";
-import RoutePlanner from "./features/driver-dashboard/routing-page/MapBox.jsx";
+import RoutePlanner from "./features/driver-dashboard/routing-page/RoutePlanner.jsx";
 import DriverRoutePage from "./features/driver-dashboard/DriverRoutePage.jsx";
 import DriverDashboard from "./features/driver-dashboard/DriverDashboard.jsx";
+import AdminStatisticsPage from "./features/admin-dashboard/pages/admin-statistics-page/AdminStatisticsPage.jsx";
 
 function App() {
 
@@ -30,16 +30,18 @@ function App() {
 
                   <Route path="partner" >
 
-                      {/*<Route index element={
+                      <Route index element={
                           <GuestRoute allowedRoles={[role.ADMIN, role.DRIVER]}>
                               <PartnerLoginPage />
                           </GuestRoute>
-                      }/>*/}
+                      }/>
 
-                      <Route index element={<PartnerLoginPage />} />
                       <Route path="dashboard" element={
-                          <PartnerDashboardPage />
-                      } />
+                          <ProtectedRoute redirectPath="/partner" allowedRoles={[role.PARTNER]}>
+                              <PartnerDashboardPage />
+                          </ProtectedRoute>
+                      }/>
+
                   </Route>
 
                   <Route path="driver" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.DRIVER, role.ADMIN]}> <DriverDashboard /> </ProtectedRoute>}>

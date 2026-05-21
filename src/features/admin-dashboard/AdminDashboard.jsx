@@ -10,10 +10,8 @@ function AdminDashboard() {
     return (
         <>
             <title>Q-recycle | Admin</title>
-            <div className="bg-primary-background h-dvh">
-                <Navbar title="Admin" navItems={adminNavItems} pendingBags={count}/>
-                <Outlet />
-            </div>
+            <Navbar title="Admin" navItems={adminNavItems} pendingBags={count}/>
+            <Outlet />
         </>
     );
 }

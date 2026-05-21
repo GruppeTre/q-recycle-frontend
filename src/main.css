@@ -5,10 +5,10 @@
     /* Farver */
     --color-primary: oklch(0.7952 0.1617 86.05);
     --color-primary-hover: oklch(from var(--color-primary) calc(l - 0.05) c h);
-    --color-primary-background: oklch(from var(--color-primary) calc(l + 0.10) calc(c - 0.1) h);
+    --color-primary-background: oklch(from var(--color-primary) calc(l + 0.1) calc(c - 0.12) h);
     --color-text-color: oklch(0.15 0 0);
     --color-text-color-muted: oklch(from var(--color-text-color) calc(l + 0.1) c h);
-    --color-surface: oklch(0.910 0.014 98.88);
+    --color-surface: oklch(from var(--color-background) calc(l - 0.06) c h);
     --color-background: oklch(0.9663 0.008 98.88);
 
     /* states og feedback */
@@ -27,6 +27,10 @@
     --spacing-gap-md: 1rem;
     --spacing-gap-lg: 2rem;
     --spacing-gap-xl: 4rem;
+}
+
+body {
+    @apply bg-primary-background
 }
 
 /* typography */
