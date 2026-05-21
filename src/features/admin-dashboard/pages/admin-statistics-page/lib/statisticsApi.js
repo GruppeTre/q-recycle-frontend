@@ -4,23 +4,18 @@ export const statisticsApi = {
 
     getPickupData: async (cutoffDate) => {
 
-        console.log(`trying to fetch data AFTER date: ${cutoffDate}`);
-
         //fetch
         const data = await pickupRequest.getAllCompletedAfter(cutoffDate);
 
-        //transform data into array with values fields 'name' and 'pickups'
-        const statisticalData = data.map(pickup => {
-            return {
-                name: pickup.completed_at.slice(0, 10),
-                pickups: pickup.bags
-            }
-        });
-
-        console.log('returning data: ', JSON.stringify(statisticalData));
-        console.log('mock data: ', JSON.stringify(mockPickupData));
-
-        return statisticalData;
+        //transform data into array with values fields 'name' and 'pickups', and combine pickups that happened on the same day
+        return Object.values(
+            data.reduce((acc, pickup) => {
+                const date = new Date(pickup.completed_at).toLocaleDateString('en-GB');
+                acc[date] ??= {name: date, pickups: 0}
+                acc[date].pickups += pickup.bags;
+                return acc;
+            }, {})
+        );
     },
 
     getBagsByPartner: (cutoffDate) => {
