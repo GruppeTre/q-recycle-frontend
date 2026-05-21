@@ -1,12 +1,17 @@
 import {useState} from "react";
 import {ChevronDown, ChevronUp} from "lucide-react";
 
-function SectionCardExpandable({children, title = null, initialIsOpen, backgroundColor = null}) {
+function SectionCardExpandable({children, title = null, initialIsOpen, backgroundColor = null, onToggle = null}) {
 
     const [isOpen, setIsOpen] = useState(initialIsOpen);
 
     const handleAccordionToggle = () => {
-        setIsOpen(prevState => !prevState);
+        const newState = !isOpen;
+
+        setIsOpen(newState);
+        if (onToggle) {
+            onToggle(newState);
+        }
     }
 
     return (

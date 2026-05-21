@@ -79,7 +79,7 @@ import SectionCardExpandable from "./SectionCardExpandable";
         {/* Section content here */}
     </SectionCard>
 
-    <SectionCardExpandable title="Expandable section">
+    <SectionCardExpandable title="Expandable section" onChange={(state) => foo(state)}>
         {/* Expandable content here */}
     </SectionCardExpandable>
 </PageContainer>
@@ -104,6 +104,8 @@ import SectionCard from "./SectionCard";
     </SectionCard>
 </PageContainer>
 ```
+
+The ``SectionCardExpandable`` can optionally take an ``onToggle`` callback function, that will be called with the  state (bool ``isOpen``) every time the component is opened/closed.
 
 ### Navbar
 The ``Navbar`` component is a responsive header & navbar, designed to be as simple to use as possible.
