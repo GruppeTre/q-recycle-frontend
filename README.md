@@ -75,7 +75,7 @@ import SectionCard from "./SectionCard";
 import SectionCardExpandable from "./SectionCardExpandable";
 
 <PageContainer>
-    <SectionCard title="First Section">
+    <SectionCard title="First Section" backgroundColor="blue-200">
         {/* Section content here */}
     </SectionCard>
 
@@ -84,7 +84,8 @@ import SectionCardExpandable from "./SectionCardExpandable";
     </SectionCardExpandable>
 </PageContainer>
 ```
-- `title` — Title presented in the top of the card
+- `title` (optional) — Title presented in the top of the card
+- `backgroundColor` (optional) — determine the background color of the card
 
 Optionally, the ``SectionCard`` component takes a ``headerContent`` prop, which can be used
 to insert a JSX expression into the header of the card:
