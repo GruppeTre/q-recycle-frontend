@@ -7,7 +7,7 @@ function DriverDashboard() {
     return (
         <>
             <div>
-                <Navbar title="Driver" navItems={driverNavItems} />
+                <Navbar title="Vognmand" navItems={driverNavItems} />
                 <Outlet />
             </div>
         </>
