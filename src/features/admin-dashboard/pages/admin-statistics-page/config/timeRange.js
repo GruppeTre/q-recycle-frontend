@@ -33,8 +33,6 @@ export const timeRange = {
 
             date.setTime(0);
 
-            console.log(`return date: ${date}`);
-
             return date;
         }
     }
