@@ -4,7 +4,7 @@ export const driverNavItems = [
     {
         icon: <Truck />,
         label: "Rute Oversigt",
-        to: "/driver/navigation"
+        to: "/driver/routes"
     },
     {
         icon: <DollarSign />,
