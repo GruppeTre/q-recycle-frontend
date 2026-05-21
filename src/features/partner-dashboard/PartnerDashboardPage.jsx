@@ -79,30 +79,16 @@ function PartnerDashboardPage() {
     const handleSubmit = async (event) => {
         event.preventDefault()
 
-        console.log("handleSubmit kaldt")
+        try {
+            const data = await pickupRequest.create(user.id, Number(bags))
 
-        console.log("user data:", JSON.stringify(user));
+            setMessage("Din anmodning er sendt")
+            setActiveRequest(data[0])
+            setIsModalOpen(false)
 
-        const {data, error} = await supabaseClient
-            .from("pickup")
-            .insert({
-            partner_id: user.id,
-            bags: Number(bags),
-            status: pickupStatus.REQUESTED,
-            created_at: new Date(),
-        })
-            .select()
-
-        console.log("error:", error)
-
-        if (error) {
+        } catch{
             setMessage("Noget gik galt, prøv igen")
-            return
         }
-
-        setMessage("Din anmodning er sendt")
-        setActiveRequest(data[0])
-        closePickupModal()
     };
 
 
