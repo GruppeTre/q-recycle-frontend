@@ -1,6 +1,5 @@
 import {useState, useEffect} from "react";
 import Button from "../../components/Button.jsx";
-import PickupRequestForm from "./components/PickupRequestForm.jsx";
 import ConfirmationMessage from "./components/ConfirmationMessage.jsx";
 import {supabaseClient} from "../../lib/supabaseClient";
 import {useAuth} from "../../context/useAuth.js";

@@ -1,35 +1,34 @@
 import { useEffect, useState } from "react";
+import { partners } from "../../../lib/partners.js";
 import { supabaseClient } from "../../../lib/supabaseClient.js";
-import {pickupRequest} from "../../../lib/pickupRequest.js";
 
-export function useRequestedBagsCount() {
-    const [count, setCount] = useState(null); // null = loading
+export function usePartners() {
+    const [data, setData] = useState(null);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         let isMounted = true;
 
-        const fetchCount = async () => {
+        const fetchPartners = async () => {
             try {
-                const value = await pickupRequest.getRequestedCount();
+                const result = await partners.list();
                 if (isMounted) {
-                    setCount(value);
+                    setData(result);
                     setError(null);
                 }
             } catch (e) {
                 if (isMounted) setError(e);
-                console.log(e);
             }
-
         };
 
-        fetchCount();
+        fetchPartners();
 
+        // Real-time: opdatér listen automatisk, når partnere oprettes/slettes
         const channel = supabaseClient
-            .channel('pickup-changes')
-            .on('postgres_changes',
-                { event: '*', schema: 'public', table: 'pickup' },
-                fetchCount
+            .channel("partner-list-changes")
+            .on("postgres_changes",
+                { event: "*", schema: "public", table: "partner" },
+                fetchPartners
             )
             .subscribe();
 
@@ -39,5 +38,5 @@ export function useRequestedBagsCount() {
         };
     }, []);
 
-    return { count, error };
+    return { partners: data, error };
 }

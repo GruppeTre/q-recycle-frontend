@@ -11,6 +11,7 @@ import AdminDriversPage from "./features/admin-dashboard/pages/AdminDriversPage.
 import AdminPartnersPage from "./features/admin-dashboard/pages/AdminPartnersPage.jsx";
 import AdminStatisticsPage from "./features/admin-dashboard/pages/AdminStatisticsPage.jsx";
 import MapApp from "./features/routing-page/MapBox.jsx";
+import CreatePartnerPage from "./features/admin-dashboard/pages/CreatePartnerPage.jsx";
 
 function App() {
 
@@ -46,7 +47,12 @@ function App() {
                   <Route path="admin" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.ADMIN]}> <AdminDashboard /> </ProtectedRoute>}>
                       <Route index element={<Navigate to="drivers" replace={true}/>}/>
                       <Route path="drivers" element={<AdminDriversPage />} />
-                      <Route path="partners" element={<AdminPartnersPage />} />
+
+                      <Route path="partners">
+                          <Route index element={<AdminPartnersPage />} />
+                          <Route path="new" element={<CreatePartnerPage />} />
+                      </Route>
+
                       <Route path="statistics" element={<AdminStatisticsPage />} />
                   </Route>
 
