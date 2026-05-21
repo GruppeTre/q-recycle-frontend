@@ -4,13 +4,22 @@ import PickupChart from "../../components/PickupChart.jsx";
 import {mockExpenses, statisticsApi} from "./lib/statisticsApi.js";
 import BagsByPartnerChart from "../../components/BagsByPartnerChart.jsx";
 import ExpensesChart from "../../components/ExpensesChart.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {timeRange} from "./config/timeRange.js";
 import SectionCard from "../../../../components/SectionCard.jsx";
+import NotEnoughDataWarning from "./components/NotEnoughDataWarning.jsx";
 
 function AdminStatisticsPage() {
 
     const [selectedTimeRange, setSelectedTimeRange] = useState(timeRange.LAST_MONTH);
+
+    //chart data state
+    const [pickupData, setPickupData] = useState([]);
+
+    useEffect(() => {
+        statisticsApi.getPickupData(selectedTimeRange.getDate())
+            .then(setPickupData);
+    }, [selectedTimeRange]);
 
     const handleTimeRangeChange = (e) => {
         const selectedLabel = e.target.value;
@@ -41,7 +50,12 @@ function AdminStatisticsPage() {
                 </SectionCard>
 
                 <SectionCardExpandable title="Afhentninger">
-                    <PickupChart data={statisticsApi.getPickupData(selectedTimeRange.getDate())}/>
+                    {pickupData.length >= 2 ?
+                        <PickupChart data={pickupData}/> :
+                        <NotEnoughDataWarning>
+                            <p className="text-body">Der skal være minimum 2 datapunkter for at tegne denne graf</p>
+                        </NotEnoughDataWarning>
+                    }
                 </SectionCardExpandable>
 
                 <SectionCardExpandable title="Indsamlede poser Pr. virksomhed">

@@ -9,9 +9,18 @@ export const statisticsApi = {
         //fetch
         const data = await pickupRequest.getAllCompletedAfter(cutoffDate);
 
-        console.log('fetched data: ', JSON.stringify(data));
+        //transform data into array with values fields 'name' and 'pickups'
+        const statisticalData = data.map(pickup => {
+            return {
+                name: pickup.completed_at.slice(0, 10),
+                pickups: pickup.bags
+            }
+        });
 
-        return mockPickupData;
+        console.log('returning data: ', JSON.stringify(statisticalData));
+        console.log('mock data: ', JSON.stringify(mockPickupData));
+
+        return statisticalData;
     },
 
     getBagsByPartner: (cutoffDate) => {
