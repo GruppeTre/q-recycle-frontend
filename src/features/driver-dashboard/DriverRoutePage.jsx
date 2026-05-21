@@ -1,6 +1,8 @@
 import PageContainer from "../../components/PageContainer.jsx";
 import SectionCard from "../../components/SectionCard.jsx";
 import RoutesList from "./components/RoutesList.jsx";
+import {Link} from "react-router";
+import Button from "../../components/Button.jsx";
 
 function DriverRoutePage() {
 
@@ -8,8 +10,15 @@ function DriverRoutePage() {
         <PageContainer>
             <div className="mt-6">
                 <SectionCard>
-                    <h1 className="text-section-header">Rute Oversigt</h1>
-                    <RoutesList />
+                    <div className="flex justify-between items-center">
+                        <h2 className="text-section-header">Rute Oversigt</h2>
+                        <Link to="/driver/routes/route-planner">
+                            <Button>+ Start Rute</Button>
+                        </Link>
+                    </div>
+                    <div className="flex flex-col gap-gap-sm">
+                        <RoutesList />
+                    </div>
                 </SectionCard>
             </div>
         </PageContainer>
