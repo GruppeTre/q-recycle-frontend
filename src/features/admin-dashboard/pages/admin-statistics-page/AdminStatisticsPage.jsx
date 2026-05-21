@@ -76,7 +76,7 @@ function AdminStatisticsPage() {
                         </div>
                         : pickupChartError
                             ? <div>{pickupChartError}</div>
-                            : pickupData.length >= 1
+                            : pickupData.length >= 2
                                 ? <PickupChart data={pickupData}/>
                                 : <NotEnoughDataWarning>
                                     <p className="text-body">
@@ -93,7 +93,7 @@ function AdminStatisticsPage() {
                         </div>
                         : bagsByPartnerChartError
                             ? <div>{bagsByPartnerChartError}</div>
-                            : bagsByPartnerData.length >= 2
+                            : bagsByPartnerData.length >= 1
                                 ? <BagsByPartnerChart data={bagsByPartnerData}/>
                                 : <NotEnoughDataWarning>
                                     <p className="text-body">

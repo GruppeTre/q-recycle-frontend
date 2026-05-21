@@ -115,7 +115,7 @@ import Spinner from "./Spinner";
 
 <div>
     {isLoading
-        ? <Spinner size={16} thickness={8} color={'blue 500'}/>
+        ? <Spinner size={16} thickness={8} color={'--color-blue-500'}/>
         : <div>
             {/* loaded content here */}
         </div>
@@ -123,8 +123,8 @@ import Spinner from "./Spinner";
 </div>
 ```
 
-- `size` - size of the spinner in pixels, default: ``12``
-- `thickness` - thickness of the spinner, default: ``6``
+- `size` - height and width of spinner in ``rem``, default: ``4``
+- `thickness` - thickness of the spinner in ``rem``, default: ``0.5``
 - ``color`` - color of the spinner, defaults: ``--color-primary``
 
 ### Navbar
