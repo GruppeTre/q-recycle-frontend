@@ -4,7 +4,9 @@ export const timeRange = {
         getDate: () => {
             const date = new Date();
 
-            date.setMonth(date.getMonth() - 1);
+            date.setHours(0, 0, 0, 0);
+
+            date.setMonth(date.getMonth() - 1)
 
             return date;
         }
@@ -15,6 +17,8 @@ export const timeRange = {
         getDate: () => {
             const date = new Date();
 
+            date.setHours(0, 0, 0, 0);
+
             date.setFullYear(date.getFullYear() - 1);
 
             return date;
@@ -24,7 +28,14 @@ export const timeRange = {
     ALL_TIME: {
         label: "All time",
         getDate: () => {
-            return null;
+
+            const date = new Date();
+
+            date.setTime(0);
+
+            console.log(`return date: ${date}`);
+
+            return date;
         }
     }
 }
