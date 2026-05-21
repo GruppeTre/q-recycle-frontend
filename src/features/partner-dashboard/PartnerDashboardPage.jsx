@@ -13,9 +13,7 @@ import PickupRequestModal from "./components/PickupRequestModal.jsx";
 
 function PartnerDashboardPage() {
 
-    // =========================
     // State
-    // =========================
 
     const [bags, setBags] = useState("")
     const [message, setMessage] = useState("")
@@ -23,17 +21,15 @@ function PartnerDashboardPage() {
     const [activeRequest, setActiveRequest] = useState(null)
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false)
 
-    // =========================
+
     // Auth / derived values
-    // =========================
 
     const {session} = useAuth();
     const user = session.user;
     const hasActiveRequest = activeRequest !== null
 
-    // =========================
+
     // Modal helper functions
-    // =========================
 
     function openCreateModal() {
         setBags("")
@@ -50,9 +46,8 @@ function PartnerDashboardPage() {
         setBags("")
     }
 
-    // =========================
+
     // Load active pickup request
-    // =========================
 
     useEffect(() => {
         async function checkActiveRequest() {
@@ -79,9 +74,8 @@ function PartnerDashboardPage() {
         void checkActiveRequest()
     }, [user.id])
 
-    // =========================
+
     // Submit new pickup request
-    // =========================
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -112,9 +106,8 @@ function PartnerDashboardPage() {
         closePickupModal()
     };
 
-    // =========================
+
     // Update existing pickup request
-    // =========================
 
     const handleUpdate = async (event) => {
         event.preventDefault()
@@ -139,9 +132,8 @@ function PartnerDashboardPage() {
         }
     }
 
-    // =========================
+
     // Cancel pickup request
-    // =========================
 
     const handleCancel = async () => {
         try{
@@ -156,9 +148,8 @@ function PartnerDashboardPage() {
     }
 
 
-    // =========================
+
     // Render
-    // =========================
 
     return (
         <PageContainer>
