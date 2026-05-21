@@ -1,11 +1,9 @@
 import {useState, useEffect} from "react";
 import Button from "../../components/Button.jsx";
 import ConfirmationMessage from "./components/ConfirmationMessage.jsx";
-import {supabaseClient} from "../../lib/supabaseClient";
 import {useAuth} from "../../context/useAuth.js";
 import PageContainer from "../../components/PageContainer.jsx";
 import {pickupRequest} from "../../lib/pickupRequest.js";
-import {pickupStatus} from "../../config/constants.js";
 import Modal from "../../components/Modal.jsx";
 import PickupRequestReceipt from "./components/PickupRequestReceipt.jsx";
 import PickupRequestModal from "./components/PickupRequestModal.jsx";
