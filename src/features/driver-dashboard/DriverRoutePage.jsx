@@ -4,7 +4,7 @@ function DriverRoutePage() {
 
     return (
         <PageContainer>
-            <h1 className="text-section-header">Rute Planlægning</h1>
+            <h1 className="text-section-header">Rute Oversigt</h1>
 
         </PageContainer>
     )
