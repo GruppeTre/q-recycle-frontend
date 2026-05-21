@@ -30,16 +30,18 @@ function App() {
 
                   <Route path="partner" >
 
-                      {/*<Route index element={
+                      <Route index element={
                           <GuestRoute allowedRoles={[role.ADMIN, role.DRIVER]}>
                               <PartnerLoginPage />
                           </GuestRoute>
-                      }/>*/}
+                      }/>
 
-                      <Route index element={<PartnerLoginPage />} />
                       <Route path="dashboard" element={
-                          <PartnerDashboardPage />
-                      } />
+                          <ProtectedRoute redirectPath="/partner" allowedRoles={[role.PARTNER]}>
+                              <PartnerDashboardPage />
+                          </ProtectedRoute>
+                      }/>
+
                   </Route>
 
                   <Route path="driver" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.DRIVER, role.ADMIN]}> <DriverDashboard /> </ProtectedRoute>}>
