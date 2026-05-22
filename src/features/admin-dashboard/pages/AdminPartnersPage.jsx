@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import {Link, useNavigate} from "react-router";
 import PageContainer from "../../../components/PageContainer.jsx";
 import Button from "../../../components/Button.jsx";
 import SectionCard from "../../../components/SectionCard.jsx";
@@ -7,6 +7,7 @@ import { usePartners } from "../hooks/usePartners.js";
 import {UserPlus} from "lucide-react";
 
 function AdminPartnersPage() {
+    const navigate = useNavigate();
     const { partners, error } = usePartners();
 
     return (
@@ -42,7 +43,7 @@ function AdminPartnersPage() {
                                 <PartnerCard
                                     key={partner.id}
                                     partner={partner}
-                                    onEdit={(p) => console.log("Edit", p.id)}
+                                    onEdit={(p) => navigate(`${p.id}/edit`)}
                                     onDelete={(p) => console.log("Delete", p.id)}
                                 />
                             ))}

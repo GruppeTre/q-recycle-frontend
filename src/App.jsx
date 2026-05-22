@@ -14,6 +14,7 @@ import RoutePlanner from "./features/driver-dashboard/routing-page/RoutePlanner.
 import DriverRoutePage from "./features/driver-dashboard/DriverRoutePage.jsx";
 import DriverDashboard from "./features/driver-dashboard/DriverDashboard.jsx";
 import AdminStatisticsPage from "./features/admin-dashboard/pages/admin-statistics-page/AdminStatisticsPage.jsx";
+import EditPartnerPage from "./features/admin-dashboard/pages/EditPartnerPage.jsx";
 
 function App() {
 
@@ -62,6 +63,7 @@ function App() {
                       <Route path="partners">
                           <Route index element={<AdminPartnersPage />} />
                           <Route path="new" element={<CreatePartnerPage />} />
+                          <Route path=":id/edit" element={<EditPartnerPage />} />
                       </Route>
 
                       <Route path="statistics" element={<AdminStatisticsPage />} />
