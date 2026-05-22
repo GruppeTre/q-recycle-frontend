@@ -13,18 +13,18 @@ export function NavigationPanel({ currentStep, currentStepIdx, totalSteps, dista
     if (!currentStep) return null;
 
     return (
-        <div className="bg-slate-900/95 backdrop-blur border-t border-slate-700 p-4">
+        <div className="bg-surface-primary backdrop-blur border-t border-border p-4">
             <div className="flex items-baseline justify-between mb-1">
-                <div className="text-xs uppercase tracking-wider text-slate-400">
+                <div className="text-xs uppercase tracking-wider text-text-muted">
                     Trin {currentStepIdx + 1} / {totalSteps}
                 </div>
                 {distanceToNext != null && (
-                    <div className="text-sm font-mono text-emerald-400">
+                    <div className="text-sm font-mono text-primary font-semibold">
                         {formatDistance(distanceToNext)}
                     </div>
                 )}
             </div>
-            <div className="text-lg font-semibold text-slate-50">
+            <div className="text-lg font-semibold text-text">
                 {currentStep.instruction}
             </div>
         </div>

@@ -4,12 +4,27 @@
 @theme {
     /* Farver */
     --color-primary: oklch(0.7952 0.1617 86.05);
-    --color-primary-hover: oklch(from var(--color-primary) calc(l - 0.05) c h);
-    --color-primary-background: oklch(from var(--color-primary) calc(l + 0.15) calc(c - 0.1) h);
+    --color-primary-hover: oklch(from var(--color-primary) calc(l - 0.03) c h);
+    --color-primary-background: oklch(from var(--color-primary) calc(l + 0.1) calc(c - 0.12) h);
+
     --color-text-color: oklch(0.15 0 0);
-    --color-text-color-muted: oklch(from var(--color-text-color) calc(l + 0.1) c h);
-    --color-surface: oklch(0.910 0.014 98.88);
+    --color-text-color-muted: oklch(from var(--color-text-color) calc(l + 0.3) c h);
+
+    --color-surface-primary: oklch(0.95 0.008 98.88);
+    --color-surface-primary-accent: oklch(from var(--color-surface-primary) calc(l - 0.1) c h);
+    --color-surface-secondary: oklch(0.98 0.008 98.88);
+    --color-surface-secondary-accent: oklch(from var(--color-surface-secondary) calc(l - 0.1) c h);
     --color-background: oklch(0.9663 0.008 98.88);
+
+    /* states og feedback */
+    --color-surface-hover: oklch(from var(--color-surface-primary) calc(l - 0.04) c h);
+    --color-border: oklch(from var(--color-text-color) calc(l + 0.5) c h);
+
+    /* Feedback-farver */
+    --color-success: oklch(0.65 0.15 145);     /* grøn */
+    --color-success-bg: oklch(from var(--color-success) calc(l + 0.25) calc(c - 0.1) h);
+    --color-danger: oklch(0.55 0.20 25);       /* rød */
+    --color-danger-bg: oklch(from var(--color-danger) calc(l + 0.35) calc(c - 0.1) h);
 
     /* Gap-størrelser */
     --spacing-padding: 0.25rem;
@@ -17,6 +32,10 @@
     --spacing-gap-md: 1rem;
     --spacing-gap-lg: 2rem;
     --spacing-gap-xl: 4rem;
+}
+
+body {
+    @apply bg-primary-background
 }
 
 /* typography */
@@ -27,7 +46,7 @@
     }
 
     .text-section-header {
-        @apply text-xl font-semibold text-text-color;
+        @apply text-lg font-semibold text-text-color;
     }
 
     .text-body {

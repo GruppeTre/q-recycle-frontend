@@ -10,7 +10,7 @@ function ProtectedRoute({redirectPath, allowedRoles, children}) {
     const { session, role, isLoading } = useAuth();
 
     if (isLoading) {
-        return <h1>LOADING</h1>;
+        return
     }
 
     if (!session) {
