@@ -7,6 +7,7 @@ import {pickupRequest} from "../../lib/pickupRequest.js";
 import Modal from "../../components/Modal.jsx";
 import PickupRequestReceipt from "./components/PickupRequestReceipt.jsx";
 import PickupRequestModal from "./components/PickupRequestModal.jsx";
+import SectionCard from "../../components/SectionCard.jsx";
 
 function PartnerDashboardPage() {
 
@@ -136,65 +137,66 @@ function PartnerDashboardPage() {
 
     return (
         <PageContainer>
-            <div className="flex flex-col items-center mt-gap-xl gap-gap-md">
+            <div className="mt-gap-xl max-w-md mx-auto">
+                <SectionCard>
+                        {!hasActiveRequest && (
+                            <>
+                                <p>Du har ingen aktiv anmodning</p>
+                                <Button onClick={openCreateModal}>
+                                    Anmod om afhentning
+                                </Button>
+                            </>
+                        )}
 
-                <p>Her kan du anmode om at få hentet din pant</p>
+                        {hasActiveRequest && (
+                            <PickupRequestReceipt
+                                activeRequest={activeRequest}
 
-                {!hasActiveRequest && (
-                    <Button onClick={openCreateModal}>
-                        Anmod om afhentning
-                    </Button>
-                )}
-
-                {hasActiveRequest && (
-                    <PickupRequestReceipt
-                        activeRequest={activeRequest}
-
-                        onUpdate={openEditModal}
-                        onCancel={() => setIsCancelModalOpen(true)}
-                    />
-                )}
-
-
-                {message && (
-                    <ConfirmationMessage message={message}/>
-                )}
+                                onUpdate={openEditModal}
+                                onCancel={() => setIsCancelModalOpen(true)}
+                            />
+                        )}
 
 
-                <PickupRequestModal
-                    isOpen={isModalOpen}
-                    hasActiveRequest={hasActiveRequest}
-                    bags={bags}
-                    setBags={setBags}
-                    onClose={closePickupModal}
-                    onSubmit={
-                        hasActiveRequest
-                            ? handleUpdate
-                            : handleSubmit
-                    }
-                />
+                        {message && (
+                            <ConfirmationMessage message={message}/>
+                        )}
 
 
-                {isCancelModalOpen && (
-                    <Modal
-                        title="Annuller afhentning"
-                        onClose={() => setIsCancelModalOpen(false)}
-                    >
-                        <div className="flex flex-col gap-gap-md">
+                        <PickupRequestModal
+                            isOpen={isModalOpen}
+                            hasActiveRequest={hasActiveRequest}
+                            bags={bags}
+                            setBags={setBags}
+                            onClose={closePickupModal}
+                            onSubmit={
+                                hasActiveRequest
+                                    ? handleUpdate
+                                    : handleSubmit
+                            }
+                        />
 
-                            <p>
-                                Er du sikker på, at du vil annullere afhentningen?
-                            </p>
 
-                            <Button onClick={handleCancel}>
-                                Bekræft annullering
-                            </Button>
+                        {isCancelModalOpen && (
+                            <Modal
+                                title="Annuller afhentning"
+                                onClose={() => setIsCancelModalOpen(false)}
+                            >
+                                <div className="flex flex-col gap-gap-md">
 
-                        </div>
-                    </Modal>
-                )}
+                                    <p>
+                                        Er du sikker på, at du vil annullere afhentningen?
+                                    </p>
+
+                                    <Button onClick={handleCancel}>
+                                        Bekræft annullering
+                                    </Button>
+
+                                </div>
+                            </Modal>
+                        )}
+                </SectionCard>
             </div>
-
         </PageContainer>
     )
 }

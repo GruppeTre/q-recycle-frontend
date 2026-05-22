@@ -25,7 +25,7 @@ function PickupRequestForm({bags, setBags, onSubmit, buttonText, isUpdated}) {
                    placeholder="Antal af poser"
                    value={bags}
                    onChange={event => setBags(event.target.value)}
-                   className="bg-gray-200 p-3 rounded-md"
+                   className="bg-surface-secondary p-3 rounded-md"
                    required
             />
 

@@ -12,7 +12,7 @@ function PickupRequestReceipt({activeRequest, onUpdate, onCancel}) {
     }
 
     return (
-        <div className="bg-surface border border-primary rounded-md p-4 mt-gap-md">
+        <div className="flex flex-col items-center">
             <h2 className="text-section-header">
                 Din aktuelle anmodning
             </h2>

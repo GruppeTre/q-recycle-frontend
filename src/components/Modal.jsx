@@ -1,7 +1,7 @@
 function Modal({title, children, onClose}) {
     return (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-            <div className="bg-surface p-6 rounded-md w-80 shadow-lg border border-primary/20">
+            <div className="bg-surface-primary p-6 rounded-md w-80 shadow-lg">
                 {title && (
                     <h2 className="text-section-header mb-4">
                         {title}
