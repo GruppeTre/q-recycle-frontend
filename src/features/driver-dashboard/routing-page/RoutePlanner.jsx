@@ -7,7 +7,7 @@ import { useSpeech } from "./hooks/useSpeech.jsx";
 import { useNavigation } from "./hooks/useNavigation.jsx";
 
 import { pickupApi } from "./api/pickupApi.js";
-import { mapboxApi } from "./lib/mapboxApi.js";
+import { mapboxApi } from "./lib/mapBoxApi.js";
 import {
     renderPickupMarkers,
     renderRoute,
@@ -26,7 +26,7 @@ import { ScheduledList} from "./components/ScheduledList.jsx";
 
 const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
-export default function MapApp() {
+export default function RoutePlanner() {
     // --- map setup ---
     const markersRef = useRef([]);       // pickup-stop markers (we clear/recreate these)
     const driverMarkerRef = useRef(null); // the blue GPS dot (we move it, not recreate)
@@ -283,10 +283,10 @@ export default function MapApp() {
     // ------------------------------------------------------------------
 
     return (
-        <div className="h-screen flex flex-col bg-background text-text">
+        <div className="h-screen flex flex-col bg-surface-primary text-text">
             {/* Top panel: pickup selection (only in selecting phase) */}
             {phase === "selecting" && (
-                <div className="shrink-0 border-b border-text-muted/15 bg-surface backdrop-blur">
+                <div className="shrink-0 border-b border-text-muted/15 bg-surface-primary backdrop-blur">
                     <div className="p-4">
                         <div className="flex items-center justify-between mb-3">
                             <h2 className="text-sm font-bold uppercase tracking-wider text-text">
@@ -324,7 +324,7 @@ export default function MapApp() {
 
                 {/* Top bar during navigation */}
                 {phase === "navigating" && routeData && (
-                    <div className="absolute top-3 left-3 right-3 bg-surface/95 backdrop-blur rounded-lg border border-border px-4 py-2 flex items-center justify-between">
+                    <div className="absolute top-3 left-3 right-3 bg-surface-primary/95 backdrop-blur rounded-lg border border-border px-4 py-2 flex items-center justify-between">
                         <div className="text-sm">
                             <span className="text-text-muted">Rute:</span>{" "}
                             <span className="font-semibold">{routeData.orderedStops.length} stop</span>{" "}

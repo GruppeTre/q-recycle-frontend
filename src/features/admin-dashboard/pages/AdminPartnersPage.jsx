@@ -1,11 +1,13 @@
-import { Link } from "react-router";
+import {Link, useNavigate} from "react-router";
 import PageContainer from "../../../components/PageContainer.jsx";
 import Button from "../../../components/Button.jsx";
 import SectionCard from "../../../components/SectionCard.jsx";
 import PartnerCard from "../components/PartnerCard.jsx";
 import { usePartners } from "../hooks/usePartners.js";
+import {UserPlus} from "lucide-react";
 
 function AdminPartnersPage() {
+    const navigate = useNavigate();
     const { partners, error } = usePartners();
 
     return (
@@ -15,7 +17,7 @@ function AdminPartnersPage() {
                     <div className="flex justify-between items-center">
                         <h2 className="text-section-header">Partnere</h2>
                         <Link to="new">
-                            <Button>+ Add Partner</Button>
+                            <Button icon={<UserPlus />}>Opret Virksomhed</Button>
                         </Link>
                     </div>
                 }>
@@ -41,7 +43,7 @@ function AdminPartnersPage() {
                                 <PartnerCard
                                     key={partner.id}
                                     partner={partner}
-                                    onEdit={(p) => console.log("Edit", p.id)}
+                                    onEdit={(p) => navigate(`${p.id}/edit`)}
                                     onDelete={(p) => console.log("Delete", p.id)}
                                 />
                             ))}

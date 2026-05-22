@@ -12,6 +12,7 @@ function handlePostgresError(postgresError) {
 
 export const pickupRequest = {
 
+
     create: async(partnerId, bags) => {
         const{data, error: postgresError} = await supabaseClient
             .from("pickup")
@@ -81,5 +82,59 @@ export const pickupRequest = {
         return totalBags;
     },
 
+    getAllCompleted: async () => {
+        const { data, error: postgresError } = await supabaseClient
+            .from('pickup')
+            .select(`
+                id,
+                bags,
+                completed_at,
+                partner:partner (
+                    id,
+                    name
+                )
+            `)
+            .eq('status', pickupStatus.COMPLETED);
 
+        if (postgresError) {
+            const error = new Error(postgresError.message);
+            error.code = postgresError.code;
+            throw error;
+        }
+
+        console.log(JSON.stringify(data));
+
+        return data;
+    },
+
+    getAllCompletedAfter: async (date) => {
+
+        if (!date) {
+            const error = new Error('must provide a valid date');
+            error.code = -1;
+            throw error;
+        }
+
+        const { data, error: postgresError } = await supabaseClient
+            .from('pickup')
+            .select(`
+                id,
+                bags,
+                completed_at,
+                partner:partner (
+                    id,
+                    name
+                )
+            `)
+            .gte('completed_at', date.toISOString())
+            .eq('status', pickupStatus.COMPLETED);
+
+        if (postgresError) {
+            const error = new Error(postgresError.message);
+            error.code = postgresError.code;
+            throw error;
+        }
+
+        return data;
+    },
 }
