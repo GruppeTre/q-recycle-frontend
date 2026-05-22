@@ -9,11 +9,11 @@ function PartnerCard({ partner, onEdit, onDelete }) {
     return (
         <SectionCard backgroundColor="surface-secondary">
             <div className="flex items-center justify-between p-gap-md">
-                <div className="flex flex-col gap-1">
-                    <h3 className="font-semibold text-base">{partner.name ?? "Uden navn"}</h3>
-                    <p className="text-sm">{addressLine}</p>
+                <div className="flex flex-col">
+                    <h3 className="font-semibold text-base mb-gap-sm">{partner.name ?? "Uden navn"}</h3>
+                    <p className="text-muted">{addressLine}</p>
                     {partner.phone_number && (
-                        <p className="text-sm">{partner.phone_number}</p>
+                        <p className="text-muted">Tlf: {partner.phone_number}</p>
                     )}
                 </div>
 
