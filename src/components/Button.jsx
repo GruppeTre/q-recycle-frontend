@@ -1,23 +1,7 @@
-function Button({onClick,type = "button", children, icon = null}) {
+function Button({onClick,type = "button", children}) {
     return(
-        <button
-            type={type}
-            onClick={onClick}
-            className="
-                rounded-md
-                px-gap-md
-                py-gap-sm
-                text-text-body
-                cursor-pointer
-                bg-primary
-                hover:bg-primary-hover
-            "
-        >
-            <div className="flex justify-center gap-gap-sm whitespace-nowrap">
-                {icon && icon}
-                {children}
-            </div>
-        </button>
+        <button  type={type} onClick={onClick} className="rounded-md px-gap-md py-gap-sm bg-primary text-text-body cursor-pointer
+                 hover:bg-primary-hover">{children}</button>
     );
 }
 

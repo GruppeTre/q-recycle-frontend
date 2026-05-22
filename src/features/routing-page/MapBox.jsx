@@ -7,7 +7,7 @@ import { useSpeech } from "./hooks/useSpeech.jsx";
 import { useNavigation } from "./hooks/useNavigation.jsx";
 
 import { pickupApi } from "./api/pickupApi.js";
-import { mapboxApi } from "./lib/mapBoxApi.js";
+import { mapboxApi } from "./lib/mapboxApi.js";
 import {
     renderPickupMarkers,
     renderRoute,
@@ -17,16 +17,17 @@ import {
 
 import { PickupList } from "./components/PickupList.jsx";
 import { NavigationPanel } from "./components/NavigationPanel.jsx";
-import { ScheduledList} from "./components/ScheduledList.jsx";
+
+const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
 // Three phases of the screen, controlled by the `phase` state:
 //   "selecting"    → showing pickup list, driver picks which to include
 //   "navigating"   → route is drawn, GPS dot tracking, TTS active
 //   (no separate "loading" phase — we use a `busy` flag overlay)
 
-const token = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
+console.log('Token:', token ? token.slice(0, 12) + '...' : 'MISSING');
 
-export default function RoutePlanner() {
+export default function MapApp() {
     // --- map setup ---
     const markersRef = useRef([]);       // pickup-stop markers (we clear/recreate these)
     const driverMarkerRef = useRef(null); // the blue GPS dot (we move it, not recreate)
@@ -55,10 +56,6 @@ export default function RoutePlanner() {
         speak,
         active: phase === "navigating",
     });
-
-    // --- State ---
-    const [showRouteList, setShowRouteList] = useState(false);
-    const [activePickups, setActivePickups] = useState([]);
 
     // ------------------------------------------------------------------
     // Effect 1: fetch pending pickups once on mount
@@ -210,72 +207,12 @@ export default function RoutePlanner() {
         }
     }
 
-    //Load or reload active pickup list
-    async function loadActivePickups() {
-        try {
-            const data = await pickupApi.fetchActive();
-            console.log('Active pickups:', data);
-            setActivePickups(data);
-        } catch (err) {
-            console.error('Error loading active pickups:', err);
-            setError(err.message);
-        }
-    }
-
-    async function handleCompletePickup(id, bags){
-        await pickupApi.markCompleted(id, bags);
-        await loadActivePickups(); //Refresh when the UI shows a new status
-    }
-
-    async function handleRevertPickup(id) {
-        await pickupApi.revertToScheduled(id);
-        await loadActivePickups();
-    }
-
-    async function handleFinishRoute() {
-        try {
-            await pickupApi.archiveCompletedRoute();
-            // Refresh lists so they no longer show up
-            await loadActivePickups();
-            // Go back to selection
-            cancelSpeech();
-            clearRoute(mapRef.current);
-            setRouteData(null);
-            setPhase("selecting");
-            setShowRouteList(false);
-            // Get new pending requests
-            const fresh = await pickupApi.fetchPending();
-            setPickups(fresh);
-            setSelectedIds(new Set());
-        } catch (err) {
-            setError(err.message);
-        }
-    }
-
-    //Load fresh data when list is opened
-    function handleOpenList() {
-        loadActivePickups();
-        setShowRouteList(true);
-    }
-
-    async function handleCancelRoute() {
-        try{
-            await pickupApi.revertAllScheduled();
-
-            const fresh = await pickupApi.fetchPending();
-            setPickups(fresh);
-            setSelectedIds(new Set());
-
-            //Clean up map and state
-            cancelSpeech();
-            clearRoute(mapRef.current);
-            setRouteData(null)
-            setShowRouteList(false)
-            setPhase("selecting");
-        }
-        catch (err) {
-            setError(err.message);
-        }
+    function handleCancelRoute() {
+        cancelSpeech();
+        clearRoute(mapRef.current);
+        renderPickupMarkers(mapRef.current, pickups, markersRef, { numbered: false });
+        setRouteData(null);
+        setPhase("selecting");
     }
 
     // ------------------------------------------------------------------
@@ -283,17 +220,17 @@ export default function RoutePlanner() {
     // ------------------------------------------------------------------
 
     return (
-        <div className="h-screen flex flex-col bg-surface-primary text-text">
+        <div className="h-screen flex flex-col bg-slate-950 text-slate-100">
             {/* Top panel: pickup selection (only in selecting phase) */}
             {phase === "selecting" && (
-                <div className="shrink-0 border-b border-text-muted/15 bg-surface-primary backdrop-blur">
+                <div className="shrink-0 border-b border-slate-800 bg-slate-900/95 backdrop-blur">
                     <div className="p-4">
                         <div className="flex items-center justify-between mb-3">
-                            <h2 className="text-sm font-bold uppercase tracking-wider text-text">
+                            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
                                 Ventende opsamlinger ({pickups.length})
                             </h2>
-                            <div className="text-xs text-text-muted">
-                                Valgt: <span className="text-primary font-semibold">{selectedIds.size}</span>
+                            <div className="text-xs text-slate-400">
+                                Valgt: <span className="text-amber-400 font-semibold">{selectedIds.size}</span>
                             </div>
                         </div>
                         <div className="max-h-[35vh] overflow-y-auto pr-1">
@@ -308,11 +245,15 @@ export default function RoutePlanner() {
                             <button
                                 onClick={handleStartRoute}
                                 disabled={!mapReady || busy || selectedIds.size === 0}
-                                className="px-5 py-2.5 rounded-md font-semibold bg-primary text-text hover:bg-primary disabled:opacity-40 disabled:cursor-not-allowed transition"
+                                className="px-5 py-2.5 rounded-md font-semibold bg-emerald-500 text-slate-950 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed transition"
                             >
                                 {busy ? "Bygger rute…" : "Start rute"}
                             </button>
-                            {error && <span className="text-sm text-danger">{error}</span>}
+                            {/* DEBUG — fjern senere */}
+                            <div className="text-xs text-slate-400">
+                                mapReady: {String(mapReady)} | busy: {String(busy)} | selected: {selectedIds.size}
+                            </div>
+                            {error && <span className="text-sm text-rose-400">{error}</span>}
                         </div>
                     </div>
                 </div>
@@ -324,48 +265,29 @@ export default function RoutePlanner() {
 
                 {/* Top bar during navigation */}
                 {phase === "navigating" && routeData && (
-                    <div className="absolute top-3 left-3 right-3 bg-surface-primary/95 backdrop-blur rounded-lg border border-border px-4 py-2 flex items-center justify-between">
+                    <div className="absolute top-3 left-3 right-3 bg-slate-900/90 backdrop-blur rounded-lg border border-slate-700 px-4 py-2 flex items-center justify-between">
                         <div className="text-sm">
-                            <span className="text-text-muted">Rute:</span>{" "}
+                            <span className="text-slate-400">Rute:</span>{" "}
                             <span className="font-semibold">{routeData.orderedStops.length} stop</span>{" "}
-                            <span className="text-text-muted">·</span>{" "}
+                            <span className="text-slate-400">·</span>{" "}
                             <span className="font-mono">{routeData.distanceKm} km</span>{" "}
-                            <span className="text-text-muted">·</span>{" "}
+                            <span className="text-slate-400">·</span>{" "}
                             <span className="font-mono">{routeData.durationMin} min</span>
                         </div>
                         <button
                             onClick={handleCancelRoute}
-                            className="text-xs px-3 py-1 rounded bg-danger text-text/70 hover:bg-danger-bg transition text-text"
+                            className="text-xs px-3 py-1 rounded bg-slate-700 hover:bg-slate-600 transition"
                         >
-                            Fortryd
+                            Afslut
                         </button>
                     </div>
                 )}
 
                 {/* GPS error overlay */}
                 {gpsError && phase === "navigating" && (
-                    <div className="absolute bottom-24 left-3 right-3 bg-danger-bg backdrop-blur rounded-lg border border-danger/30 px-4 py-2 text-sm text-text">
+                    <div className="absolute bottom-24 left-3 right-3 bg-rose-900/90 backdrop-blur rounded-lg border border-rose-700 px-4 py-2 text-sm">
                         GPS: {gpsError}
                     </div>
-                )}
-
-                {phase === "navigating" && (
-                    <button
-                        onClick={handleOpenList}
-                        className="absolute bottom-32 right-3 z-10 px-4 py-2.5 rounded-full bg-surface/95 backdrop-blur border border-border text-sm font-semibold hover:bg-surface-hover transition shadow-lg"
-                    >
-                        Ruteoversigt
-                    </button>
-                )}
-
-                {phase === "navigating" && showRouteList && (
-                    <ScheduledList
-                            pickups={activePickups}
-                            onComplete={handleCompletePickup}
-                            onRevert={handleRevertPickup}
-                            onClose={() => setShowRouteList(false)}
-                            onFinishRoute={handleFinishRoute}
-                    />
                 )}
             </div>
 

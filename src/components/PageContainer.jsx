@@ -1,6 +1,6 @@
 function PageContainer({ children }) {
     return (
-        <div className="max-w-5xl mx-auto px-gap-md mb-gap-md">
+        <div className="max-w-5xl mx-auto px-gap-md">
             {children}
         </div>
     );

@@ -1,4 +1,4 @@
-import {useCallback, useRef, useState} from "react";
+import { useCallback, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import { MAP_CENTER, MAP_ZOOM } from "../constants/mapConfig.js";
 
@@ -14,7 +14,7 @@ export function useMapBox(token) {
 
         const map = new mapboxgl.Map({
             container: node,
-            style: 'mapbox://styles/mapbox/light-v11',
+            style: 'mapbox://styles/mapbox/dark-v11',
             center: MAP_CENTER,
             zoom: MAP_ZOOM,
         });

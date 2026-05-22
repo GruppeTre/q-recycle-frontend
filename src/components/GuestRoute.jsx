@@ -7,7 +7,7 @@ function GuestRoute({children, allowedRoles = []}) {
     const { session, role, isLoading } = useAuth();
 
     if (isLoading) {
-        return
+        return <h1>LOADING</h1>;
     }
 
     if (session && !allowedRoles.includes(role)) {

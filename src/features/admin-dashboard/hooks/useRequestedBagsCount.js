@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
+import { pickups } from "../../../lib/pickups.js";
 import { supabaseClient } from "../../../lib/supabaseClient.js";
-import {pickupRequest} from "../../../lib/pickupRequest.js";
 
 export function useRequestedBagsCount() {
     const [count, setCount] = useState(null); // null = loading
@@ -11,7 +11,7 @@ export function useRequestedBagsCount() {
 
         const fetchCount = async () => {
             try {
-                const value = await pickupRequest.getRequestedCount();
+                const value = await pickups.getRequestedCount();
                 if (isMounted) {
                     setCount(value);
                     setError(null);

@@ -56,8 +56,6 @@ If a certain element (e.g. the [navbar](#navbar)) should span the full width of 
 it can be put outside of the ``PageContainer`` component:
 
 ```javascript
-import PageContainer from "./PageContainer";
-
 <div>
     <Navbar title="Admin" navItems={adminNavItems}/>
     <PageContainer>
@@ -65,68 +63,6 @@ import PageContainer from "./PageContainer";
     </PageContainer>
 </div>
 ```
-
-### SectionCard & SectionCardExpandable
-The ``SectionCard`` and ``SectionCardExpandable`` components are simple card components, which can be used
-to section off related content:
-
-```javascript
-import SectionCard from "./SectionCard";
-import SectionCardExpandable from "./SectionCardExpandable";
-
-<PageContainer>
-    <SectionCard title="First Section" backgroundColor="blue-200">
-        {/* Section content here */}
-    </SectionCard>
-
-    <SectionCardExpandable title="Expandable section" onChange={(state) => foo(state)}>
-        {/* Expandable content here */}
-    </SectionCardExpandable>
-</PageContainer>
-```
-- `title` (optional) — Title presented in the top of the card
-- `backgroundColor` — determine the background color of the card: ``--color-background``
-
-Optionally, the ``SectionCard`` component takes a ``headerContent`` prop, which can be used
-to insert a JSX expression into the header of the card:
-
-```javascript
-import SectionCard from "./SectionCard";
-
-<PageContainer>
-    <SectionCard headerContent={
-        <div className="flex justify-between">
-            <h2>This is a section header</h2>
-            <button>some action</button>
-        </div>
-    }>
-        {/* Section content here */}
-    </SectionCard>
-</PageContainer>
-```
-
-The ``SectionCardExpandable`` can optionally take an ``onToggle`` callback function, that will be called with the  state (bool ``isOpen``) every time the component is opened/closed.
-
-### Spinner
-The ``Spinner`` component is a simple loading spinner, that can be used to indicate content not yet ready to display:
-
-```javascript
-import Spinner from "./Spinner";
-
-<div>
-    {isLoading
-        ? <Spinner size={16} thickness={8} color={'--color-blue-500'}/>
-        : <div>
-            {/* loaded content here */}
-        </div>
-    }
-</div>
-```
-
-- `size` - height and width of spinner in ``rem``, default: ``4``
-- `thickness` - thickness of the spinner in ``rem``, default: ``0.5``
-- ``color`` - color of the spinner, defaults: ``--color-primary``
-
 ### Navbar
 The ``Navbar`` component is a responsive header & navbar, designed to be as simple to use as possible.
 It is intended to span the full width of the page. The navigational links responsively collapse into an accordion
@@ -135,8 +71,6 @@ on smaller screens, and automatically highlight the link indicating the current 
 The ``Navbar`` component takes two props:
 
 ```javascript
-import Navbar from "./Navbar";
-
 <div className="h-dvh">
     <Navbar title="Admin" navItems={adminNavItems}/>
     {/* Page content here */}
