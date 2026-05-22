@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import {Link, useNavigate} from "react-router";
 import PageContainer from "../../../components/PageContainer.jsx";
 import AddressAutocomplete from "../components/AddressAutocomplete.jsx";
 import { partners } from "../../../lib/partners.js";
 import Button from "../../../components/Button.jsx";
 import Input from "../../../components/Input.jsx";
+import SectionCard from "../../../components/SectionCard.jsx";
+import {ArrowLeft} from "lucide-react";
 
 function CreatePartnerPage() {
     const navigate = useNavigate();
@@ -68,41 +70,51 @@ function CreatePartnerPage() {
 
     return (
         <PageContainer>
-            <h1 className="text-section-header mt-4">Opret partner</h1>
-            <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-gap-md max-w-md">
-                <label className="flex flex-col gap-1">
-                    <span className="text-sm">Navn</span>
-                    <Input
-                        type="text" value={name} onChange={(e) => setName(e.target.value)}
-                        required minLength={2}
-                    />
-                </label>
-
-                <label className="flex flex-col gap-1">
-                    <span className="text-sm">Telefonnummer</span>
-                    <Input
-                        type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)}
-                    />
-                </label>
-
-                <AddressAutocomplete
-                    selectedAddress={address}
-                    onSelect={setAddress}
-                />
-
-                {error && (
-                    <div role="alert" className="text-sm accent-danger px-3 py-2 rounded">
-                        {error}
+            <div className="mt-6 max-w-md mx-auto">
+                <SectionCard headerContent={
+                    <div className="flex justify-between items-center">
+                        <h1 className="text-section-header mt-4">Opret partner</h1>
+                        <Link to="/admin/partners">
+                            <Button icon={<ArrowLeft />}>Tilbage</Button>
+                        </Link>
                     </div>
-                )}
+                }>
+                    <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-gap-md max-w-md">
+                        <label className="flex flex-col gap-1">
+                            <span className="text-sm">Navn</span>
+                            <Input
+                                type="text" value={name} onChange={(e) => setName(e.target.value)}
+                                required minLength={2}
+                            />
+                        </label>
 
-                <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                >
-                    {isSubmitting ? "Opretter..." : "Opret partner"}
-                </Button>
-            </form>
+                        <label className="flex flex-col gap-1">
+                            <span className="text-sm">Telefonnummer</span>
+                            <Input
+                                type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)}
+                            />
+                        </label>
+
+                        <AddressAutocomplete
+                            selectedAddress={address}
+                            onSelect={setAddress}
+                        />
+
+                        {error && (
+                            <div role="alert" className="text-sm accent-danger px-3 py-2 rounded">
+                                {error}
+                            </div>
+                        )}
+
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? "Opretter..." : "Opret partner"}
+                        </Button>
+                    </form>
+                </SectionCard>
+            </div>
         </PageContainer>
     );
 }

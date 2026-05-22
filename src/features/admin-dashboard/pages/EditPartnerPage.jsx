@@ -91,7 +91,7 @@ function EditPartnerPage() {
 
     return (
         <PageContainer>
-            <div className="mt-6">
+            <div className="mt-6 max-w-md mx-auto">
                 <SectionCard headerContent={
                     <div className="flex justify-between items-center">
                         <h2 className="text-section-header">Rediger partner</h2>
