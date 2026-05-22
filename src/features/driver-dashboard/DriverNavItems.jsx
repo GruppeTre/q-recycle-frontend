@@ -1,13 +1,13 @@
-import { Truck, DollarSign } from "lucide-react";
+import {Map, Wallet} from "lucide-react";
 
 export const driverNavItems = [
     {
-        icon: <Truck />,
+        icon: <Map />,
         label: "Rute Oversigt",
         to: "/driver/routes"
     },
     {
-        icon: <DollarSign />,
+        icon: <Wallet />,
         label: "Udgifter",
         to: "/driver/expenses"
     }

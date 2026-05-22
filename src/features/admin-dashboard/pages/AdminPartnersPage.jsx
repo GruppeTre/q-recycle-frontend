@@ -4,6 +4,7 @@ import Button from "../../../components/Button.jsx";
 import SectionCard from "../../../components/SectionCard.jsx";
 import PartnerCard from "../components/PartnerCard.jsx";
 import { usePartners } from "../hooks/usePartners.js";
+import {UserPlus} from "lucide-react";
 
 function AdminPartnersPage() {
     const { partners, error } = usePartners();
@@ -15,7 +16,7 @@ function AdminPartnersPage() {
                     <div className="flex justify-between items-center">
                         <h2 className="text-section-header">Partnere</h2>
                         <Link to="new">
-                            <Button>+ Add Partner</Button>
+                            <Button icon={<UserPlus />}>Opret Virksomhed</Button>
                         </Link>
                     </div>
                 }>

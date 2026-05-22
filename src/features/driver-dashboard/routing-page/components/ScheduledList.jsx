@@ -11,7 +11,7 @@ export function ScheduledList( {pickups, onComplete, onRevert, onClose, onFinish
                 </h2>
                 <button
                     onClick={onClose}
-                    className="text-xs px-3 py-1.5 rounded bg-surface hover:bg-surface-hover transition">
+                    className="text-xs px-3 py-1.5 rounded bg-surface-primary hover:bg-surface-hover transition">
                     Luk
                 </button>
             </div>

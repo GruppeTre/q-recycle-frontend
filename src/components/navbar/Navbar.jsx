@@ -13,7 +13,7 @@ function Navbar({title, navItems, pendingBags}) {
 
     return (
         <nav>
-            <div className="bg-background px-gap-md py-gap-md border-b border-surface">
+            <div className="bg-surface-primary px-gap-md py-gap-md border-b border-surface-primary-accent">
                 <div className="flex justify-between items-center">
                     <div className="flex gap-gap-md items-center">
                         <HeroIcon pendingBags={pendingBags}/>
@@ -28,7 +28,7 @@ function Navbar({title, navItems, pendingBags}) {
                 </div>
             </div>
             {isOpen &&
-                <div className="md:hidden w-full flex flex-col gap-gap-md bg-background px-gap-lg py-gap-md border-b border-surface ">
+                <div className="md:hidden w-full flex flex-col gap-gap-md bg-background px-gap-lg py-gap-md border-b border-surface-primary-accent">
                     <NavLinks navItems={navItems}/>
                 </div>
             }
