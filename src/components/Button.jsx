@@ -13,7 +13,7 @@ function Button({onClick,type = "button", children, icon = null}) {
                 hover:bg-primary-hover
             "
         >
-            <div className="flex gap-gap-sm whitespace-nowrap">
+            <div className="flex justify-center gap-gap-sm whitespace-nowrap">
                 {icon && icon}
                 {children}
             </div>

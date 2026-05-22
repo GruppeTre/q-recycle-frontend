@@ -283,10 +283,10 @@ export default function RoutePlanner() {
     // ------------------------------------------------------------------
 
     return (
-        <div className="h-screen flex flex-col bg-background text-text">
+        <div className="h-screen flex flex-col bg-surface-primary text-text">
             {/* Top panel: pickup selection (only in selecting phase) */}
             {phase === "selecting" && (
-                <div className="shrink-0 border-b border-text-muted/15 bg-surface backdrop-blur">
+                <div className="shrink-0 border-b border-text-muted/15 bg-surface-primary backdrop-blur">
                     <div className="p-4">
                         <div className="flex items-center justify-between mb-3">
                             <h2 className="text-sm font-bold uppercase tracking-wider text-text">
@@ -324,7 +324,7 @@ export default function RoutePlanner() {
 
                 {/* Top bar during navigation */}
                 {phase === "navigating" && routeData && (
-                    <div className="absolute top-3 left-3 right-3 bg-surface/95 backdrop-blur rounded-lg border border-border px-4 py-2 flex items-center justify-between">
+                    <div className="absolute top-3 left-3 right-3 bg-surface-primary/95 backdrop-blur rounded-lg border border-border px-4 py-2 flex items-center justify-between">
                         <div className="text-sm">
                             <span className="text-text-muted">Rute:</span>{" "}
                             <span className="font-semibold">{routeData.orderedStops.length} stop</span>{" "}

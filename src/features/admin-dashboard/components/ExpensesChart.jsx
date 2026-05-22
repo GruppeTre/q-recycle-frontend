@@ -37,7 +37,7 @@ function ExpensesChart({data}) {
                 }}
                 contentStyle={{
                     color: 'var(--color-text)',
-                    backgroundColor: 'var(--color-surface)'
+                    backgroundColor: 'var(--color-surface-primary)'
                 }}
             />
             <Line

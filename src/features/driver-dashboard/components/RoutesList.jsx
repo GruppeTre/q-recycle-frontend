@@ -59,7 +59,7 @@ function RoutesList() {
 
         const statusColor = route.archived
         ? "bg-primary-bg text-primary border-primary/40"
-        : "bg-surface text-text-muted border-border";
+        : "bg-surface-secondary text-text-muted border-border";
 
         return (
             <li className="p-4 round-lg border border-border bg-surface">
