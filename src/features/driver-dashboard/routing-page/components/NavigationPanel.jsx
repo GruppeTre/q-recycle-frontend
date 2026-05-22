@@ -13,7 +13,7 @@ export function NavigationPanel({ currentStep, currentStepIdx, totalSteps, dista
     if (!currentStep) return null;
 
     return (
-        <div className="bg-surface backdrop-blur border-t border-border p-4">
+        <div className="bg-surface-primary backdrop-blur border-t border-border p-4">
             <div className="flex items-baseline justify-between mb-1">
                 <div className="text-xs uppercase tracking-wider text-text-muted">
                     Trin {currentStepIdx + 1} / {totalSteps}

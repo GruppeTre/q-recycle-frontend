@@ -4,15 +4,20 @@
 @theme {
     /* Farver */
     --color-primary: oklch(0.7952 0.1617 86.05);
-    --color-primary-hover: oklch(from var(--color-primary) calc(l - 0.05) c h);
+    --color-primary-hover: oklch(from var(--color-primary) calc(l - 0.03) c h);
     --color-primary-background: oklch(from var(--color-primary) calc(l + 0.1) calc(c - 0.12) h);
+
     --color-text-color: oklch(0.15 0 0);
-    --color-text-color-muted: oklch(from var(--color-text-color) calc(l + 0.1) c h);
-    --color-surface: oklch(from var(--color-background) calc(l - 0.06) c h);
+    --color-text-color-muted: oklch(from var(--color-text-color) calc(l + 0.3) c h);
+
+    --color-surface-primary: oklch(0.95 0.008 98.88);
+    --color-surface-primary-accent: oklch(from var(--color-surface-primary) calc(l - 0.1) c h);
+    --color-surface-secondary: oklch(0.98 0.008 98.88);
+    --color-surface-secondary-accent: oklch(from var(--color-surface-secondary) calc(l - 0.1) c h);
     --color-background: oklch(0.9663 0.008 98.88);
 
     /* states og feedback */
-    --color-surface-hover: oklch(from var(--color-surface) calc(l - 0.04) c h);
+    --color-surface-hover: oklch(from var(--color-surface-primary) calc(l - 0.04) c h);
     --color-border: oklch(from var(--color-text-color) calc(l + 0.5) c h);
 
     /* Feedback-farver */
