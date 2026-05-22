@@ -1,4 +1,5 @@
 import {pickupRequest} from "../../../../../lib/pickupRequest.js";
+import {expenditure} from "../../../../../lib/expenditure.js";
 
 export const statisticsApi = {
 
@@ -29,11 +30,10 @@ export const statisticsApi = {
         try {
             const data = await pickupRequest.getAllCompletedAfter(cutoffDate);
 
-            // transform into array with values 'name' and 'amount'
+            // transform into array with values 'name' and 'amount', combine pickups on the same partner
             const returnData = Object.values(
                 data.reduce((acc, pickup) => {
                     const partnerName = pickup.partner.name;
-
                     acc[partnerName] ??= { name: partnerName, amount: 0 };
                     acc[partnerName].amount += pickup.bags;
 
@@ -47,8 +47,38 @@ export const statisticsApi = {
         }
     },
 
-    getExpenses: (cutoffDate) => {
-        return mockExpenses;
+    getExpenses: async (cutoffDate) => {
+
+        try {
+            const data = await expenditure.getAllAfter(cutoffDate);
+
+            console.log(JSON.stringify(data));
+
+            // transform into array with values 'name' and 'amount', combine expenses that happened on the same day
+            const returnData = Object.values(
+                data.reduce((acc, expense) => {
+                    const date = new Date(expense.created_at).toLocaleDateString('en-GB');
+
+                    acc[date] ??= {name: date, paid: 0, unpaid: 0}
+
+                    if (expense.is_pending) {
+                        console.log('Expense is pending');
+                        acc[date].unpaid += expense.amount;
+                    } else {
+                        console.log('Expense is paid')
+                        acc[date].paid += expense.amount;
+                    }
+
+                    return acc;
+                }, {})
+            );
+
+            console.log('returning data: ', JSON.stringify(returnData));
+
+            return { data: returnData, error: null }
+        } catch (e) {
+            return { data: null, error: e }
+        }
     }
 }
 

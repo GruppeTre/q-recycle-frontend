@@ -30,6 +30,7 @@ function BagsByPartnerChart({data}) {
                 <Tooltip />
                 <Bar
                     dataKey="amount"
+                    name="poser"
                     fill="var(--color-primary)"
                     radius={[5, 5, 0, 0]}
                 />
