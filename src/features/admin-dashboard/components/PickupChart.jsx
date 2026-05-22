@@ -37,6 +37,7 @@ function PickupChart({data}) {
                 <Line
                     type="monotone"
                     dataKey="pickups"
+                    name="Afhentede poser"
                     stroke="var(--color-primary)"
                 />
             </LineChart>
