@@ -1,4 +1,4 @@
-import {Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
+import {Area, AreaChart, Tooltip, XAxis, YAxis} from "recharts";
 
 function valueToCurrency(value) {
     return value + 'kr';
@@ -6,7 +6,7 @@ function valueToCurrency(value) {
 
 function ExpensesChart({data}) {
     return (
-        <LineChart
+        <AreaChart
             style={{
                 width: '100%',
                 height: '100%',
@@ -31,21 +31,19 @@ function ExpensesChart({data}) {
                 stroke="var(--color-text-color)"
                 tickFormatter={valueToCurrency}
             />
-            <Tooltip
-                cursor={{
-                    stroke: 'var(--color-primary-hover)',
-                }}
-                contentStyle={{
-                    color: 'var(--color-text)',
-                    backgroundColor: 'var(--color-surface)'
-                }}
-            />
-            <Line
-                type="monotone"
-                dataKey="amount"
-                stroke="var(--color-primary)"
-            />
-        </LineChart>
+             <Tooltip
+                 cursor={{
+                     stroke: 'var(--color-primary-hover)',
+                 }}
+                 contentStyle={{
+                     color: 'var(--color-text)',
+                     backgroundColor: 'var(--color-surface)'
+                 }}
+             />
+            <Area type="monotone" dataKey="unpaid" stackId="1" stroke="#8884d8" fill="#ffc658" />
+            <Area type="monotone" dataKey="paid" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+
+        </AreaChart>
     );
 }
 
