@@ -21,7 +21,7 @@ function PartnerCard({ partner, onEdit, onDelete }) {
                     <button
                         type="button"
                         onClick={() => onEdit?.(partner)}
-                        className="p-2 accent-success hover:bg-green-50 rounded-md cursor-pointer"
+                        className="p-2 accent-success text-success cursor-pointer"
                         aria-label="Rediger partner"
                     >
                         <Pencil size={18} />
@@ -29,7 +29,7 @@ function PartnerCard({ partner, onEdit, onDelete }) {
                     <button
                         type="button"
                         onClick={() => onDelete?.(partner)}
-                        className="p-2 accent-danger hover:bg-red-50 rounded-md cursor-pointer"
+                        className="p-2 accent-danger text-danger cursor-pointer"
                         aria-label="Slet partner"
                     >
                         <Trash2 size={18} />
