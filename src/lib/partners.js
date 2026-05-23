@@ -129,4 +129,26 @@ export const partners = {
 
         return { id };
     },
+
+    delete: async (id) => {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) {
+            const error = new Error("Du skal være logget ind");
+            error.code = "unauthorized";
+            throw error;
+        }
+
+        const { data, error: invokeError } = await supabaseClient.functions.invoke(
+            "delete-partner",
+            { body: { partnerId: id } }
+        );
+
+        if (invokeError) {
+            const error = new Error(invokeError.message);
+            error.code = invokeError.context?.code;
+            throw error;
+        }
+
+        return data;
+    },
 };
