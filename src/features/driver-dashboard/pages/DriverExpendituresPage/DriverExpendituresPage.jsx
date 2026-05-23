@@ -1,9 +1,9 @@
-import PageContainer from "../../../components/PageContainer.jsx";
-import SectionCard from "../../../components/SectionCard.jsx";
+import PageContainer from "../../../../components/PageContainer.jsx";
+import SectionCard from "../../../../components/SectionCard.jsx";
 import {Link} from "react-router";
-import Button from "../../../components/Button.jsx";
+import Button from "../../../../components/Button.jsx";
 import {CirclePlus} from "lucide-react";
-import {useExpenditureData} from "../hooks/useExpenditureData.js";
+import {useExpenditureData} from "./hooks/useExpenditureData.js";
 
 function DriverExpendituresPage() {
 
@@ -21,7 +21,7 @@ const { data: expenditureData, error, isLoading } = useExpenditureData()
                     </div>
                 }>
                     {expenditureData && expenditureData.length <= 0 && (
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-text-color-muted">
                             Du har ingen nuværende udgifter.
                         </p>
                     )}

@@ -39,5 +39,32 @@ export const expenditure = {
         }
 
         return data;
+    },
+
+    getAllByUserId: async (userId) => {
+
+        if (!userId) {
+            const error = new Error('must provide a user ID');
+            error.code = -1;
+            throw error;
+        }
+
+        const { data, error: postgresError } = await supabaseClient
+            .from('expenditure')
+            .select(`
+                id,
+                amount,
+                is_pending,
+                created_at
+            `)
+            .eq('user_id', userId);
+
+        if (postgresError) {
+            const error = new Error(postgresError.message);
+            error.code = postgresError.code;
+            throw error;
+        }
+
+        return data;
     }
 }

@@ -15,7 +15,7 @@ import DriverRoutePage from "./features/driver-dashboard/DriverRoutePage.jsx";
 import DriverDashboard from "./features/driver-dashboard/DriverDashboard.jsx";
 import AdminStatisticsPage from "./features/admin-dashboard/pages/admin-statistics-page/AdminStatisticsPage.jsx";
 import EditPartnerPage from "./features/admin-dashboard/pages/EditPartnerPage.jsx";
-import DriverExpendituresPage from "./features/driver-dashboard/pages/DriverExpendituresPage.jsx";
+import DriverExpendituresPage from "./features/driver-dashboard/pages/DriverExpendituresPage/DriverExpendituresPage.jsx";
 
 function App() {
 
