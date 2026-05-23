@@ -4,6 +4,7 @@ import {Link} from "react-router";
 import Button from "../../../../components/Button.jsx";
 import {CirclePlus} from "lucide-react";
 import {useExpenditureData} from "./hooks/useExpenditureData.js";
+import ExpenditureCard from "./components/ExpenditureCard.jsx";
 
 function DriverExpendituresPage() {
 
@@ -27,8 +28,8 @@ const { data: expenditureData, error, isLoading } = useExpenditureData()
                     )}
 
                     {(expenditureData && expenditureData.length >= 1) &&
-                        <div>
-                            <p>Udgiftsliste</p>
+                        <div className="flex flex-col gap-gap-sm">
+                            {expenditureData.map(expenditure => <ExpenditureCard key={expenditure.id} expenditure={expenditure}/>)}
                         </div>
                     }
 
