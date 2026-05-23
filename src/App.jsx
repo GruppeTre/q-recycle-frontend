@@ -15,6 +15,7 @@ import DriverRoutePage from "./features/driver-dashboard/DriverRoutePage.jsx";
 import DriverDashboard from "./features/driver-dashboard/DriverDashboard.jsx";
 import AdminStatisticsPage from "./features/admin-dashboard/pages/admin-statistics-page/AdminStatisticsPage.jsx";
 import EditPartnerPage from "./features/admin-dashboard/pages/EditPartnerPage.jsx";
+import DriverExpendituresPage from "./features/driver-dashboard/pages/DriverExpendituresPage.jsx";
 
 function App() {
 
@@ -48,6 +49,7 @@ function App() {
                   <Route path="driver" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.DRIVER, role.ADMIN]}> <DriverDashboard /> </ProtectedRoute>}>
                       <Route index element={<Navigate to="routes" replace={true} /> } />
                       <Route path="routes" element={<DriverRoutePage />} />
+                      <Route path="expenditures" element={<DriverExpendituresPage />} />
 
                   </Route>
                   <Route path="driver/routes/route-planner" element={
