@@ -5,10 +5,28 @@ import SectionCard from "../../../components/SectionCard.jsx";
 import PartnerCard from "../components/PartnerCard.jsx";
 import { usePartners } from "../hooks/usePartners.js";
 import {UserPlus} from "lucide-react";
+import { partners as partnersApi } from "../../../lib/partners.js";
+import {useState} from "react";
 
 function AdminPartnersPage() {
     const navigate = useNavigate();
     const { partners, error } = usePartners();
+    const [deleteError, setDeleteError] = useState(null);
+
+    const handleDelete = async (partner) => {
+        const confirmed = window.confirm(
+            `Er du sikker på, at du vil slette ${partner.name ?? "denne partner"}? Dette kan ikke fortrydes.`
+        );
+        if (!confirmed) return;
+
+        try {
+            await partnersApi.delete(partner.id);
+            setDeleteError(null);
+            // Listen opdateres automatisk via real-time subscription i usePartners
+        } catch (e) {
+            setDeleteError(e.message ?? "Kunne ikke slette partner");
+        }
+    };
 
     return (
         <PageContainer>
@@ -24,6 +42,12 @@ function AdminPartnersPage() {
                     {error && (
                         <div role="alert" className="text-sm accent-danger px-3 py-2 rounded">
                             Kunne ikke hente partnere: {error.message}
+                        </div>
+                    )}
+
+                    {deleteError && (
+                        <div role="alert" className="text-sm accent-danger px-3 py-2 rounded">
+                            {deleteError}
                         </div>
                     )}
 
@@ -44,7 +68,7 @@ function AdminPartnersPage() {
                                     key={partner.id}
                                     partner={partner}
                                     onEdit={(p) => navigate(`${p.id}/edit`)}
-                                    onDelete={(p) => console.log("Delete", p.id)}
+                                    onDelete={handleDelete}
                                 />
                             ))}
                         </div>
