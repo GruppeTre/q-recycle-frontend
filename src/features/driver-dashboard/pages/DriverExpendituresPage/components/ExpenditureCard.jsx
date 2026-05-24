@@ -38,7 +38,7 @@ function ExpenditureCard({ expenditure, selected = false, onClick}) {
             <div className={`relative z-0 -translate-y-3 w-full grid transition-[grid-template-rows] duration-200 ${selected ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
                 <div className="overflow-hidden min-h-0 shadow-sm rounded-lg ">
                     <SectionCard backgroundColor="surface-secondary">
-                        <div className="flex justify-between md:max-w-44 ">
+                        <div className="flex justify-between md:max-w-44 pt-3">
                             <button
                                 tabIndex={selected ? 0 : -1}
                                 type="button"
