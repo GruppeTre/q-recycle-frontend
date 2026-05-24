@@ -27,6 +27,7 @@ export const expenditure = {
             .from('expenditure')
             .select(`
                 amount,
+                name,
                 is_pending,
                 created_at
             `)
@@ -54,6 +55,7 @@ export const expenditure = {
             .select(`
                 id,
                 amount,
+                name,
                 is_pending,
                 created_at
             `)
