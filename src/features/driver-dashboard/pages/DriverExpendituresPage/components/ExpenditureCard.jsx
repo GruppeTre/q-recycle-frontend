@@ -18,7 +18,7 @@ function ExpenditureCard({ expenditure, selected = false, onClick}) {
                                 <p className="text-muted">{expenditure.created_at}</p>
                             </div>
                             <div className={`flex items-end gap-gap-sm ${expenditure.is_pending ? 'text-primary' : 'text-success'}`}>
-                                <p>{expenditure.is_pending
+                                <p className="pb-0.5">{expenditure.is_pending
                                     ? 'Afventer'
                                     : 'Refunderet'
                                 }
@@ -32,17 +32,6 @@ function ExpenditureCard({ expenditure, selected = false, onClick}) {
                         <div className="flex justify-center items-end -mb-3 -mt-4">
                             <ChevronDown className={`transition-all duration-300 ${selected ? 'rotate-180' : ''}`}/>
                         </div>
-                        {/*    <div className="flex justify-between w-full">*/}
-                        {/*        <div className="flex flex-col gap-gap-sm w-1/3 overflow-hidden">*/}
-
-                        {/*        </div>*/}
-
-                        {/*        <div className="flex flex-col gap-gap-sm items-end w-1/3">*/}
-                        {/*            <h3 className='font-semibold text-text-color'>{expenditure.amount} kr</h3>*/}
-                        {/*            <p className="text-muted">{expenditure.created_at}</p>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
                     </div>
                 </SectionCard>
             </div>
