@@ -20,7 +20,6 @@ function DriverExpendituresPage() {
         const selected = expenditureData.find(expenditure => expenditure.id === expenditureId);
 
         if (selectedExpenditure?.id === expenditureId) {
-            console.log('duplicate detected!');
             setSelectedExpenditure(null);
             return;
         }
