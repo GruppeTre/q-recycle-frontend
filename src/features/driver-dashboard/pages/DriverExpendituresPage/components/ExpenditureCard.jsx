@@ -29,7 +29,7 @@ function ExpenditureCard({ expenditure, selected = false, onClick}) {
                                 }
                             </div>
                         </div>
-                        <div className="flex justify-center items-end -mb-3">
+                        <div className="flex justify-center items-end -mb-3 -mt-4">
                             <ChevronDown className={`transition-all duration-300 ${selected ? 'rotate-180' : ''}`}/>
                         </div>
                         {/*    <div className="flex justify-between w-full">*/}
@@ -51,13 +51,16 @@ function ExpenditureCard({ expenditure, selected = false, onClick}) {
                     <SectionCard backgroundColor="surface-secondary">
                         <div className="flex justify-between md:max-w-44 ">
                             <button
+                                tabIndex={selected ? 0 : -1}
                                 type="button"
+                                onClick={() => console.log('CLICKED!')}
                                 className="p-2 text-text-color cursor-pointer w-min"
                                 aria-label="Slet partner"
                             >
                                 <ReceiptText size={24} />
                             </button>
                             <button
+                                tabIndex={selected ? 0 : -1}
                                 type="button"
                                 className="p-2 text-text-color cursor-pointer w-min"
                                 aria-label="Slet partner"
@@ -65,6 +68,7 @@ function ExpenditureCard({ expenditure, selected = false, onClick}) {
                                 <PenIcon size={24} />
                             </button>
                             <button
+                                tabIndex={selected ? 0 : -1}
                                 type="button"
                                 className="p-2 text-danger cursor-pointer w-min"
                                 aria-label="Slet partner"
