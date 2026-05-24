@@ -10,6 +10,7 @@ function SectionCard({children, title = null, headerContent = null, backgroundCo
             shadow-sm
             box-border
             border-2
+            overflow-hidden
             ${backgroundColor ? `bg-${backgroundColor}` : 'bg-surface-primary'}
             ${border ? 'border-primary' : 'border-transparent'}
         `}>
