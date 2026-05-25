@@ -20,7 +20,6 @@ export const mapboxApi = {
             `?source=first&destination=last&roundtrip=false` +
             `&overview=full&geometries=geojson` +
             `&access_token=${token}`;
-
         const res = await fetch(url);
         const data = await res.json();
         if (data.code !== "Ok") throw new Error(data.message || data.code);
@@ -51,7 +50,7 @@ export const mapboxApi = {
 
         const res = await fetch(url);
         const data = await res.json();
-        if(data.code !== "Ok") throw new Error(data.message);
+        if(data.code !== "Ok") throw new Error(data.message ||data.code);
 
         const route = data.routes[0];
 
