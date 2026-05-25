@@ -1,6 +1,5 @@
 import SectionCard from "../../../../../components/SectionCard.jsx";
-import {ChevronDown, CircleDot, CircleDotDashed, EyeIcon, PenIcon, ReceiptText, Trash, Trash2} from "lucide-react";
-import Button from "../../../../../components/Button.jsx";
+import {ChevronDown, CircleDot, CircleDotDashed, PenIcon, ReceiptText, Trash2} from "lucide-react";
 
 function ExpenditureCard({ expenditure, selected = false, onClick, onDelete, onEdit, OnShowReceipt}) {
 

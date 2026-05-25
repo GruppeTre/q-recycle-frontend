@@ -1,6 +1,6 @@
 import {supabaseClient} from "./supabaseClient.js";
 
-export const expenditure = {
+export const expenditureApi = {
     getAll: async()  => {
         const { data, error: postgresError } = await supabaseClient
             .from('expenditure')
@@ -77,5 +77,19 @@ export const expenditure = {
             .eq('id', id);
 
         console.log(JSON.stringify(response));
+    },
+
+    add: async (expenditure) => {
+        const response = await supabaseClient
+            .from('expenditure')
+            .insert({
+                user_id: expenditure.user_id,
+                amount: expenditure.amount,
+                is_pending: expenditure.is_pending,
+                name: expenditure.name,
+                created_at: expenditure.created_at
+            });
+
+        return response;
     }
 }

@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import {useAuth} from "../../../../../context/useAuth.js";
-import {expenditureApi} from "../lib/expenditureApi.js";
-import {expenditure} from "../../../../../lib/expenditure.js";
+import {expenditureApi} from "../../../../../lib/expenditureApi.js";
 
 export function useExpenditureData() {
 
@@ -13,19 +12,21 @@ export function useExpenditureData() {
 
     useEffect(() => {
         expenditureApi.getAllByUserId(session.user.id)
-            .then(result => {
-                if (result.error) {
-                    setError('Noget gik galt, prøv igen senere');
-                } else {
-                    setData(result.data.sort((a, b) => {
-                        if (a.is_pending !== b.is_pending) {
-                            return a.is_pending ? -1 : 1;
-                        } else {
-                            return a.created_at > b.created_at ? -1 : 1;
-                        }
-                    }));
-                    setError(null);
-                }
+            .then(data => {
+
+                data = data.map(expenditure => ({
+                    ...expenditure,
+                    created_at: new Date(expenditure.created_at).toLocaleDateString('en-GB')
+                }));
+
+                setData(data.sort((a, b) => {
+                    if (a.is_pending !== b.is_pending) {
+                        return a.is_pending ? -1 : 1;
+                    } else {
+                        return a.created_at > b.created_at ? -1 : 1;
+                    }
+                }));
+                setError(null);
             }).catch(error => {
                 console.error(error);
                 setError('Noget gik galt, prøv igen senere');
@@ -36,9 +37,18 @@ export function useExpenditureData() {
     }, [session]);
 
     const deleteExpenditure = async (id) => {
-        await expenditure.deleteById(id);
+        await expenditureApi.deleteById(id);
         setData(prevState => prevState.filter(e => e.id !== id));
     }
 
-    return { data, error, isLoading, deleteExpenditure }
+    const addExpenditure = async (expenditure) => {
+        const response = await expenditureApi.add(expenditure);
+
+        if (response.status !== 201) {
+            console.error(JSON.stringify(response));
+            throw new Error('something went wrong');
+        }
+    }
+
+    return { data, error, isLoading, deleteExpenditure, addExpenditure }
 }

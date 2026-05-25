@@ -35,6 +35,13 @@
     --spacing-gap-xl: 4rem;
 }
 
+@source inline("bg-primary hover:bg-primary bg-primary-hover hover:bg-primary-hover bg-primary-background hover:bg-primary-background");
+@source inline("bg-surface-primary hover:bg-surface-primary bg-surface-primary-accent hover:bg-surface-primary-accent");
+@source inline("bg-surface-secondary hover:bg-surface-secondary bg-surface-secondary-accent hover:bg-surface-secondary-accent");
+@source inline("bg-surface-hover hover:bg-surface-hover bg-background hover:bg-background");
+@source inline("bg-success hover:bg-success bg-success-bg hover:bg-success-bg");
+@source inline("bg-danger hover:bg-danger bg-danger-hover hover:bg-danger-hover bg-danger-bg hover:bg-danger-bg");
+
 body {
     @apply bg-primary-background
 }

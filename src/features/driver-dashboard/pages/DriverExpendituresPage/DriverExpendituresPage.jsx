@@ -1,6 +1,5 @@
 import PageContainer from "../../../../components/PageContainer.jsx";
 import SectionCard from "../../../../components/SectionCard.jsx";
-import {Link} from "react-router";
 import Button from "../../../../components/Button.jsx";
 import {CirclePlus, Trash, XIcon} from "lucide-react";
 import {useExpenditureData} from "./hooks/useExpenditureData.js";
@@ -8,12 +7,17 @@ import ExpenditureCard from "./components/ExpenditureCard.jsx";
 import Spinner from "../../../../components/Spinner.jsx";
 import {useState} from "react";
 import Modal from "../../../../components/Modal.jsx";
+import CreateExpenditureForm from "./components/CreateExpenditureForm.jsx";
+import {useAuth} from "../../../../context/useAuth.js";
 
 function DriverExpendituresPage() {
 
-    const { data: expenditureData, error, isLoading, deleteExpenditure } = useExpenditureData();
+    const { data: expenditureData, error: expenditureDataError, isLoading, deleteExpenditure, addExpenditure } = useExpenditureData();
+    const { session } = useAuth();
     const [selectedExpenditure, setSelectedExpenditure] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [error, setError] = useState(null);
 
     const handleExpenditureClick = (expenditureId) => {
         console.log(expenditureId)
@@ -27,6 +31,9 @@ function DriverExpendituresPage() {
 
         setSelectedExpenditure(selected);
     }
+    const handleCreateModalToggle = () => {
+        setShowCreateModal(prevState => !prevState);
+    }
 
     const handleDeleteModalToggle = () => {
         setShowDeleteModal(prevState => !prevState);
@@ -39,8 +46,37 @@ function DriverExpendituresPage() {
         setShowDeleteModal(false);
     }
 
+    const handleCreate = async (formData) => {
+        const newExpenditure = {
+            user_id: session.user.id,
+            amount: formData.get('price'),
+            is_pending: true,
+            created_at: new Date(formData.get('date')).toISOString(),
+            name: formData.get('name')
+        }
+
+        try {
+            await addExpenditure(newExpenditure);
+        } catch (e) {
+            console.error(e);
+            setError('Noget gik galt, prøv igen senere');
+        } finally {
+            setShowCreateModal(false);
+        }
+    }
+
     return (
         <PageContainer>
+            {showCreateModal &&
+                <div className="relative z-30">
+                    <Modal showCancelBtn={false}>
+                        <div>
+                            <h2 className="text-section-header">Opret udgift</h2>
+                            <CreateExpenditureForm onCancel={handleCreateModalToggle} onSubmit={handleCreate}/>
+                        </div>
+                    </Modal>
+                </div>
+            }
             {showDeleteModal &&
                 <div className="relative z-30">
                     <Modal onClose={handleDeleteModalToggle} showCancelBtn={false}>
@@ -64,9 +100,7 @@ function DriverExpendituresPage() {
                     <div className="flex flex-col gap-gap-sm">
                         <div className="flex justify-between items-center">
                             <h2 className="text-section-header">Dine udgifter</h2>
-                            <Link to="new">
-                                <Button icon={<CirclePlus />}>Ny udgift</Button>
-                            </Link>
+                            <Button icon={<CirclePlus />} onClick={handleCreateModalToggle}>Ny udgift</Button>
                         </div>
                     </div>
                 }>
