@@ -20,17 +20,15 @@ function DriverExpendituresPage() {
     const [error, setError] = useState(null);
 
     const handleExpenditureClick = (expenditureId) => {
-        console.log(expenditureId)
-
         const selected = expenditureData.find(expenditure => expenditure.id === expenditureId);
 
         if (selectedExpenditure?.id === expenditureId) {
             setSelectedExpenditure(null);
             return;
         }
-
         setSelectedExpenditure(selected);
     }
+
     const handleCreateModalToggle = () => {
         setShowCreateModal(prevState => !prevState);
     }
@@ -40,7 +38,6 @@ function DriverExpendituresPage() {
     }
 
     const handleDelete = async () => {
-        console.log('deleting item with name: ', selectedExpenditure.name);
         await deleteExpenditure(selectedExpenditure.id);
         setSelectedExpenditure(null);
         setShowDeleteModal(false);
@@ -49,7 +46,7 @@ function DriverExpendituresPage() {
     const handleCreate = async (formData) => {
         const newExpenditure = {
             user_id: session.user.id,
-            amount: formData.get('price'),
+            amount: parseFloat(formData.get('price')),
             is_pending: true,
             created_at: new Date(formData.get('date')).toISOString(),
             name: formData.get('name')

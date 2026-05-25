@@ -71,16 +71,20 @@ export const expenditureApi = {
     },
 
     deleteById: async (id) => {
-        const response = await supabaseClient
+        const { error: postgresError } = await supabaseClient
             .from('expenditure')
             .delete()
             .eq('id', id);
 
-        console.log(JSON.stringify(response));
+        if (postgresError) {
+            const error = new Error(postgresError.message);
+            error.code = postgresError.code;
+            throw error;
+        }
     },
 
     add: async (expenditure) => {
-        const response = await supabaseClient
+        const { data, error: postgresError } = await supabaseClient
             .from('expenditure')
             .insert({
                 user_id: expenditure.user_id,
@@ -88,8 +92,16 @@ export const expenditureApi = {
                 is_pending: expenditure.is_pending,
                 name: expenditure.name,
                 created_at: expenditure.created_at
-            });
+            })
+            .select()
+            .single();
 
-        return response;
+        if (postgresError) {
+            const error = new Error(postgresError.message);
+            error.code = postgresError.code;
+            throw error;
+        }
+
+        return data;
     }
 }

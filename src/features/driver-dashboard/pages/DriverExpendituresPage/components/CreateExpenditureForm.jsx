@@ -27,9 +27,15 @@ function CreateExpenditureForm({ onCancel, onSubmit }) {
                 />
 
                 <div className="flex justify-between">
-                    <Button backgroundColor="surface-primary" hoverColor={"surface-primary"} onClick={onCancel}>
+                    <Button
+                        type="button"
+                        backgroundColor="surface-primary"
+                        hoverColor={"surface-primary"}
+                        onClick={onCancel}
+                    >
                         <p>Annuller</p>
                     </Button>
+
                     <Button type="submit">
                         <p>Opret</p>
                     </Button>

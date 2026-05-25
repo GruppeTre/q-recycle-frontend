@@ -14,7 +14,7 @@ function ExpenditureCard({ expenditure, selected = false, onClick, onDelete, onE
                         </div>
                         <div className="flex justify-between">
                             <div>
-                                <p className="text-muted">{expenditure.created_at}</p>
+                                <p className="text-muted">{expenditure.formatted_date}</p>
                             </div>
                             <div className={`flex items-end gap-gap-sm ${expenditure.is_pending ? 'text-primary' : 'text-success'}`}>
                                 <p className="pb-0.5">{expenditure.is_pending

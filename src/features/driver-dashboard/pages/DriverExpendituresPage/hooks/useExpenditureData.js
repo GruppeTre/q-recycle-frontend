@@ -2,6 +2,11 @@ import {useEffect, useState} from "react";
 import {useAuth} from "../../../../../context/useAuth.js";
 import {expenditureApi} from "../../../../../lib/expenditureApi.js";
 
+const sortExpenditures = (a, b) => {
+    if (a.is_pending !== b.is_pending) return a.is_pending ? -1 : 1;
+    return new Date(b.created_at) - new Date(a.created_at);
+};
+
 export function useExpenditureData() {
 
     const { session } = useAuth();
@@ -16,16 +21,10 @@ export function useExpenditureData() {
 
                 data = data.map(expenditure => ({
                     ...expenditure,
-                    created_at: new Date(expenditure.created_at).toLocaleDateString('en-GB')
+                    formatted_date: new Date(expenditure.created_at).toLocaleDateString('en-GB')
                 }));
 
-                setData(data.sort((a, b) => {
-                    if (a.is_pending !== b.is_pending) {
-                        return a.is_pending ? -1 : 1;
-                    } else {
-                        return a.created_at > b.created_at ? -1 : 1;
-                    }
-                }));
+                setData(data.sort(sortExpenditures));
                 setError(null);
             }).catch(error => {
                 console.error(error);
@@ -34,7 +33,7 @@ export function useExpenditureData() {
             .finally(() => {
                 setIsLoading(false);
             });
-    }, [session]);
+    }, [session?.user?.id]);
 
     const deleteExpenditure = async (id) => {
         await expenditureApi.deleteById(id);
@@ -42,11 +41,16 @@ export function useExpenditureData() {
     }
 
     const addExpenditure = async (expenditure) => {
-        const response = await expenditureApi.add(expenditure);
 
-        if (response.status !== 201) {
-            console.error(JSON.stringify(response));
-            throw new Error('something went wrong');
+        try {
+            const data = await expenditureApi.add(expenditure);
+
+            const formatted = { ...data, formatted_date: new Date(data.created_at).toLocaleDateString('en-GB') };
+
+            setData(prevState => [...prevState, formatted].sort(sortExpenditures));
+        } catch (e) {
+            console.error(e);
+            setError(e);
         }
     }
 
