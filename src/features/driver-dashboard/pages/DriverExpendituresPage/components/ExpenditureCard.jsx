@@ -2,7 +2,7 @@ import SectionCard from "../../../../../components/SectionCard.jsx";
 import {ChevronDown, CircleDot, CircleDotDashed, EyeIcon, PenIcon, ReceiptText, Trash, Trash2} from "lucide-react";
 import Button from "../../../../../components/Button.jsx";
 
-function ExpenditureCard({ expenditure, selected = false, onClick}) {
+function ExpenditureCard({ expenditure, selected = false, onClick, onDelete, onEdit, OnShowReceipt}) {
 
     return (
         <div>
@@ -58,6 +58,7 @@ function ExpenditureCard({ expenditure, selected = false, onClick}) {
                             </button>
                             <button
                                 tabIndex={selected ? 0 : -1}
+                                onClick={onDelete}
                                 type="button"
                                 className="p-2 text-danger cursor-pointer w-min"
                                 aria-label="Slet partner"

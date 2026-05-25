@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {useAuth} from "../../../../../context/useAuth.js";
 import {expenditureApi} from "../lib/expenditureApi.js";
+import {expenditure} from "../../../../../lib/expenditure.js";
 
 export function useExpenditureData() {
 
@@ -28,5 +29,10 @@ export function useExpenditureData() {
             });
     }, [session]);
 
-    return { data, error, isLoading }
+    const deleteExpenditure = async (id) => {
+        await expenditure.deleteById(id);
+        setData(prevState => prevState.filter(e => e.id !== id));
+    }
+
+    return { data, error, isLoading, deleteExpenditure }
 }

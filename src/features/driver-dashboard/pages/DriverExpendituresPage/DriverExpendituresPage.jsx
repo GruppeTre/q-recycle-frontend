@@ -2,17 +2,19 @@ import PageContainer from "../../../../components/PageContainer.jsx";
 import SectionCard from "../../../../components/SectionCard.jsx";
 import {Link} from "react-router";
 import Button from "../../../../components/Button.jsx";
-import {CirclePlus} from "lucide-react";
+import {CirclePlus, CrossIcon, Trash, XIcon} from "lucide-react";
 import {useExpenditureData} from "./hooks/useExpenditureData.js";
 import ExpenditureCard from "./components/ExpenditureCard.jsx";
 import Spinner from "../../../../components/Spinner.jsx";
 import {useState} from "react";
 import {expenditure} from "../../../../lib/expenditure.js";
+import Modal from "../../../../components/Modal.jsx";
 
 function DriverExpendituresPage() {
 
-    const { data: expenditureData, error, isLoading } = useExpenditureData();
+    const { data: expenditureData, error, isLoading, deleteExpenditure } = useExpenditureData();
     const [selectedExpenditure, setSelectedExpenditure] = useState(null);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const handleExpenditureClick = (expenditureId) => {
         console.log(expenditureId)
@@ -27,8 +29,37 @@ function DriverExpendituresPage() {
         setSelectedExpenditure(selected);
     }
 
+    const handleDeleteModalToggle = () => {
+        setShowDeleteModal(prevState => !prevState);
+    }
+
+    const handleDelete = async () => {
+        console.log('deleting item with name: ', selectedExpenditure.name);
+        await deleteExpenditure(selectedExpenditure.id);
+        setSelectedExpenditure(null);
+        setShowDeleteModal(false);
+    }
+
     return (
         <PageContainer>
+            {showDeleteModal &&
+                <div className="relative z-30">
+                    <Modal onClose={handleDeleteModalToggle} showCancelBtn={false}>
+                        <div>
+                            <h2 className="text-section-header">Vil du slette denne udgift?</h2>
+                            <p className="text-muted">Denne handling kan ikke fortrydes</p>
+                        </div>
+                        <div className="flex justify-between mt-gap-lg">
+                            <Button backgroundColor="primary" icon={<XIcon />} onClick={handleDeleteModalToggle}>
+                                <p>Annuller</p>
+                            </Button>
+                            <Button backgroundColor="danger" icon={<Trash />} hoverColor="danger-hover" onClick={handleDelete}>
+                                <p>Bekræft</p>
+                            </Button>
+                        </div>
+                    </Modal>
+                </div>
+            }
             <div className="mt-6">
                 <SectionCard headerContent={
                     <div className="flex flex-col gap-gap-sm">
@@ -55,6 +86,7 @@ function DriverExpendituresPage() {
                         <div className="flex flex-col gap-gap-sm">
                             {expenditureData.map(expenditure =>
                                 <ExpenditureCard
+                                    onDelete={handleDeleteModalToggle}
                                     selected={selectedExpenditure !== null && selectedExpenditure.id === expenditure.id}
                                     key={expenditure.id}
                                     expenditure={expenditure}

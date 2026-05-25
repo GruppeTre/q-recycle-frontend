@@ -68,5 +68,14 @@ export const expenditure = {
         }
 
         return data;
+    },
+
+    deleteById: async (id) => {
+        const response = await supabaseClient
+            .from('expenditure')
+            .delete()
+            .eq('id', id);
+
+        console.log(JSON.stringify(response));
     }
 }
