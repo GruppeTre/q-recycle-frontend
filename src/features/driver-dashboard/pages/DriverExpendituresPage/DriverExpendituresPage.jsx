@@ -2,12 +2,11 @@ import PageContainer from "../../../../components/PageContainer.jsx";
 import SectionCard from "../../../../components/SectionCard.jsx";
 import {Link} from "react-router";
 import Button from "../../../../components/Button.jsx";
-import {CirclePlus, CrossIcon, Trash, XIcon} from "lucide-react";
+import {CirclePlus, Trash, XIcon} from "lucide-react";
 import {useExpenditureData} from "./hooks/useExpenditureData.js";
 import ExpenditureCard from "./components/ExpenditureCard.jsx";
 import Spinner from "../../../../components/Spinner.jsx";
 import {useState} from "react";
-import {expenditure} from "../../../../lib/expenditure.js";
 import Modal from "../../../../components/Modal.jsx";
 
 function DriverExpendituresPage() {

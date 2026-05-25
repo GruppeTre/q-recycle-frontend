@@ -17,7 +17,13 @@ export function useExpenditureData() {
                 if (result.error) {
                     setError('Noget gik galt, prøv igen senere');
                 } else {
-                    setData(result.data);
+                    setData(result.data.sort((a, b) => {
+                        if (a.is_pending !== b.is_pending) {
+                            return a.is_pending ? -1 : 1;
+                        } else {
+                            return a.created_at > b.created_at ? -1 : 1;
+                        }
+                    }));
                     setError(null);
                 }
             }).catch(error => {
