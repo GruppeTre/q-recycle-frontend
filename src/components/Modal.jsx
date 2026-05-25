@@ -1,4 +1,4 @@
-function Modal({title, children, onClose}) {
+function Modal({title, children, onClose, showCancelBtn = true}) {
     return (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
             <div className="bg-surface-primary p-6 rounded-md w-80 shadow-lg">
@@ -11,19 +11,21 @@ function Modal({title, children, onClose}) {
                 <div className="text-body">
                     {children}
                 </div>
-                <button
-                    type="button"
-                    onClick={onClose}
-                    className="mt-3
+                {showCancelBtn &&
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="mt-3
                 text-sm
                 text-text-color-muted
                 hover:text-text-color
                 underline
                 transition-colors">
 
-                    Annuller
+                        Annuller
 
-                </button>
+                    </button>
+                }
             </div>
         </div>
     )

@@ -1,5 +1,5 @@
 import {pickupRequest} from "../../../../../lib/pickupRequest.js";
-import {expenditure} from "../../../../../lib/expenditure.js";
+import {expenditureApi} from "../../../../../lib/expenditureApi.js";
 
 export const statisticsApi = {
 
@@ -50,7 +50,7 @@ export const statisticsApi = {
     getExpenses: async (cutoffDate) => {
 
         try {
-            const data = await expenditure.getAllAfter(cutoffDate);
+            const data = await expenditureApi.getAllAfter(cutoffDate);
 
             console.log(JSON.stringify(data));
 

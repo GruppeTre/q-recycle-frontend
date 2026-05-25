@@ -9,6 +9,6 @@ export const driverNavItems = [
     {
         icon: <Wallet />,
         label: "Udgifter",
-        to: "/driver/expenses"
+        to: "/driver/expenditures"
     }
 ];
