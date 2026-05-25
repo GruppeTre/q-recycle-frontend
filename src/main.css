@@ -23,7 +23,8 @@
     /* Feedback-farver */
     --color-success: oklch(0.65 0.15 145);     /* grøn */
     --color-success-bg: oklch(from var(--color-success) calc(l + 0.25) calc(c - 0.1) h);
-    --color-danger: oklch(0.55 0.20 25);       /* rød */
+    --color-danger: oklch(0.65 0.20 25);      /* rød */
+    --color-danger-hover: oklch(from var(--color-danger) calc(l - 0.03) c h);
     --color-danger-bg: oklch(from var(--color-danger) calc(l + 0.35) calc(c - 0.1) h);
 
     /* Gap-størrelser */
