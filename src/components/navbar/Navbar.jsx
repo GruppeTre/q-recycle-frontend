@@ -11,6 +11,10 @@ function Navbar({title, navItems, pendingBags}) {
         setIsOpen(prevState => !prevState);
     }
 
+    const handleNavClick = () => {
+        setIsOpen(false);
+    }
+
     return (
         <nav>
             <div className="bg-surface-primary px-gap-md py-gap-md border-b border-surface-primary-accent">
@@ -29,7 +33,7 @@ function Navbar({title, navItems, pendingBags}) {
             </div>
             {isOpen &&
                 <div className="md:hidden w-full flex flex-col gap-gap-md bg-background px-gap-lg py-gap-md border-b border-surface-primary-accent">
-                    <NavLinks navItems={navItems}/>
+                    <NavLinks navItems={navItems} onClick={handleNavClick}/>
                 </div>
             }
         </nav>
