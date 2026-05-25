@@ -54,5 +54,28 @@ export function useExpenditureData() {
         }
     }
 
-    return { data, error, isLoading, deleteExpenditure, addExpenditure }
+    const updateExpenditure = async (expenditure) => {
+        try {
+            console.log(`trying to update with expenditure: ${JSON.stringify(expenditure)}`);
+
+            const data = await expenditureApi.update(expenditure);
+
+            console.log('got back data: ', JSON.stringify(data));
+
+            const formatted = { ...data, formatted_date: new Date(data.created_at).toLocaleDateString('en-GB') };
+
+            console.log(`Created formatted data: ${JSON.stringify(formatted)}`);
+
+            setData(
+                prevState => prevState.map(
+                    expenditure => expenditure.id === formatted.id ? formatted : expenditure
+                ).sort(sortExpenditures)
+            );
+        } catch (e) {
+            console.error(e);
+            setError(e);
+        }
+    }
+
+    return { data, error, isLoading, deleteExpenditure, addExpenditure, updateExpenditure }
 }

@@ -43,15 +43,16 @@ function ExpenditureCard({ expenditure, selected = false, onClick, onDelete, onE
                                 type="button"
                                 onClick={() => console.log('CLICKED!')}
                                 className="p-2 text-text-color cursor-pointer w-min"
-                                aria-label="Slet partner"
+                                aria-label="Se bilag"
                             >
                                 <ReceiptText size={24} />
                             </button>
                             <button
                                 tabIndex={selected ? 0 : -1}
                                 type="button"
+                                onClick={onEdit}
                                 className="p-2 text-text-color cursor-pointer w-min"
-                                aria-label="Slet partner"
+                                aria-label="Rediger Partner"
                             >
                                 <PenIcon size={24} />
                             </button>

@@ -7,20 +7,31 @@ import ExpenditureCard from "./components/ExpenditureCard.jsx";
 import Spinner from "../../../../components/Spinner.jsx";
 import {useState} from "react";
 import Modal from "../../../../components/Modal.jsx";
-import CreateExpenditureForm from "./components/CreateExpenditureForm.jsx";
+import ExpenditureForm from "./components/ExpenditureForm.jsx";
 import {useAuth} from "../../../../context/useAuth.js";
 
 function DriverExpendituresPage() {
 
-    const { data: expenditureData, error: expenditureDataError, isLoading, deleteExpenditure, addExpenditure } = useExpenditureData();
+    const {
+        data: expenditureData,
+        error: expenditureDataError,
+        isLoading,
+        deleteExpenditure,
+        addExpenditure,
+        updateExpenditure,
+    } = useExpenditureData();
+
     const { session } = useAuth();
     const [selectedExpenditure, setSelectedExpenditure] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
     const [error, setError] = useState(null);
 
     const handleExpenditureClick = (expenditureId) => {
         const selected = expenditureData.find(expenditure => expenditure.id === expenditureId);
+
+        console.log('selected id: ', expenditureId);
 
         if (selectedExpenditure?.id === expenditureId) {
             setSelectedExpenditure(null);
@@ -31,6 +42,10 @@ function DriverExpendituresPage() {
 
     const handleCreateModalToggle = () => {
         setShowCreateModal(prevState => !prevState);
+    }
+
+    const handleEditModalToggle = () => {
+        setShowEditModal(prevState => !prevState);
     }
 
     const handleDeleteModalToggle = () => {
@@ -62,6 +77,29 @@ function DriverExpendituresPage() {
         }
     }
 
+    const handleUpdate = async (formData) => {
+        console.log('Updating expense with name: ', formData.get('name'));
+
+        const newExpenditure = {
+            id: selectedExpenditure.id,
+            user_id: session.user.id,
+            amount: parseFloat(formData.get('price')),
+            is_pending: selectedExpenditure.is_pending,
+            created_at: new Date(formData.get('date')).toISOString(),
+            name: formData.get('name')
+        }
+
+        try {
+            await updateExpenditure(newExpenditure);
+        } catch (e) {
+            console.error(e);
+            setError('Noget gik galt, prøv igen senere');
+        } finally {
+            setSelectedExpenditure(null);
+            setShowEditModal(false);
+        }
+    }
+
     return (
         <PageContainer>
             {showCreateModal &&
@@ -69,7 +107,17 @@ function DriverExpendituresPage() {
                     <Modal showCancelBtn={false}>
                         <div>
                             <h2 className="text-section-header">Opret udgift</h2>
-                            <CreateExpenditureForm onCancel={handleCreateModalToggle} onSubmit={handleCreate}/>
+                            <ExpenditureForm onCancel={handleCreateModalToggle} onSubmit={handleCreate}/>
+                        </div>
+                    </Modal>
+                </div>
+            }
+            {showEditModal &&
+                <div className="relative z-30">
+                    <Modal showCancelBtn={false}>
+                        <div>
+                            <h2 className="text-section-header">Opdater udgift</h2>
+                            <ExpenditureForm onCancel={handleEditModalToggle} onSubmit={handleUpdate} toUpdate={selectedExpenditure}/>
                         </div>
                     </Modal>
                 </div>
@@ -117,6 +165,7 @@ function DriverExpendituresPage() {
                             {expenditureData.map(expenditure =>
                                 <ExpenditureCard
                                     onDelete={handleDeleteModalToggle}
+                                    onEdit={handleEditModalToggle}
                                     selected={selectedExpenditure !== null && selectedExpenditure.id === expenditure.id}
                                     key={expenditure.id}
                                     expenditure={expenditure}

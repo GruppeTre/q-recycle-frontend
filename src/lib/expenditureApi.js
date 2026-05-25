@@ -103,5 +103,33 @@ export const expenditureApi = {
         }
 
         return data;
+    },
+
+    update: async (expenditure) => {
+
+        console.log(`Trying to call update in supabase with object: ${JSON.stringify(expenditure)}`);
+
+        const { data, error: postgresError } = await supabaseClient
+            .from('expenditure')
+            .update({
+                user_id: expenditure.user_id,
+                amount: expenditure.amount,
+                is_pending: expenditure.is_pending,
+                name: expenditure.name,
+                created_at: expenditure.created_at
+            })
+            .eq('id', expenditure.id)
+            .select()
+            .single();
+
+        console.log(JSON.stringify(data));
+
+        if (postgresError) {
+            const error = new Error(JSON.stringify(postgresError));
+            error.code = postgresError.code;
+            throw error;
+        }
+
+        return data;
     }
 }
