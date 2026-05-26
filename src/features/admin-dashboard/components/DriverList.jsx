@@ -4,7 +4,7 @@ import { accountApi} from "../../../lib/accountApi.js";
 import SectionCard from "../../../components/SectionCard.jsx";
 import {Pencil, Trash2} from "lucide-react";
 
-function DriversList() {
+function DriverList() {
     const [driver, setDriver] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -28,6 +28,18 @@ function DriversList() {
         return () => { cancelled = true; };
     }, []);
 
+    const handleDelete = async (driver) => {
+        const fullName = [driver.firstname, driver.surname].filter(Boolean).join(" ");
+        if (!window.confirm(`Slet ${fullName || "denne chauffør"}?`)) return;
+
+        try {
+            await accountApi.deleteDriver(driver.id);
+            setDriver(prev => prev.filter(d => d.id !== driver.id));
+        } catch (e) {
+            setError(e.message ?? "Kunne ikke slette chauffør");
+        }
+    };
+
     if (loading) return (
         <SectionCard backgroundColor="surface-secondary">
             <p className="text-text-muted">Indlæser chauffører...</p>
@@ -47,13 +59,13 @@ function DriversList() {
     return (
         <div className="flex flex-col gap-2">
             {driver.map((d) => (
-                <DriverCard key={driver.id} driver={d} />
+                <DriverCard key={d.id} driver={d} onDelete={handleDelete} />
             ))}
         </div>
     );
 }
 
-function DriverCard({driver}) {
+function DriverCard({ driver, onDelete }) {
     const fullName = [driver.firstname, driver.surname].filter(Boolean).join(" ");
 
     return (
@@ -77,9 +89,9 @@ function DriverCard({driver}) {
                     <button
                         //Delete function her!
                         type="button"
-                        //onClick={() => onDelete?.(driver)}
+                        onClick={() => onDelete?.(driver)}
                         className="p-2 accent-danger text-danger cursor-pointer"
-                        aria-label="Slet partner"
+                        aria-label="Slet chauffør"
                     >
                         <Trash2 size={18} />
                     </button>
@@ -89,4 +101,4 @@ function DriverCard({driver}) {
     )
 }
 
-export default DriversList;
+export default DriverList;
