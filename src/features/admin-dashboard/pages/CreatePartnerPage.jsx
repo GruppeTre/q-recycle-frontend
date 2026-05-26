@@ -54,14 +54,14 @@ function CreatePartnerPage() {
         return (
             <PageContainer>
                 <div className="mt-8 p-6 rounded-lg">
-                    <h2 className="text-section-header accent-success">Partner oprettet</h2>
-                    <p className="mt-2 text-sm accent-success">Giv denne PIN til partneren:</p>
+                    <h2 className="text-section-header accent-success">Virksomhed oprettet</h2>
+                    <p className="mt-2 text-sm accent-success">Giv denne PIN til virksomheden:</p>
                     <div className="mt-4 text-4xl font-mono font-bold tracking-wider accent-success">
                         {generatedPin}
                     </div>
                     <Button
                         onClick={() => navigate("/admin/partners")}>
-                        Tilbage til partneroversigt
+                        Tilbage til virksomhedsoversigt
                     </Button>
                 </div>
             </PageContainer>
@@ -73,7 +73,7 @@ function CreatePartnerPage() {
             <div className="mt-6 max-w-md mx-auto">
                 <SectionCard headerContent={
                     <div className="flex justify-between items-center">
-                        <h1 className="text-section-header mt-4">Opret partner</h1>
+                        <h1 className="text-section-header mt-4">Opret virksomhed</h1>
                         <Link to="/admin/partners">
                             <Button icon={<ArrowLeft />}>Tilbage</Button>
                         </Link>
@@ -110,7 +110,7 @@ function CreatePartnerPage() {
                             type="submit"
                             disabled={isSubmitting}
                         >
-                            {isSubmitting ? "Opretter..." : "Opret partner"}
+                            {isSubmitting ? "Opretter..." : "Opret virksomhed"}
                         </Button>
                     </form>
                 </SectionCard>

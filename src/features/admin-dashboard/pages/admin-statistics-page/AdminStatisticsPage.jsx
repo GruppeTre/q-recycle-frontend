@@ -72,7 +72,7 @@ function AdminStatisticsPage() {
 
                 <SectionCard title="Indstillinger">
                     <div className="flex gap-gap-lg">
-                        <p>Select time range:</p>
+                        <p>Vælg periode:</p>
                         <select
                             value={selectedTimeRange.label}
                             onChange={handleTimeRangeChange}

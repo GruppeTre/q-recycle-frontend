@@ -42,7 +42,7 @@ function EditPartnerPage() {
                     });
                 }
             } catch (e) {
-                if (isMounted) setError(e.message ?? "Kunne ikke hente partner");
+                if (isMounted) setError(e.message ?? "Kunne ikke hente virksomhed");
             } finally {
                 if (isMounted) setIsLoading(false);
             }
@@ -94,7 +94,7 @@ function EditPartnerPage() {
             <div className="mt-6 max-w-md mx-auto">
                 <SectionCard headerContent={
                     <div className="flex justify-between items-center">
-                        <h2 className="text-section-header">Rediger partner</h2>
+                        <h2 className="text-section-header">Rediger virksomhed</h2>
                         <Link to="/admin/partners">
                             <Button icon={<ArrowLeft />}>Tilbage</Button>
                         </Link>

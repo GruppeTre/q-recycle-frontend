@@ -3,17 +3,17 @@ import {ChartColumn, Truck, Users} from "lucide-react";
 export const adminNavItems = [
     {
         icon: <Truck />,
-        label: "Drivers",
+        label: "Chauffører",
         to: "/admin/drivers"
     },
     {
         icon: <Users />,
-        label: "Partners",
+        label: "Virksomheder",
         to: "/admin/partners"
     },
     {
         icon: <ChartColumn />,
-        label: "Statistics",
+        label: "Statistik",
         to: "/admin/statistics"
     }
 ];

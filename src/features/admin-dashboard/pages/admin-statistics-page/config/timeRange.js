@@ -1,6 +1,6 @@
 export const timeRange = {
     LAST_MONTH: {
-        label: "Last month",
+        label: "Seneste måned",
         getDate: () => {
             const date = new Date();
 
@@ -13,7 +13,7 @@ export const timeRange = {
     },
 
     LAST_YEAR: {
-        label: "Last year",
+        label: "Seneste år",
         getDate: () => {
             const date = new Date();
 
@@ -26,7 +26,7 @@ export const timeRange = {
     },
 
     ALL_TIME: {
-        label: "All time",
+        label: "Alle data",
         getDate: () => {
 
             const date = new Date();

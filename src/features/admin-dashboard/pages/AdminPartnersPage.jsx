@@ -33,7 +33,7 @@ function AdminPartnersPage() {
             <div className="mt-6">
                 <SectionCard headerContent={
                     <div className="flex justify-between items-center">
-                        <h2 className="text-section-header">Partnere</h2>
+                        <h2 className="text-section-header">Virksomheder</h2>
                         <Link to="new">
                             <Button icon={<UserPlus />}>Opret Virksomhed</Button>
                         </Link>
