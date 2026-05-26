@@ -15,5 +15,15 @@ export const auth = {
         }
 
         return data ? data : null;
+    },
+
+    signOut: async() => {
+        const { error: authError } = await supabaseClient.auth.signOut();
+
+        if (authError) {
+            const error = new Error(authError.message);
+            error.code = authError.code;
+            throw error;
+        }
     }
 }

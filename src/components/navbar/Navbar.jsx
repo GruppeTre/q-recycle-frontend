@@ -1,7 +1,9 @@
-import HeroIcon from "./components/HeroIcon.jsx";
+import ProfileIcon from "./components/ProfileIcon.jsx";
 import NavLinks from "./components/NavLinks.jsx";
 import {Menu, X} from "lucide-react";
 import {useState} from "react";
+import Button from "../Button.jsx";
+import {auth} from "../../lib/auth.js";
 
 function Navbar({title, navItems, pendingBags}) {
 
@@ -19,8 +21,8 @@ function Navbar({title, navItems, pendingBags}) {
         <nav>
             <div className="bg-surface-primary px-gap-md py-gap-md border-b border-surface-primary-accent">
                 <div className="flex justify-between items-center">
-                    <div className="flex gap-gap-md items-center">
-                        <HeroIcon pendingBags={pendingBags}/>
+                    <div className="flex gap-gap-sm items-center">
+                        <ProfileIcon pendingBags={pendingBags}/>
                         <h2 className="text-center py-padding text-lg font-semibold">{title}</h2>
                     </div>
                     <div className="hidden md:flex flex-row gap-gap-md justify-between">
