@@ -37,7 +37,10 @@ export const pickupRequest = {
             .from("pickup")
             .select("*")
             .eq("partner_id", userId)
-            .eq("status", pickupStatus.REQUESTED)
+            .in("status", [
+                pickupStatus.REQUESTED,
+                pickupStatus.SCHEDULED
+            ])
 
         console.log(JSON.stringify(data, null, 2))
 
@@ -53,7 +56,10 @@ export const pickupRequest = {
             .from("pickup")
             .update({status: pickupStatus.CANCELLED})
             .eq("partner_id", userId)
-            .eq("status", pickupStatus.REQUESTED)
+            .in("status", [
+                pickupStatus.REQUESTED,
+                pickupStatus.SCHEDULED
+            ])
 
         handlePostgresError(postgresError);
 
