@@ -15,66 +15,67 @@ import DriverRoutePage from "./features/driver-dashboard/DriverRoutePage.jsx";
 import DriverDashboard from "./features/driver-dashboard/DriverDashboard.jsx";
 import AdminStatisticsPage from "./features/admin-dashboard/pages/admin-statistics-page/AdminStatisticsPage.jsx";
 import EditPartnerPage from "./features/admin-dashboard/pages/EditPartnerPage.jsx";
+import EditDriverPage from "./features/admin-dashboard/pages/EditDriverPage.jsx";
 import DriverExpendituresPage from "./features/driver-dashboard/pages/DriverExpendituresPage/DriverExpendituresPage.jsx";
 
 function App() {
+    return (
+        <AuthProvider>
+            <BrowserRouter>
+                <Routes>
 
-  return (
-      <AuthProvider>
-          <BrowserRouter>
-              <Routes>
+                    <Route index element={
+                        <GuestRoute>
+                            <UserLoginPage />
+                        </GuestRoute>
+                    }/>
 
-                  <Route index element={
-                      <GuestRoute>
-                          <UserLoginPage />
-                      </GuestRoute>
-                  }/>
+                    <Route path="partner">
+                        <Route index element={
+                            <GuestRoute allowedRoles={[role.ADMIN, role.DRIVER]}>
+                                <PartnerLoginPage />
+                            </GuestRoute>
+                        }/>
+                        <Route path="dashboard" element={
+                            <ProtectedRoute redirectPath="/partner" allowedRoles={[role.PARTNER]}>
+                                <PartnerDashboardPage />
+                            </ProtectedRoute>
+                        }/>
+                    </Route>
 
-                  <Route path="partner" >
+                    <Route path="driver" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.DRIVER, role.ADMIN]}> <DriverDashboard /> </ProtectedRoute>}>
+                        <Route index element={<Navigate to="routes" replace={true} />} />
+                        <Route path="routes" element={<DriverRoutePage />} />
+                        <Route path="expenditures" element={<DriverExpendituresPage />} />
+                    </Route>
 
-                      <Route index element={
-                          <GuestRoute allowedRoles={[role.ADMIN, role.DRIVER]}>
-                              <PartnerLoginPage />
-                          </GuestRoute>
-                      }/>
+                    <Route path="driver/routes/route-planner" element={
+                        <ProtectedRoute redirectPath="/" allowedRoles={[role.DRIVER, role.ADMIN]}>
+                            <RoutePlanner />
+                        </ProtectedRoute>
+                    }/>
 
-                      <Route path="dashboard" element={
-                          <ProtectedRoute redirectPath="/partner" allowedRoles={[role.PARTNER]}>
-                              <PartnerDashboardPage />
-                          </ProtectedRoute>
-                      }/>
+                    <Route path="admin" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.ADMIN]}> <AdminDashboard /> </ProtectedRoute>}>
+                        <Route index element={<Navigate to="drivers" replace={true}/>}/>
 
-                  </Route>
+                        <Route path="drivers">
+                            <Route index element={<AdminDriversPage />} />
+                            <Route path=":id/edit" element={<EditDriverPage />} />
+                        </Route>
 
-                  <Route path="driver" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.DRIVER, role.ADMIN]}> <DriverDashboard /> </ProtectedRoute>}>
-                      <Route index element={<Navigate to="routes" replace={true} /> } />
-                      <Route path="routes" element={<DriverRoutePage />} />
-                      <Route path="expenditures" element={<DriverExpendituresPage />} />
+                        <Route path="partners">
+                            <Route index element={<AdminPartnersPage />} />
+                            <Route path="new" element={<CreatePartnerPage />} />
+                            <Route path=":id/edit" element={<EditPartnerPage />} />
+                        </Route>
 
-                  </Route>
-                  <Route path="driver/routes/route-planner" element={
-                      <ProtectedRoute redirectPath="/" allowedRoles={[role.DRIVER, role.ADMIN]} >
-                          <RoutePlanner />
-                      </ProtectedRoute> }
-                  />
+                        <Route path="statistics" element={<AdminStatisticsPage />} />
+                    </Route>
 
-                  <Route path="admin" element={<ProtectedRoute redirectPath="/" allowedRoles={[role.ADMIN]}> <AdminDashboard /> </ProtectedRoute>}>
-                      <Route index element={<Navigate to="drivers" replace={true}/>}/>
-                      <Route path="drivers" element={<AdminDriversPage />} />
-
-                      <Route path="partners">
-                          <Route index element={<AdminPartnersPage />} />
-                          <Route path="new" element={<CreatePartnerPage />} />
-                          <Route path=":id/edit" element={<EditPartnerPage />} />
-                      </Route>
-
-                      <Route path="statistics" element={<AdminStatisticsPage />} />
-                  </Route>
-
-              </Routes>
-          </BrowserRouter>
-      </AuthProvider>
-  );
+                </Routes>
+            </BrowserRouter>
+        </AuthProvider>
+    );
 }
 
-export default App
+export default App;
