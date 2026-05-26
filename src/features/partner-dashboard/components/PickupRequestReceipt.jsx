@@ -6,7 +6,7 @@ function PickupRequestReceipt({activeRequest, onUpdate, onCancel}) {
 
     const statusText={
         [pickupStatus.REQUESTED]: "Afventer afhentning",
-        [pickupStatus.SCHEDULED]: "Afhentning planlagt",
+        [pickupStatus.SCHEDULED]: "Afhentning planlagt, chafføren er på vej",
         [pickupStatus.COMPLETED]: "Afhentet",
         [pickupStatus.CANCELLED]: "Annulleret",
     }
