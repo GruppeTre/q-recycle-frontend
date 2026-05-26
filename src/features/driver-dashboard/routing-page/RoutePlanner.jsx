@@ -18,6 +18,8 @@ import {
 import { PickupList } from "./components/PickupList.jsx";
 import { NavigationPanel } from "./components/NavigationPanel.jsx";
 import { ScheduledList} from "./components/ScheduledList.jsx";
+import Button from "../../../components/Button.jsx";
+import {Link} from "react-router";
 
 // Three phases of the screen, controlled by the `phase` state:
 //   "selecting"    → showing pickup list, driver picks which to include
@@ -305,10 +307,25 @@ export default function RoutePlanner() {
                             />
                         </div>
                         <div className="flex items-center gap-2 mt-3">
+                            <Link to="/driver/routes">
+                                <Button backgroundColor="transparent" hoverColor="transparent">
+                                    Tilbage
+                                </Button>
+                            </Link>
                             <button
                                 onClick={handleStartRoute}
                                 disabled={!mapReady || busy || selectedIds.size === 0}
-                                className="px-5 py-2.5 rounded-md font-semibold bg-primary text-text hover:bg-primary disabled:opacity-40 disabled:cursor-not-allowed transition"
+                                className="
+                                    px-gap-md
+                                    py-gap-sm
+                                    rounded-md
+                                    font-semibold
+                                    bg-primary
+                                    text-text
+                                    hover:bg-primary
+                                    disabled:opacity-40
+                                    disabled:cursor-not-allowed
+                                    transition"
                             >
                                 {busy ? "Bygger rute…" : "Start rute"}
                             </button>
