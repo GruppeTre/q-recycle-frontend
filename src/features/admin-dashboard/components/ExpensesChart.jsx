@@ -44,8 +44,8 @@ function ExpensesChart({data}) {
                     }}
                 />
                 <Legend />
-                <Area type="monotone" dataKey="paid" name="betalt" stackId="1" stroke="var(--color-success)" fill="var(--color-success)" />
-                <Area type="monotone" dataKey="unpaid" name="ubetalt" stackId="1" stroke="var(--color-danger)" fill="var(--color-danger)" />
+                <Area type="linear" dataKey="paid" name="betalt" stackId="1" stroke="var(--color-success)" strokeWidth={0} fill="var(--color-success)" />
+                <Area type="linear" dataKey="unpaid" name="ubetalt" stackId="1" stroke="var(--color-danger)" strokeWidth={0} fill="var(--color-danger)" />
 
             </AreaChart>
         </SectionCard>
