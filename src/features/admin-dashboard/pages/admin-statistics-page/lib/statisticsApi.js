@@ -54,26 +54,26 @@ export const statisticsApi = {
 
             console.log(JSON.stringify(data));
 
-            // transform into array with values 'name' and 'amount', combine expenses that happened on the same day
-            const returnData = Object.values(
+            const grouped = Object.values(
                 data.reduce((acc, expense) => {
                     const date = new Date(expense.created_at).toLocaleDateString('en-GB');
-
-                    acc[date] ??= {name: date, paid: 0, unpaid: 0}
-
+                    acc[date] ??= { name: date, paid: 0, unpaid: 0, _ts: new Date(expense.created_at) };
                     if (expense.is_pending) {
-                        console.log('Expense is pending');
                         acc[date].unpaid += expense.amount;
                     } else {
-                        console.log('Expense is paid')
                         acc[date].paid += expense.amount;
                     }
-
                     return acc;
                 }, {})
-            );
+            ).sort((a, b) => a._ts - b._ts);
 
-            console.log('returning data: ', JSON.stringify(returnData));
+            let cumulativePaid = 0;
+            let cumulativeUnpaid = 0;
+            const returnData = grouped.map(({ _ts, ...point }) => {
+                cumulativePaid += point.paid;
+                cumulativeUnpaid += point.unpaid;
+                return { ...point, paid: cumulativePaid, unpaid: cumulativeUnpaid };
+            });
 
             return { data: returnData, error: null }
         } catch (e) {
