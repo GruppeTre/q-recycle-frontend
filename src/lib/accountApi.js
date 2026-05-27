@@ -53,9 +53,9 @@ export const accountApi = {
         return { id: driverId };
     },
 
-    async createDriver({ email, password, firstname, surname, phone}) {
+    async createDriver({ email, password, firstname, surname, phonenumber}) {
         const { data, error } = await supabaseClient.functions.invoke('create-driver', {
-            body: {email, password, firstname, surname, phone}
+            body: {email, password, firstname, surname, phonenumber}
         });
         if (error) throw error;
         if(data?.error){
@@ -64,5 +64,5 @@ export const accountApi = {
             throw err;
         }
         return data;
-    }
+    },
 };
