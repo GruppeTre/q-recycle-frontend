@@ -6,7 +6,7 @@ import SectionCard from "../../../components/SectionCard.jsx";
 import {INTERNAL_EMAIL_SUFFIX} from "../../../config/constants.js"
 import Button from "../../../components/Button.jsx";
 import {ArrowLeft} from "lucide-react";
-import Field from "../../../components/Field";;
+import Field from "../../../components/Field";
 
 function CreateDriverPage() {
     const navigate = useNavigate();
