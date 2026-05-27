@@ -16,5 +16,6 @@ export const pickupStatus = {
     REQUESTED: 'requested',
     SCHEDULED: 'scheduled',
     COMPLETED: 'completed',
-    CANCELLED: 'cancelled'
+    CANCELLED: 'cancelled',
+    ARCHIVED: 'archived'
 }

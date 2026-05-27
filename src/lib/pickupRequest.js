@@ -133,7 +133,7 @@ export const pickupRequest = {
                 )
             `)
             .gte('completed_at', date.toISOString())
-            .eq('status', pickupStatus.COMPLETED);
+            .eq('status', pickupStatus.ARCHIVED);
 
         if (postgresError) {
             const error = new Error(postgresError.message);
