@@ -52,4 +52,17 @@ export const accountApi = {
         if (error) throw new Error("Could not update driver: " + error.message);
         return { id: driverId };
     },
+
+    async createDriver({ email, password, firstname, surname, phonenumber}) {
+        const { data, error } = await supabaseClient.functions.invoke('create-driver', {
+            body: {email, password, firstname, surname, phonenumber}
+        });
+        if (error) throw error;
+        if(data?.error){
+            const err = new Error(data.error);
+            err.fieldErrors = data.fieldErrors;
+            throw err;
+        }
+        return data;
+    },
 };

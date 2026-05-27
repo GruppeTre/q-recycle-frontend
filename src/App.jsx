@@ -17,6 +17,7 @@ import AdminStatisticsPage from "./features/admin-dashboard/pages/admin-statisti
 import EditPartnerPage from "./features/admin-dashboard/pages/EditPartnerPage.jsx";
 import EditDriverPage from "./features/admin-dashboard/pages/EditDriverPage.jsx";
 import DriverExpendituresPage from "./features/driver-dashboard/pages/DriverExpendituresPage/DriverExpendituresPage.jsx";
+import CreateDriverPage from "./features/admin-dashboard/pages/CreateDriverPage.jsx";
 
 function App() {
     return (
@@ -60,6 +61,7 @@ function App() {
 
                         <Route path="drivers">
                             <Route index element={<AdminDriversPage />} />
+                            <Route path="new" element={<CreateDriverPage />} />
                             <Route path=":id/edit" element={<EditDriverPage />} />
                         </Route>
 
